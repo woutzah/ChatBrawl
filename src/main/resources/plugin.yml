@@ -1,0 +1,12 @@
+name: ChatBrawl
+version: 1.4
+main: be.woutzah.chatbrawl.ChatBrawl
+api-version: 1.14
+authors: [Woutzah]
+description: A fun chat competition plugin.
+softdepend: [PlaceholderAPI, LangUtils]
+commands:
+  cb:
+    description: main chatbrawl command
+    usage: /cb
+    aliases: chatbrawl

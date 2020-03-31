@@ -55,7 +55,7 @@ public class RaceCreator {
                 } else {
                     if (!(plugin.getServer().getOnlinePlayers().size() < minimumAmountOfPlayers)) {
                         switch (plugin.getRaceRandomizer().getRandomRace()) {
-                        //switch (RaceType.food) {
+                        //switch (RaceType.quiz) {
                             case chat:
                                 chatRaceStart();
                                 setCurrentRunningRace(RaceType.chat);

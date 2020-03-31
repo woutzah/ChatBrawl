@@ -18,6 +18,9 @@
 #NOTE: The plugin will help you with finding errors if you make any.
 #      Be sure to check the server startup log for "chatbralw config errors".
 
+#the prefix that is used in front of the plugin messages.
+plugin-prefix: "&e&l[&6&oChatBrawl&e&l] &r"
+
 #do you want the plugin to create events (enabling/disabling the plugin)
 events-enabled: true
 
@@ -28,246 +31,17 @@ notify-event-login: true
 minimum-players: 1
 
 #this is the delay between events in seconds (currently 20 mins). Even if a winner is determined after e.g. 10 seconds
-#the plugin will still wait the full 30 seconds before starting a new event. Every race
+#the plugin will still wait the full 20 mins before starting a new event. Every race
 #has a setting "duration" where you can set specific durations per race before it ends.
 #NOTE: this setting (general delay) has to be a higher delay than all the other specific race delays!
 event-delay: 1200
 
-#the prefix that is used in front of the plugin messages.
-plugin-prefix: "&e&l[&6&oChatBrawl&e&l] &r"
 
-############################################################
-# +------------------------------------------------------+ #
-# |                 Race Specific Settings               | #
-# +------------------------------------------------------+ #
-############################################################
 
-#general settings for the chatrace (type the word shown in chat as fast as possible)
-chatrace:
-  #this setting enables/disable this type of race
-  enabled: true
-  #this is a list of words the plugin will randomly choose from when starting the event
-  words:
-    - Eustachius
-    - yeet
-    - treehugger
-    - chatbrawl
-    - DfzEfZsxdFg
-    - bearsarelife
-    - creepersexplode
-    - hat
-  #the duration of the chatrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance chatrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
 
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 10
-    #parameters you can use: {player} = placeholder for player name in commands
-    commands:
-      1:
-        command: 'eco give {player} 10'
-        chance: 30
-      2:
-        command: 'time set day'
-        chance: 20
 
-#general settings for the blockrace (Mine the amount of specific blocks as fast as possible)
-blockrace:
-  #this setting enables/disable this type of race
-  enabled: true
-  #this is a list of blocks, with the amount required to mine, the plugin will randomly choose from when starting the event
-  blocks:
-    #E.G. if selected, players need to mine 3 diamond blocks the fastest
-    #list of materials you can use: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
-    COBBLESTONE: 30
-    OAK_LOG: 20
-    OBSIDIAN: 5
-    ANDESITE: 20
-    GRANITE: 15
-  #the duration of the blockrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance blockrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
 
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 10
-    #parameters you can use: {player}
-    commands:
-      1:
-        command: 'say standardcommand'
-        chance: 20
-      2:
-        command: 'eco give {player} 10'
-        chance: 20
 
-#general settings for the fishrace (Fish the amount of specific fish as fast as possible)
-fishrace:
-  #this settings enables/disable this type of race
-  enabled: true
-  #this is a list of fish, with the amount required to fish, the plugin will randomly choose from when starting the event
-  fish:
-    #E.G. if selected, players need to fish 3 cod fishes the fastest
-    #usable fish: COD, PUFFERFISH, SALMON, TROPICAL_FISH
-    COD: 3
-    PUFFERFISH: 5
-    SALMON: 5
-    TROPICAL_FISH: 2
-  #the duration of the fishrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance fishrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'time set day' has a chance of 10
-    #parameters you can use: {player}
-    commands:
-      1:
-        command: 'time set day'
-        chance: 10
-      2:
-        command: 'time set night'
-        chance: 20
 
-#general settings for the huntrace (Hunt and kill the required mobs as fast as possible)
-huntrace:
-  #this settings enables/disable this type of race
-  enabled: true
-  #this is a list of mobs, with the amount required to kill, the plugin will randomly choose from when starting the event
-  mobs:
-    #E.G. if selected, players need to kill 3 zombies as fast as possible
-    #usable entity types: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
-    ZOMBIE: 20
-    SKELETON: 10
-    COW: 25
-  #the duration of the huntrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance huntrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'say chance1' has a chance of 10
-    #parameters you can use: {player}
-    commands:
-      1:
-        command: 'say chance1'
-        chance: 10
-      2:
-        command: 'say chance2'
-        chance: 20
 
-#general settings for the craftrace (Craft the amount of items as fast as possible)
-craftrace:
-  #this setting enables/disable this type of race
-  enabled: true
-  #this is a list of items, with the amount required to mine, the plugin will randomly choose from when starting the event
-  items:
-    #E.G. if selected, players need to craft 3 torches as fast as possible
-    #list of materials you can use: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
-    TORCH: 20
-    ANVIL: 10
-    CAKE: 5
-  #the duration of the craftrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance craftrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 20
-    #parameters you can use: {player}
-    commands:
-      1:
-        command: 'say standardcommand'
-        chance: 20
-      2:
-        command: 'eco give {player} 10'
-        chance: 20
-#general settings for the quizrace (Answer the question as fast as possible!)
-quizrace:
-  #this setting enables/disable this type of race
-  enabled: true
-  #this is a list of question entries.Make sure to fill in the question/answer field for each entry.
-  #You can add/remove as much entries as you want. The plugin will randomly choose a section from here when starting the event
-  questions:
-    1:
-      question: 'What''s the capital of France?'
-      answer: 'paris'
-    2:
-      question: 'How much is 20 + 20 X 2 ?'
-      answer: '60'
-  #the duration of the quizrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance quizrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 20
-    #parameters you can use: {player}
-    commands:
-      1:
-        command: 'say standardcommand'
-        chance: 20
-      2:
-        command: 'eco give {player} 10'
-        chance: 20
-#general settings for the foodrace (Consume the amount of food as fast as possible)
-foodrace:
-  #this setting enables/disable this type of race
-  enabled: true
-  #this is a list of fooditems, with the amount required to eat, the plugin will randomly choose from when starting the event
-  food:
-    #E.G. if selected, players need to eat 3 cake's as fast as possible
-    #list of materials you can use: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
-    COOKED_BEEF: 2
-    BAKED_POTATO: 10
-    APPLE: 5
-  #the duration of the foodrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance foodrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 20
-    #parameters you can use: {player}
-    commands:
-      1:
-        command: 'say standardcommand'
-        chance: 20
-      2:
-        command: 'eco give {player} 10'
-        chance: 20
+

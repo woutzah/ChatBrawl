@@ -70,7 +70,7 @@ public class LanguageFileReader {
 
     public LanguageFileReader(ChatBrawl plugin){
         this.plugin = plugin;
-        this.languageConfig = plugin.getFileManager().getLanguageConfig();
+        this.languageConfig = plugin.getLanguageConfig();
         this.lang = languageConfig.getString("lang");
         this.chatraceName = languageConfig.getString("chatrace.chatrace-name");
         this.chatraceStart = languageConfig.getStringList("chatrace.chatrace-start");

@@ -1,0 +1,34 @@
+#general settings for the chatrace (type the word shown in chat as fast as possible)
+chatrace:
+  #this setting enables/disable this type of race
+  enabled: true
+  #this is a list of words the plugin will randomly choose from when starting the event
+  words:
+    - Eustachius
+    - yeet
+    - treehugger
+    - chatbrawl
+    - DfzEfZsxdFg
+    - bearsarelife
+    - creepersexplode
+    - hat
+  #the duration of the chatrace in seconds (cannot be longer than event-delay in general settings!)
+  duration: 900
+  #the chance chatrace is held in chat
+  chance: 20
+  #shoot a firework from the player that wins the race.
+  enable-firework: true
+
+  rewards:
+    #in here you can add/remove commands that will be executed when someone wins!
+    #the chance the command get's executed in the console is behind the semicolon
+    #you can add/remove entries in the list by inserting the next number
+    #E.G. the command 'eco give {player} 10' has a chance of 10
+    #parameters you can use: {player} = placeholder for player name in commands
+    commands:
+      1:
+        command: 'eco give {player} 10'
+        chance: 30
+      2:
+        command: 'time set day'
+        chance: 20

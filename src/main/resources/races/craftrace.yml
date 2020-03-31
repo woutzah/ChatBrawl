@@ -1,0 +1,31 @@
+#general settings for the craftrace (Craft the amount of items as fast as possible)
+craftrace:
+  #this setting enables/disable this type of race
+  enabled: true
+  #this is a list of items, with the amount required to mine, the plugin will randomly choose from when starting the event
+  items:
+    #E.G. if selected, players need to craft 3 torches as fast as possible
+    #list of materials you can use: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+    TORCH: 20
+    ANVIL: 10
+    CAKE: 5
+  #the duration of the craftrace in seconds (cannot be longer than event-delay in general settings!)
+  duration: 900
+  #the chance craftrace is held in chat
+  chance: 20
+  #shoot a firework from the player that wins the race.
+  enable-firework: true
+  #rewards
+  rewards:
+    #in here you can add/remove commands that will be executed when someone wins!
+    #the chance the command get's executed in the console is behind the semicolon
+    #you can add/remove entries in the list by inserting the next number
+    #E.G. the command 'eco give {player} 10' has a chance of 20
+    #parameters you can use: {player}
+    commands:
+      1:
+        command: 'say standardcommand'
+        chance: 20
+      2:
+        command: 'eco give {player} 10'
+        chance: 20

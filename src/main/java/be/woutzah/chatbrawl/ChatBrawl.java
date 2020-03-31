@@ -10,6 +10,8 @@ import be.woutzah.chatbrawl.placeholders.Placeholders;
 import be.woutzah.chatbrawl.races.*;
 import be.woutzah.chatbrawl.utils.RaceRandomizer;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -27,14 +29,21 @@ public class ChatBrawl extends JavaPlugin {
     private RaceCreator raceCreator;
     private Printer printer;
     private FileManager fileManager;
+    private FileConfiguration languageConfig;
+    private FileConfiguration chatraceConfig;
+    private FileConfiguration blockraceConfig;
+    private FileConfiguration fishraceConfig;
+    private FileConfiguration huntraceConfig;
+    private FileConfiguration craftraceConfig;
+    private FileConfiguration quizraceConfig;
+    private FileConfiguration foodraceConfig;
     private LanguageFileReader languageFileReader;
     private RaceRandomizer raceRandomizer;
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        this.fileManager = new FileManager(this, "language/language.yml");
-        fileManager.init();
+        setupFiles();
+        boolean isConfigCorrect = configChecker();
         init();
         printer.printConsoleMessage();
         this.getServer().getPluginManager().registerEvents(new GeneralListener(this), this);
@@ -52,7 +61,7 @@ public class ChatBrawl extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
             langUtilsIsEnabled = true;
         }
-        if (configChecker()) {
+        if (isConfigCorrect) {
             raceCreator.createRaces();
         }
     }
@@ -79,169 +88,169 @@ public class ChatBrawl extends JavaPlugin {
                         "The plugin-prefix setting is missing in general settings in the config!");
             }
             // chatrace config checks
-            if (!this.getConfig().isSet("chatrace")) {
+            if (!this.getChatraceConfig().isSet("chatrace")) {
                 throw new RaceException("The chatrace section is missing in the config!");
-            } else if (!this.getConfig().isSet("chatrace.enabled")) {
+            } else if (!this.getChatraceConfig().isSet("chatrace.enabled")) {
                 throw new RaceException("The enabled setting of chat race is missing in the config!");
-            } else if (!this.getConfig().isSet("chatrace.duration")) {
+            } else if (!this.getChatraceConfig().isSet("chatrace.duration")) {
                 throw new RaceException("The duration of chat race is missing in the config!");
-            } else if (this.getConfig().getLong("chatrace.duration")
+            } else if (this.getChatraceConfig().getLong("chatrace.duration")
                     >= this.getConfig().getLong("event-delay")) {
                 throw new RaceException("The duration of chat race is higher than the event delay!");
-            } else if (!this.getConfig().isSet("chatrace.chance")) {
+            } else if (!this.getChatraceConfig().isSet("chatrace.chance")) {
                 throw new RaceException("The chat race chance is not set!");
-            } else if (!this.getConfig().isSet("chatrace.words")) {
+            } else if (!this.getChatraceConfig().isSet("chatrace.words")) {
                 throw new RaceException("The words for the chatrace are missing in the config!");
-            } else if (!this.getConfig().isSet("chatrace.enable-firework")) {
+            } else if (!this.getChatraceConfig().isSet("chatrace.enable-firework")) {
                 throw new RaceException(
                         "The enable-firework settings is missing for the chatrace in the config!");
-            } else if (!this.getConfig().isSet("chatrace.rewards")) {
+            } else if (!this.getChatraceConfig().isSet("chatrace.rewards")) {
                 throw new RaceException("The rewards for chatrace are missing in the config!");
-            } else if (!this.getConfig().isSet("chatrace.rewards.commands")) {
+            } else if (!this.getChatraceConfig().isSet("chatrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for chatrace rewards are missing in the config!");
             }
 
             // blockrace config checks
-            if (!this.getConfig().isSet("blockrace")) {
+            if (!this.getBlockraceConfig().isSet("blockrace")) {
                 throw new RaceException("The blockrace section is missing in the config!");
-            } else if (!this.getConfig().isSet("blockrace.enabled")) {
+            } else if (!this.getBlockraceConfig().isSet("blockrace.enabled")) {
                 throw new RaceException("The enabled setting of block race is missing in the config!");
-            } else if (!this.getConfig().isSet("blockrace.duration")) {
+            } else if (!this.getBlockraceConfig().isSet("blockrace.duration")) {
                 throw new RaceException("The duration of block race is missing in the config!");
-            } else if (this.getConfig().getLong("blockrace.duration")
+            } else if (this.getBlockraceConfig().getLong("blockrace.duration")
                     >= this.getConfig().getLong("event-delay")) {
                 throw new RaceException("The duration of block race is higher than the event delay!");
-            } else if (!this.getConfig().isSet("blockrace.chance")) {
+            } else if (!this.getBlockraceConfig().isSet("blockrace.chance")) {
                 throw new RaceException("The block race chance is not set!");
-            } else if (!this.getConfig().isSet("blockrace.blocks")) {
+            } else if (!this.getBlockraceConfig().isSet("blockrace.blocks")) {
                 throw new RaceException("The blocks for the blockrace are missing in the config!");
-            } else if (!this.getConfig().isSet("blockrace.enable-firework")) {
+            } else if (!this.getBlockraceConfig().isSet("blockrace.enable-firework")) {
                 throw new RaceException(
                         "The enable-firework settings is missing for the blockrace in the config!");
-            } else if (!this.getConfig().isSet("blockrace.rewards")) {
+            } else if (!this.getBlockraceConfig().isSet("blockrace.rewards")) {
                 throw new RaceException("The rewards for blockrace are missing in the config!");
-            } else if (!this.getConfig().isSet("blockrace.rewards.commands")) {
+            } else if (!this.getBlockraceConfig().isSet("blockrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for blockrace rewards are missing in the config!");
             }
 
             // fishrace config checks
-            if (!this.getConfig().isSet("fishrace")) {
+            if (!this.getFishraceConfig().isSet("fishrace")) {
                 throw new RaceException("The fishrace section is missing in the config!");
-            } else if (!this.getConfig().isSet("fishrace.enabled")) {
+            } else if (!this.getFishraceConfig().isSet("fishrace.enabled")) {
                 throw new RaceException("The enabled setting of fish race is missing in the config!");
-            } else if (!this.getConfig().isSet("fishrace.duration")) {
+            } else if (!this.getFishraceConfig().isSet("fishrace.duration")) {
                 throw new RaceException("The duration of fish race is missing in the config!");
-            } else if (this.getConfig().getLong("fishrace.duration")
+            } else if (this.getFishraceConfig().getLong("fishrace.duration")
                     >= this.getConfig().getLong("event-delay")) {
                 throw new RaceException("The duration of fish race is higher than the event delay!");
-            } else if (!this.getConfig().isSet("fishrace.chance")) {
+            } else if (!this.getFishraceConfig().isSet("fishrace.chance")) {
                 throw new RaceException("The fish race chance is not set!");
-            } else if (!this.getConfig().isSet("fishrace.fish")) {
+            } else if (!this.getFishraceConfig().isSet("fishrace.fish")) {
                 throw new RaceException("The fish for the fishrace are missing in the config!");
-            } else if (!this.getConfig().isSet("fishrace.enable-firework")) {
+            } else if (!this.getFishraceConfig().isSet("fishrace.enable-firework")) {
                 throw new RaceException(
                         "The enable-firework settings is missing for the fishrace in the config!");
-            } else if (!this.getConfig().isSet("fishrace.rewards")) {
+            } else if (!this.getFishraceConfig().isSet("fishrace.rewards")) {
                 throw new RaceException("The rewards for fishrace are missing in the config!");
-            } else if (!this.getConfig().isSet("fishrace.rewards.commands")) {
+            } else if (!this.getFishraceConfig().isSet("fishrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for fishrace rewards are missing in the config!");
             }
 
             // huntrace config checks
-            if (!this.getConfig().isSet("huntrace")) {
+            if (!this.getHuntraceConfig().isSet("huntrace")) {
                 throw new RaceException("The huntrace section is missing in the config!");
-            } else if (!this.getConfig().isSet("huntrace.enabled")) {
+            } else if (!this.getHuntraceConfig().isSet("huntrace.enabled")) {
                 throw new RaceException("The enabled setting of hunt race is missing in the config!");
-            } else if (!this.getConfig().isSet("huntrace.duration")) {
+            } else if (!this.getHuntraceConfig().isSet("huntrace.duration")) {
                 throw new RaceException("The duration of hunt race is missing in the config!");
-            } else if (this.getConfig().getLong("huntrace.duration")
+            } else if (this.getHuntraceConfig().getLong("huntrace.duration")
                     >= this.getConfig().getLong("event-delay")) {
                 throw new RaceException("The duration of hunt race is higher than the event delay!");
-            } else if (!this.getConfig().isSet("huntrace.chance")) {
+            } else if (!this.getHuntraceConfig().isSet("huntrace.chance")) {
                 throw new RaceException("The hunt race chance is not set!");
-            } else if (!this.getConfig().isSet("huntrace.mobs")) {
+            } else if (!this.getHuntraceConfig().isSet("huntrace.mobs")) {
                 throw new RaceException("The mobs for the huntrace are missing in the config!");
-            } else if (!this.getConfig().isSet("huntrace.enable-firework")) {
+            } else if (!this.getHuntraceConfig().isSet("huntrace.enable-firework")) {
                 throw new RaceException(
                         "The enable-firework settings is missing for the huntrace in the config!");
-            } else if (!this.getConfig().isSet("huntrace.rewards")) {
+            } else if (!this.getHuntraceConfig().isSet("huntrace.rewards")) {
                 throw new RaceException("The rewards for huntrace are missing in the config!");
-            } else if (!this.getConfig().isSet("huntrace.rewards.commands")) {
+            } else if (!this.getHuntraceConfig().isSet("huntrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for huntrace rewards are missing in the config!");
             }
 
             // craftrace config checks
-            if (!this.getConfig().isSet("craftrace")) {
+            if (!this.getCraftraceConfig().isSet("craftrace")) {
                 throw new RaceException("The craftrace section is missing in the config!");
-            } else if (!this.getConfig().isSet("craftrace.enabled")) {
+            } else if (!this.getCraftraceConfig().isSet("craftrace.enabled")) {
                 throw new RaceException("The enabled setting of craft race is missing in the config!");
-            } else if (!this.getConfig().isSet("craftrace.duration")) {
+            } else if (!this.getCraftraceConfig().isSet("craftrace.duration")) {
                 throw new RaceException("The duration of craft race is missing in the config!");
-            } else if (this.getConfig().getLong("craftrace.duration")
+            } else if (this.getCraftraceConfig().getLong("craftrace.duration")
                     >= this.getConfig().getLong("event-delay")) {
                 throw new RaceException("The duration of craft race is higher than the event delay!");
-            } else if (!this.getConfig().isSet("craftrace.chance")) {
+            } else if (!this.getCraftraceConfig().isSet("craftrace.chance")) {
                 throw new RaceException("The craft race chance is not set!");
-            } else if (!this.getConfig().isSet("craftrace.items")) {
+            } else if (!this.getCraftraceConfig().isSet("craftrace.items")) {
                 throw new RaceException("The items for the craftrace are missing in the config!");
-            } else if (!this.getConfig().isSet("craftrace.enable-firework")) {
+            } else if (!this.getCraftraceConfig().isSet("craftrace.enable-firework")) {
                 throw new RaceException(
                         "The enable-firework settings is missing for the craftrace in the config!");
-            } else if (!this.getConfig().isSet("craftrace.rewards")) {
+            } else if (!this.getCraftraceConfig().isSet("craftrace.rewards")) {
                 throw new RaceException("The rewards for craftrace are missing in the config!");
-            } else if (!this.getConfig().isSet("craftrace.rewards.commands")) {
+            } else if (!this.getCraftraceConfig().isSet("craftrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for craftrace rewards are missing in the config!");
             }
             
             // quizrace config checks
-            if (!this.getConfig().isSet("quizrace")) {
+            if (!this.getQuizraceConfig().isSet("quizrace")) {
                 throw new RaceException("The quizrace section is missing in the config!");
-            } else if (!this.getConfig().isSet("quizrace.enabled")) {
+            } else if (!this.getQuizraceConfig().isSet("quizrace.enabled")) {
                 throw new RaceException("The enabled setting of quiz race is missing in the config!");
-            } else if (!this.getConfig().isSet("quizrace.duration")) {
+            } else if (!this.getQuizraceConfig().isSet("quizrace.duration")) {
                 throw new RaceException("The duration of quiz race is missing in the config!");
-            } else if (this.getConfig().getLong("quizrace.duration")
+            } else if (this.getQuizraceConfig().getLong("quizrace.duration")
                     >= this.getConfig().getLong("event-delay")) {
                 throw new RaceException("The duration of quiz race is higher than the event delay!");
-            } else if (!this.getConfig().isSet("quizrace.chance")) {
+            } else if (!this.getQuizraceConfig().isSet("quizrace.chance")) {
                 throw new RaceException("The quiz race chance is not set!");
-            } else if (!this.getConfig().isSet("quizrace.questions")) {
+            } else if (!this.getQuizraceConfig().isSet("quizrace.questions")) {
                 throw new RaceException("The questions for the quizrace are missing in the config!");
-            } else if (!this.getConfig().isSet("quizrace.enable-firework")) {
+            } else if (!this.getQuizraceConfig().isSet("quizrace.enable-firework")) {
                 throw new RaceException(
                         "The enable-firework settings is missing for the quizrace in the config!");
-            } else if (!this.getConfig().isSet("quizrace.rewards")) {
+            } else if (!this.getQuizraceConfig().isSet("quizrace.rewards")) {
                 throw new RaceException("The rewards for quizrace are missing in the config!");
-            } else if (!this.getConfig().isSet("quizrace.rewards.commands")) {
+            } else if (!this.getQuizraceConfig().isSet("quizrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for quizrace rewards are missing in the config!");
             }
 
             // foodrace config checks
-            if (!this.getConfig().isSet("foodrace")) {
+            if (!this.getFoodraceConfig().isSet("foodrace")) {
                 throw new RaceException("The foodrace section is missing in the config!");
-            } else if (!this.getConfig().isSet("foodrace.enabled")) {
+            } else if (!this.getFoodraceConfig().isSet("foodrace.enabled")) {
                 throw new RaceException("The enabled setting of food race is missing in the config!");
-            } else if (!this.getConfig().isSet("foodrace.duration")) {
+            } else if (!this.getFoodraceConfig().isSet("foodrace.duration")) {
                 throw new RaceException("The duration of food race is missing in the config!");
-            } else if (this.getConfig().getLong("foodrace.duration")
+            } else if (this.getFoodraceConfig().getLong("foodrace.duration")
                     >= this.getConfig().getLong("event-delay")) {
                 throw new RaceException("The duration of food race is higher than the event delay!");
-            } else if (!this.getConfig().isSet("foodrace.chance")) {
+            } else if (!this.getFoodraceConfig().isSet("foodrace.chance")) {
                 throw new RaceException("The food race chance is not set!");
-            } else if (!this.getConfig().isSet("foodrace.food")) {
+            } else if (!this.getFoodraceConfig().isSet("foodrace.food")) {
                 throw new RaceException("The food for the foodrace is missing in the config!");
-            } else if (!this.getConfig().isSet("foodrace.enable-firework")) {
+            } else if (!this.getFoodraceConfig().isSet("foodrace.enable-firework")) {
                 throw new RaceException(
                         "The enable-firework settings is missing for the foodrace in the config!");
-            } else if (!this.getConfig().isSet("foodrace.rewards")) {
+            } else if (!this.getFoodraceConfig().isSet("foodrace.rewards")) {
                 throw new RaceException("The rewards for foodrace are missing in the config!");
-            } else if (!this.getConfig().isSet("foodrace.rewards.commands")) {
+            } else if (!this.getFoodraceConfig().isSet("foodrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for foodrace rewards are missing in the config!");
             }
@@ -265,6 +274,19 @@ public class ChatBrawl extends JavaPlugin {
         this.foodRace = new FoodRace(this);
         this.raceCreator = new RaceCreator(this);
         this.raceRandomizer = new RaceRandomizer(this);
+    }
+
+    public void setupFiles(){
+        saveDefaultConfig();
+        this.fileManager = new FileManager(this);
+        languageConfig = fileManager.loadFile("language/language.yml", true);
+        chatraceConfig = fileManager.loadFile("races/chatrace.yml", true);
+        blockraceConfig = fileManager.loadFile("races/blockrace.yml", true);
+        fishraceConfig = fileManager.loadFile("races/fishrace.yml", true);
+        huntraceConfig = fileManager.loadFile("races/huntrace.yml", true);
+        craftraceConfig = fileManager.loadFile("races/craftrace.yml", true);
+        quizraceConfig = fileManager.loadFile("races/quizrace.yml", true);
+        foodraceConfig = fileManager.loadFile("races/foodrace.yml", true);
     }
 
     public ChatRace getChatrace() {
@@ -315,5 +337,35 @@ public class ChatBrawl extends JavaPlugin {
         return languageFileReader;
     }
 
+    public FileConfiguration getLanguageConfig() {
+        return languageConfig;
+    }
 
+    public FileConfiguration getChatraceConfig() {
+        return chatraceConfig;
+    }
+
+    public FileConfiguration getBlockraceConfig() {
+        return blockraceConfig;
+    }
+
+    public FileConfiguration getFishraceConfig() {
+        return fishraceConfig;
+    }
+
+    public FileConfiguration getHuntraceConfig() {
+        return huntraceConfig;
+    }
+
+    public FileConfiguration getCraftraceConfig() {
+        return craftraceConfig;
+    }
+
+    public FileConfiguration getQuizraceConfig() {
+        return quizraceConfig;
+    }
+
+    public FileConfiguration getFoodraceConfig() {
+        return foodraceConfig;
+    }
 }

@@ -1,0 +1,31 @@
+#general settings for the huntrace (Hunt and kill the required mobs as fast as possible)
+huntrace:
+  #this settings enables/disable this type of race
+  enabled: true
+  #this is a list of mobs, with the amount required to kill, the plugin will randomly choose from when starting the event
+  mobs:
+    #E.G. if selected, players need to kill 3 zombies as fast as possible
+    #usable entity types: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
+    ZOMBIE: 20
+    SKELETON: 10
+    COW: 25
+  #the duration of the huntrace in seconds (cannot be longer than event-delay in general settings!)
+  duration: 900
+  #the chance huntrace is held in chat
+  chance: 20
+  #shoot a firework from the player that wins the race.
+  enable-firework: true
+  #rewards
+  rewards:
+    #in here you can add/remove commands that will be executed when someone wins!
+    #the chance the command get's executed in the console is behind the semicolon
+    #you can add/remove entries in the list by inserting the next number
+    #E.G. the command 'say chance1' has a chance of 10
+    #parameters you can use: {player}
+    commands:
+      1:
+        command: 'say chance1'
+        chance: 10
+      2:
+        command: 'say chance2'
+        chance: 20

@@ -22,8 +22,6 @@ public class FishRaceListener implements Listener {
 
   @EventHandler
   public void checkFishedObjects(PlayerFishEvent event) {
-    // if (!plugin.getRaceCreator().getFishRaceTask().isCancelled() &&
-    // plugin.getRaceCreator().getFishRaceTask() != null) {
     if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.fish)) {
       if (event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH)) {
         Item fish = (Item) event.getCaught();

@@ -1,0 +1,32 @@
+#general settings for the fishrace (Fish the amount of specific fish as fast as possible)
+fishrace:
+  #this settings enables/disable this type of race
+  enabled: true
+  #this is a list of fish, with the amount required to fish, the plugin will randomly choose from when starting the event
+  fish:
+    #E.G. if selected, players need to fish 3 cod fishes the fastest
+    #usable fish: COD, PUFFERFISH, SALMON, TROPICAL_FISH
+    COD: 3
+    PUFFERFISH: 5
+    SALMON: 5
+    TROPICAL_FISH: 2
+  #the duration of the fishrace in seconds (cannot be longer than event-delay in general settings!)
+  duration: 900
+  #the chance fishrace is held in chat
+  chance: 20
+  #shoot a firework from the player that wins the race.
+  enable-firework: true
+  #rewards
+  rewards:
+    #in here you can add/remove commands that will be executed when someone wins!
+    #the chance the command get's executed in the console is behind the semicolon
+    #you can add/remove entries in the list by inserting the next number
+    #E.G. the command 'time set day' has a chance of 10
+    #parameters you can use: {player}
+    commands:
+      1:
+        command: 'time set day'
+        chance: 10
+      2:
+        command: 'time set night'
+        chance: 20

@@ -21,11 +21,11 @@ public class CraftRace extends Race {
     public CraftRace(ChatBrawl plugin) {
         super(
                 plugin,
-                plugin.getConfig().getLong("craftrace.duration"),
-                plugin.getConfig().getInt("craftrace.chance"),
-                plugin.getConfig().getBoolean("craftrace.enable-firework"),
-                plugin.getConfig().getBoolean("craftrace.enabled"),
-                plugin.getConfig().getConfigurationSection("craftrace.rewards.commands"));
+                plugin.getCraftraceConfig().getLong("craftrace.duration"),
+                plugin.getCraftraceConfig().getInt("craftrace.chance"),
+                plugin.getCraftraceConfig().getBoolean("craftrace.enable-firework"),
+                plugin.getCraftraceConfig().getBoolean("craftrace.enabled"),
+                plugin.getCraftraceConfig().getConfigurationSection("craftrace.rewards.commands"));
         this.craftsMap = new HashMap<>();
         this.playerScores = new HashMap<>();
         getCraftsFromConfig();
@@ -34,7 +34,7 @@ public class CraftRace extends Race {
     private void getCraftsFromConfig() {
         try {
             ConfigurationSection configSection =
-                    getPlugin().getConfig().getConfigurationSection("craftrace.items");
+                    getPlugin().getCraftraceConfig().getConfigurationSection("craftrace.items");
             for (String materialString :
                     Objects.requireNonNull(configSection).getKeys(false)) {
                 Material material = Material.getMaterial(materialString);

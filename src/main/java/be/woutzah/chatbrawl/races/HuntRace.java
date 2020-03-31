@@ -21,11 +21,11 @@ public class HuntRace extends Race {
   public HuntRace(ChatBrawl plugin) {
     super(
         plugin,
-        plugin.getConfig().getLong("huntrace.duration"),
-        plugin.getConfig().getInt("huntrace.chance"),
-        plugin.getConfig().getBoolean("huntrace.enable-firework"),
-        plugin.getConfig().getBoolean("huntrace.enabled"),
-        plugin.getConfig().getConfigurationSection("chatrace.rewards.commands"));
+        plugin.getHuntraceConfig().getLong("huntrace.duration"),
+        plugin.getHuntraceConfig().getInt("huntrace.chance"),
+        plugin.getHuntraceConfig().getBoolean("huntrace.enable-firework"),
+        plugin.getHuntraceConfig().getBoolean("huntrace.enabled"),
+        plugin.getHuntraceConfig().getConfigurationSection("huntrace.rewards.commands"));
     this.playerScores = new HashMap<>();
     this.huntMap = new HashMap<>();
     getMobsFromConfig();
@@ -34,7 +34,7 @@ public class HuntRace extends Race {
   private void getMobsFromConfig() {
     try {
       ConfigurationSection configSection =
-          getPlugin().getConfig().getConfigurationSection("huntrace.mobs");
+          getPlugin().getHuntraceConfig().getConfigurationSection("huntrace.mobs");
       for (String entityString :
           Objects.requireNonNull(configSection).getKeys(false)) {
         EntityType entityType = EntityType.valueOf(entityString.toUpperCase());

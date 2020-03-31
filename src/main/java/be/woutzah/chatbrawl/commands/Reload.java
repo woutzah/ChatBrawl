@@ -43,7 +43,7 @@ public class Reload implements CommandExecutor {
         }
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
-        plugin.getFileManager().init();
+        plugin.setupFiles();
         plugin.init();
         RaceException.resetIsBadConfig();
         plugin.configChecker();

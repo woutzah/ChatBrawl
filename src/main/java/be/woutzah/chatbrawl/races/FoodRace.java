@@ -20,11 +20,11 @@ public class FoodRace extends Race {
     public FoodRace(ChatBrawl plugin) {
         super(
                 plugin,
-                plugin.getConfig().getLong("foodrace.duration"),
-                plugin.getConfig().getInt("foodrace.chance"),
-                plugin.getConfig().getBoolean("foodrace.enable-firework"),
-                plugin.getConfig().getBoolean("foodrace.enabled"),
-                plugin.getConfig().getConfigurationSection("foodrace.rewards.commands"));
+                plugin.getFoodraceConfig().getLong("foodrace.duration"),
+                plugin.getFoodraceConfig().getInt("foodrace.chance"),
+                plugin.getFoodraceConfig().getBoolean("foodrace.enable-firework"),
+                plugin.getFoodraceConfig().getBoolean("foodrace.enabled"),
+                plugin.getFoodraceConfig().getConfigurationSection("foodrace.rewards.commands"));
         this.foodMap = new HashMap<>();
         this.playerScores = new HashMap<>();
         getFoodFromConfig();
@@ -33,7 +33,7 @@ public class FoodRace extends Race {
     private void getFoodFromConfig() {
         try {
             ConfigurationSection configSection =
-                    getPlugin().getConfig().getConfigurationSection("foodrace.food");
+                    getPlugin().getFoodraceConfig().getConfigurationSection("foodrace.food");
             for (String materialString :
                     Objects.requireNonNull(configSection).getKeys(false)) {
                 Material material = Material.getMaterial(materialString);

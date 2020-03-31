@@ -5,23 +5,25 @@ import be.woutzah.chatbrawl.exceptions.RaceException;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class QuizRace extends Race {
 
-    private HashMap<String, String> questionsMap;
+    private HashMap<String, List<String>> questionsMap;
     private String currentQuestion;
-    private String currentAnswer;
+    private List<String> currentAnswers;
 
     public QuizRace(ChatBrawl plugin) {
         super(
                 plugin,
-                plugin.getConfig().getLong("quizrace.duration"),
-                plugin.getConfig().getInt("quizrace.chance"),
-                plugin.getConfig().getBoolean("quizrace.enable-firework"),
-                plugin.getConfig().getBoolean("quizrace.enabled"),
-                plugin.getConfig().getConfigurationSection("quizrace.rewards.commands"));
+                plugin.getQuizraceConfig().getLong("quizrace.duration"),
+                plugin.getQuizraceConfig().getInt("quizrace.chance"),
+                plugin.getQuizraceConfig().getBoolean("quizrace.enable-firework"),
+                plugin.getQuizraceConfig().getBoolean("quizrace.enabled"),
+                plugin.getQuizraceConfig().getConfigurationSection("quizrace.rewards.commands"));
         this.questionsMap = new HashMap<>();
         getQuestionsFromConfig();
     }
@@ -29,18 +31,21 @@ public class QuizRace extends Race {
     private void getQuestionsFromConfig() {
         try {
             ConfigurationSection configSection =
-                    getPlugin().getConfig().getConfigurationSection("quizrace.questions");
+                    getPlugin().getQuizraceConfig().getConfigurationSection("quizrace.questions");
             for (String questionAnswerEntry :
                     Objects.requireNonNull(configSection).getKeys(false)) {
                 String question = configSection.getString( questionAnswerEntry + ".question");
-                String answer = configSection.getString(questionAnswerEntry + ".answer");
+                List<String> answers = configSection.getStringList(questionAnswerEntry + ".answer")
+                        .stream()
+                        .map(String::toLowerCase)
+                        .collect(Collectors.toList());
                 if (question == null) {
                     throw new RaceException("Empty question in quizrace for questionsection number " + questionAnswerEntry);
                 }
-                if (answer == null) {
+                if (answers.isEmpty()) {
                     throw new RaceException("Empty answer in quizrace for questionsection number " + questionAnswerEntry);
                 }
-                questionsMap.put(question, answer);
+                questionsMap.put(question, answers);
             }
 
         } catch (RaceException e) {
@@ -51,14 +56,14 @@ public class QuizRace extends Race {
     public void generateRandomQuestionWithAnswer() {
         Object[] questions = questionsMap.keySet().toArray();
         currentQuestion = (String) questions[new Random().nextInt(questions.length)];
-        currentAnswer = questionsMap.get(currentQuestion);
+        currentAnswers = questionsMap.get(currentQuestion);
     }
 
     public String getCurrentQuestion() {
         return currentQuestion;
     }
 
-    public String getCurrentAnswer() {
-        return currentAnswer;
+    public List<String> getCurrentAnswers() {
+        return currentAnswers;
     }
 }

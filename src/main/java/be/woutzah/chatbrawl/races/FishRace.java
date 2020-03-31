@@ -19,11 +19,11 @@ public class FishRace extends Race {
   public FishRace(ChatBrawl plugin) {
     super(
         plugin,
-        plugin.getConfig().getLong("fishrace.duration"),
-        plugin.getConfig().getInt("fishrace.chance"),
-        plugin.getConfig().getBoolean("fishrace.enable-firework"),
-        plugin.getConfig().getBoolean("fishrace.enabled"),
-        plugin.getConfig().getConfigurationSection("fishrace.rewards.commands"));
+        plugin.getFishraceConfig().getLong("fishrace.duration"),
+        plugin.getFishraceConfig().getInt("fishrace.chance"),
+        plugin.getFishraceConfig().getBoolean("fishrace.enable-firework"),
+        plugin.getFishraceConfig().getBoolean("fishrace.enabled"),
+        plugin.getFishraceConfig().getConfigurationSection("fishrace.rewards.commands"));
     this.playerScores = new HashMap<>();
     this.fishMap = new HashMap<>();
     this.fishableList = new ArrayList<>();
@@ -34,7 +34,7 @@ public class FishRace extends Race {
   private void getFishFromConfig() {
     try {
       ConfigurationSection configSection =
-          getPlugin().getConfig().getConfigurationSection("fishrace.fish");
+          getPlugin().getFishraceConfig().getConfigurationSection("fishrace.fish");
       for (String materialString :
           Objects.requireNonNull(configSection).getKeys(false)) {
         Material material = Material.getMaterial(materialString);

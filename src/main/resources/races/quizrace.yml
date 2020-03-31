@@ -1,0 +1,38 @@
+#general settings for the quizrace (Answer the question as fast as possible!)
+quizrace:
+  #this setting enables/disable this type of race
+  enabled: true
+  #this is a list of question entries.Make sure to fill in the question/answer field for each entry.
+  #You can add/remove as much entries as you want. The plugin will randomly choose a section from here when starting the event
+  questions:
+    1:
+      question: 'What''s the capital of France?'
+      answer:
+        - 'paris'
+        - 'parijs'
+        - 'Paris'
+    2:
+      question: 'How much is 20 + 20 X 2 ?'
+      answer:
+        - '60'
+        - 'sixty'
+  #the duration of the quizrace in seconds (cannot be longer than event-delay in general settings!)
+  duration: 900
+  #the chance quizrace is held in chat
+  chance: 20
+  #shoot a firework from the player that wins the race.
+  enable-firework: true
+  #rewards
+  rewards:
+    #in here you can add/remove commands that will be executed when someone wins!
+    #the chance the command get's executed in the console is behind the semicolon
+    #you can add/remove entries in the list by inserting the next number
+    #E.G. the command 'eco give {player} 10' has a chance of 20
+    #parameters you can use: {player}
+    commands:
+      1:
+        command: 'say standardcommand'
+        chance: 20
+      2:
+        command: 'eco give {player} 10'
+        chance: 20

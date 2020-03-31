@@ -12,17 +12,17 @@ public class ChatRace extends Race {
   public ChatRace(ChatBrawl plugin) {
     super(
         plugin,
-        plugin.getConfig().getLong("chatrace.duration"),
-        plugin.getConfig().getInt("chatrace.chance"),
-        plugin.getConfig().getBoolean("chatrace.enable-firework"),
-        plugin.getConfig().getBoolean("chatrace.enabled"),
-        plugin.getConfig().getConfigurationSection("chatrace.rewards.commands"));
+        plugin.getChatraceConfig().getLong("chatrace.duration"),
+        plugin.getChatraceConfig().getInt("chatrace.chance"),
+        plugin.getChatraceConfig().getBoolean("chatrace.enable-firework"),
+        plugin.getChatraceConfig().getBoolean("chatrace.enabled"),
+        plugin.getChatraceConfig().getConfigurationSection("chatrace.rewards.commands"));
     getRandomWordFromConfig();
   }
 
   public void getRandomWordFromConfig() {
     Random random = new Random();
-    List<String> allWords = getPlugin().getConfig().getStringList("chatrace.words");
+    List<String> allWords = getPlugin().getChatraceConfig().getStringList("chatrace.words");
     wordToGuess = allWords.get(random.nextInt(allWords.size()));
   }
 

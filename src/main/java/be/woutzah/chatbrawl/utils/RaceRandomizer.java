@@ -24,9 +24,9 @@ public class RaceRandomizer {
 
   public void putChancesInList() {
     if (plugin.getChatrace().isEnabled()) {
-      Chance raceChance = new Chance(sum + plugin.getChatrace().getChance(), sum, RaceType.chat);
+      Chance chatChance = new Chance(sum + plugin.getChatrace().getChance(), sum, RaceType.chat);
       sum += plugin.getChatrace().getChance();
-      chanceList.add(raceChance);
+      chanceList.add(chatChance);
     }
     if (plugin.getBlockRace().isEnabled()) {
       Chance blockChance = new Chance(sum + plugin.getBlockRace().getChance(), sum, RaceType.block);
@@ -57,6 +57,11 @@ public class RaceRandomizer {
       Chance foodChance = new Chance(sum + plugin.getFoodRace().getChance(), sum, RaceType.food);
       sum += plugin.getFoodRace().getChance();
       chanceList.add(foodChance);
+    }
+    if (plugin.getScrambleRace().isEnabled()) {
+      Chance scrambleChance = new Chance(sum + plugin.getScrambleRace().getChance(), sum, RaceType.scramble);
+      sum += plugin.getScrambleRace().getChance();
+      chanceList.add(scrambleChance);
     }
   }
 

@@ -1,7 +1,13 @@
 package be.woutzah.chatbrawl.listeners;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.types.CraftRace;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.rewards.RewardRandomizer;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,15 +22,31 @@ import java.util.UUID;
 
 public class CraftRaceListener implements Listener {
 
+    private RaceCreator raceCreator;
+    private CraftRace craftRace;
+    private Printer printer;
+    private RewardRandomizer rewardRandomizer;
     private ChatBrawl plugin;
 
     public CraftRaceListener(ChatBrawl plugin) {
+        this.raceCreator = plugin.getRaceCreator();
+        this.craftRace = plugin.getCraftRace();
+        this.printer = plugin.getPrinter();
+        this.rewardRandomizer = craftRace.getRewardRandomizer();
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true)
     public void checkCraftedItems(CraftItemEvent event) {
-        if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.craft)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.craft)) {
+            if (plugin.getDisabledWorldsList().contains(event.getWhoClicked().getLocation().getWorld().getName())){
+                return;
+            }
+            if (!plugin.getAllowCreative()) {
+                if (event.getWhoClicked().getGameMode() == GameMode.CREATIVE) {
+                    return;
+                }
+            }
             if (!(event.getWhoClicked().getInventory().firstEmpty() == -1)) {
                 if (event.getSlotType() == InventoryType.SlotType.RESULT) {
                     ItemStack craftedItemStack;
@@ -38,31 +60,28 @@ public class CraftRaceListener implements Listener {
                     } else {
                         craftedItemStack = event.getCurrentItem();
                     }
-                    UUID uuid = event.getWhoClicked().getUniqueId();
-                    Player player = (Player) event.getWhoClicked();
                     assert craftedItemStack != null;
-                    if (craftedItemStack.getType().equals(plugin.getCraftRace().getCurrentItemStack().getType())) {
-                        if (plugin.getCraftRace().getPlayerScores().containsKey(uuid)) {
-                            int currentAmount = plugin.getCraftRace().getPlayerScores().get(uuid);
+                    if (craftedItemStack.getType().equals(craftRace.getCurrentItemStack().getType())) {
+                        UUID uuid = event.getWhoClicked().getUniqueId();
+                        if (craftRace.getPlayerScores().containsKey(uuid)) {
+                            int currentAmount = craftRace.getPlayerScores().get(uuid);
                             currentAmount += craftedItemStack.getAmount();
-                            plugin.getCraftRace().getPlayerScores().put(uuid, currentAmount);
-                            if (plugin.getCraftRace().getPlayerScores().get(uuid)
-                                    >= plugin.getCraftRace().getCurrentItemStack().getAmount()) {
-                                plugin
-                                        .getServer()
-                                        .broadcastMessage(
-                                                plugin.getPrinter().getAnnounceCraftWinner(player));
-                                if (!plugin.getPrinter().getPersonalCraftWinner().isEmpty()) {
-                                    player.sendMessage(plugin.getPrinter().getPersonalCraftWinner());
+                            craftRace.getPlayerScores().put(uuid, currentAmount);
+                            if (craftRace.getPlayerScores().get(uuid)
+                                    >= craftRace.getCurrentItemStack().getAmount()) {
+                                Player player = (Player) event.getWhoClicked();
+                                Bukkit.broadcast(printer.getAnnounceCraftWinner(player), "cb.default");
+                                if (!printer.getPersonalCraftWinner().isEmpty()) {
+                                    player.sendMessage(printer.getPersonalCraftWinner());
                                 }
-                                plugin.getChatrace().shootFireWorkIfEnabled(player);
-                                plugin
-                                        .getCraftRace()
-                                        .getRewardRandomizer()
-                                        .executeRandomCommand(plugin.getCraftRace().getCommandRewardsMap(), player);
-                                plugin.getRaceCreator().getCraftRaceTask().cancel();
-                                plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-                                plugin.getCraftRace().removeOnlinePlayers();
+                                if (plugin.isSoundEnabled()){
+                                    Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getEndSound(),1.0F, 8.0F) );
+                                }
+                                craftRace.shootFireWorkIfEnabled(player);
+                                rewardRandomizer.executeRandomCommand(craftRace.getCommandRewardsMap(), player);
+                                raceCreator.getCraftRaceTask().cancel();
+                                raceCreator.setCurrentRunningRace(RaceType.none);
+                                craftRace.removeOnlinePlayers();
                             }
                         }
                     }
@@ -73,9 +92,9 @@ public class CraftRaceListener implements Listener {
 
     @EventHandler
     public void addPlayerCraftRace(PlayerJoinEvent event) {
-        if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.craft)) {
-            if (!plugin.getCraftRace().getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
-                plugin.getCraftRace().getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.craft)) {
+            if (!craftRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
+                craftRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
             }
         }
     }

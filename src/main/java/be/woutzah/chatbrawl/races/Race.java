@@ -8,7 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Race {
@@ -20,7 +22,8 @@ public abstract class Race {
   private boolean isEnabled;
   private RewardRandomizer rewardRandomizer;
   private ConfigurationSection commandRewardSection;
-  private HashMap<String, Integer> commandRewardsMap;
+  private HashMap<List<String>, Integer> commandRewardsMap;
+  private List<String> ignoredCommandsList;
 
   public Race(
       ChatBrawl plugin,
@@ -38,6 +41,12 @@ public abstract class Race {
     this.commandRewardSection = commandRewardSection;
     this.rewardRandomizer = new RewardRandomizer(plugin);
     fillCommandRewards();
+    fillIgnoredCommands();
+  }
+
+  private void fillIgnoredCommands() {
+    this.ignoredCommandsList = new ArrayList<>();
+    this.ignoredCommandsList = plugin.getConfig().getStringList("ignored-commands");
   }
 
   public void shootFireWorkIfEnabledAsync(Player player) {
@@ -61,18 +70,18 @@ public abstract class Race {
     try {
       for (String commandEntry :
           Objects.requireNonNull(commandRewardSection).getKeys(false)) {
-        String command = commandRewardSection.getString(commandEntry + ".command");
-        int commandChance = commandRewardSection.getInt(commandEntry + ".chance");
-        if (command == null) {
-          throw new RaceException("the command string for a reward is missing in the config!");
-        } else if (commandChance == 0) {
-          throw new RaceException("the command chance for a reward is missing in the config!");
+        List<String> commands = commandRewardSection.getStringList(commandEntry + ".commands");
+        if (commands.isEmpty()) {
+          throw new RaceException("the commandlist for a reward is missing in the config!");
         }
-        commandRewardsMap.put(command, commandChance);
+        int commandChance = commandRewardSection.getInt(commandEntry + ".chance");
+        if (commandChance == 0) {
+          throw new RaceException("the command chance for rewards is missing in the config!");
+        }
+        commandRewardsMap.put(commands, commandChance);
       }
-
     } catch (RaceException e) {
-      RaceException.handleConfigException(getPlugin(), e);
+      RaceException.handleConfigException(plugin, e);
     }
   }
 
@@ -88,15 +97,15 @@ public abstract class Race {
     return rewardRandomizer;
   }
 
-  public HashMap<String, Integer> getCommandRewardsMap() {
+  public HashMap<List<String>, Integer> getCommandRewardsMap() {
     return commandRewardsMap;
-  }
-
-  public ChatBrawl getPlugin() {
-    return plugin;
   }
 
   public boolean isEnabled() {
     return isEnabled;
+  }
+
+  public List<String> getIgnoredCommandsList() {
+    return ignoredCommandsList;
   }
 }

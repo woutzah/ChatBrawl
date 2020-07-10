@@ -24,8 +24,27 @@ huntrace:
     #parameters you can use: {player}
     commands:
       1:
-        command: 'say chance1'
-        chance: 10
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
+        chance: 30
       2:
-        command: 'say chance2'
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
         chance: 20
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  huntrace-name: 'Hunt Race'
+  huntrace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oHunt Race &e&l]&8&m------------&e&l<\n'
+    - '&fKill the following mobs as fast as possible!\n'
+    - '      &f&l>> &b<amount> &7x &b<mob> &f&l<<\n'
+    - '&e&l>&8&m------------------------------------&e&l<'
+  huntrace-ended: '&fthe &eHunt Race &fended without a winner!'
+  huntrace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oHunt Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m------------------------------------&e&l<\n'
+  huntrace-winner-personal: '&7you won the &eHunt Race&7!'

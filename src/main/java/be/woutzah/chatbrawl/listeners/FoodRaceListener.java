@@ -1,7 +1,13 @@
 package be.woutzah.chatbrawl.listeners;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.types.FoodRace;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.rewards.RewardRandomizer;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,39 +17,53 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.UUID;
 
 public class FoodRaceListener implements Listener {
+
+    private RaceCreator raceCreator;
+    private FoodRace foodRace;
+    private Printer printer;
+    private RewardRandomizer rewardRandomizer;
     private ChatBrawl plugin;
 
     public FoodRaceListener(ChatBrawl plugin) {
+        this.raceCreator = plugin.getRaceCreator();
+        this.foodRace = plugin.getFoodRace();
+        this.printer = plugin.getPrinter();
+        this.rewardRandomizer = foodRace.getRewardRandomizer();
         this.plugin = plugin;
     }
 
     @EventHandler
     public void onFoodConsume(PlayerItemConsumeEvent event) {
-        if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.food)) {
-            UUID uuid = event.getPlayer().getUniqueId();
-            Player player = event.getPlayer();
-            if (event.getItem().getType().equals(plugin.getFoodRace().getCurrentItemStack().getType())) {
-                if (plugin.getFoodRace().getPlayerScores().containsKey(uuid)) {
-                    int currentAmount = plugin.getFoodRace().getPlayerScores().get(uuid);
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.food)) {
+            if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
+                return;
+            }
+            if (!plugin.getAllowCreative()) {
+                if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+                    return;
+                }
+            }
+            if (event.getItem().getType().equals(foodRace.getCurrentItemStack().getType())) {
+                UUID uuid = event.getPlayer().getUniqueId();
+                if (foodRace.getPlayerScores().containsKey(uuid)) {
+                    int currentAmount = foodRace.getPlayerScores().get(uuid);
                     currentAmount++;
-                    plugin.getFoodRace().getPlayerScores().put(uuid, currentAmount);
-                    if (plugin.getFoodRace().getPlayerScores().get(uuid)
-                            == plugin.getFoodRace().getCurrentItemStack().getAmount()) {
-                        plugin
-                                .getServer()
-                                .broadcastMessage(
-                                        plugin.getPrinter().getAnnounceFoodWinner(player));
-                        if (!plugin.getPrinter().getPersonalFoodWinner().isEmpty()) {
-                            player.sendMessage(plugin.getPrinter().getPersonalFoodWinner());
+                    foodRace.getPlayerScores().put(uuid, currentAmount);
+                    if (foodRace.getPlayerScores().get(uuid)
+                            == foodRace.getCurrentItemStack().getAmount()) {
+                        Player player = event.getPlayer();
+                        Bukkit.broadcast(printer.getAnnounceFoodWinner(player), "cb.default");
+                        if (!printer.getPersonalFoodWinner().isEmpty()) {
+                            player.sendMessage(printer.getPersonalFoodWinner());
                         }
-                        plugin.getFoodRace().shootFireWorkIfEnabled(player);
-                        plugin
-                                .getFoodRace()
-                                .getRewardRandomizer()
-                                .executeRandomCommand(plugin.getFoodRace().getCommandRewardsMap(), player);
-                        plugin.getRaceCreator().getFoodRaceTask().cancel();
-                        plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-                        plugin.getFoodRace().removeOnlinePlayers();
+                        if (plugin.isSoundEnabled()){
+                            Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getEndSound(),1.0F, 8.0F) );
+                        }
+                        foodRace.shootFireWorkIfEnabled(player);
+                        rewardRandomizer.executeRandomCommand(foodRace.getCommandRewardsMap(), player);
+                        raceCreator.getFoodRaceTask().cancel();
+                        raceCreator.setCurrentRunningRace(RaceType.none);
+                        foodRace.removeOnlinePlayers();
                     }
                 }
             }
@@ -52,9 +72,9 @@ public class FoodRaceListener implements Listener {
 
     @EventHandler
     public void addPlayerFoodRace(PlayerJoinEvent event) {
-        if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.food)) {
-            if (!plugin.getFoodRace().getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
-                plugin.getFoodRace().getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.food)) {
+            if (!foodRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
+                foodRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
             }
         }
     }

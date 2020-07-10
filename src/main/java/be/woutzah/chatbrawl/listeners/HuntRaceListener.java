@@ -1,7 +1,13 @@
 package be.woutzah.chatbrawl.listeners;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.types.HuntRace;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.rewards.RewardRandomizer;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,40 +19,56 @@ import java.util.UUID;
 
 public class HuntRaceListener implements Listener {
 
+  private RaceCreator raceCreator;
+  private HuntRace huntRace;
+  private Printer printer;
+  private RewardRandomizer rewardRandomizer;
   private ChatBrawl plugin;
 
   public HuntRaceListener(ChatBrawl plugin) {
+    this.raceCreator = plugin.getRaceCreator();
+    this.huntRace = plugin.getHuntRace();
+    this.printer = plugin.getPrinter();
+    this.rewardRandomizer = huntRace.getRewardRandomizer();
     this.plugin = plugin;
   }
 
   @EventHandler
   public void checkMobsKilled(EntityDeathEvent event) {
-    if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.hunt)) {
-      if (event.getEntity().getKiller() != null) {
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.hunt)) {
+      if (event.getEntity().getKiller() == null){
+        return;
+      }
+      if (plugin.getDisabledWorldsList().contains(event.getEntity().getKiller().getLocation().getWorld().getName())){
+        return;
+      }
+      if (!plugin.getAllowCreative()) {
+        if (event.getEntity().getKiller().getGameMode() == GameMode.CREATIVE) {
+          return;
+        }
+      }
+      Player player = event.getEntity().getKiller();
+      if (player != null) {
         Entity mob = event.getEntity();
-        Player player = event.getEntity().getKiller();
-        UUID uuid = event.getEntity().getKiller().getUniqueId();
-        if (mob.getType().equals(plugin.getHuntRace().getCurrentEntityType())) {
-          int currentAmount = plugin.getHuntRace().getPlayerScores().get(uuid);
+        if (mob.getType().equals(huntRace.getCurrentEntityType())) {
+          UUID uuid = player.getUniqueId();
+          int currentAmount = huntRace.getPlayerScores().get(uuid);
           currentAmount++;
-          plugin.getHuntRace().getPlayerScores().put(uuid, currentAmount);
-          if (plugin.getHuntRace().getPlayerScores().get(uuid)
-              == plugin.getHuntRace().getCurrentAmount()) {
-            plugin
-                .getServer()
-                .broadcastMessage(
-                    plugin.getPrinter().getAnnounceHuntWinner(player));
-            if (!plugin.getPrinter().getPersonalHuntWinner().isEmpty()) {
-              player.sendMessage(plugin.getPrinter().getPersonalHuntWinner());
+          huntRace.getPlayerScores().put(uuid, currentAmount);
+          if (huntRace.getPlayerScores().get(uuid)
+              == huntRace.getCurrentAmount()) {
+            Bukkit.broadcast(printer.getAnnounceHuntWinner(player), "cb.default");
+            if (!printer.getPersonalHuntWinner().isEmpty()) {
+              player.sendMessage(printer.getPersonalHuntWinner());
             }
-            plugin.getHuntRace().shootFireWorkIfEnabled(player);
-            plugin
-                .getFishRace()
-                .getRewardRandomizer()
-                .executeRandomCommand(plugin.getFishRace().getCommandRewardsMap(), player);
-            plugin.getRaceCreator().getHuntRaceTask().cancel();
-            plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-            plugin.getHuntRace().removeOnlinePlayers();
+            if (plugin.isSoundEnabled()){
+              Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getEndSound(),1.0F, 8.0F) );
+            }
+            huntRace.shootFireWorkIfEnabled(player);
+            rewardRandomizer.executeRandomCommand(huntRace.getCommandRewardsMap(), player);
+            raceCreator.getHuntRaceTask().cancel();
+            raceCreator.setCurrentRunningRace(RaceType.none);
+            huntRace.removeOnlinePlayers();
           }
         }
       }
@@ -55,9 +77,9 @@ public class HuntRaceListener implements Listener {
 
   @EventHandler
   public void addPlayerFishRace(PlayerJoinEvent event) {
-    if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.hunt)) {
-      if (!plugin.getHuntRace().getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
-        plugin.getHuntRace().getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.hunt)) {
+      if (!huntRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
+        huntRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
       }
     }
   }

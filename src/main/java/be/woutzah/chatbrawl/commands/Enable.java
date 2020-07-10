@@ -1,6 +1,8 @@
 package be.woutzah.chatbrawl.commands;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,22 +10,22 @@ import org.bukkit.command.CommandSender;
 
 public class Enable implements CommandExecutor {
 
-  private ChatBrawl plugin;
+  private Printer printer;
+  private RaceCreator raceCreator;
 
   public Enable(ChatBrawl plugin) {
-    this.plugin = plugin;
+    this.printer = plugin.getPrinter();
+    this.raceCreator = plugin.getRaceCreator();
   }
 
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    if (!plugin.getRaceCreator().getRacesEnabled()) {
-      plugin.getRaceCreator().setRacesEnabled(true);
-      plugin.getRaceCreator().createRaces();
-      sender.sendMessage(
-          plugin.getPrinter().getEnabled());
+    if (!raceCreator.getRacesEnabled()) {
+      raceCreator.setRacesEnabled(true);
+      raceCreator.createRaces();
+      sender.sendMessage(printer.getEnabled());
     } else {
-      sender.sendMessage(
-          plugin.getPrinter().getAlreadyEnabled());
+      sender.sendMessage(printer.getAlreadyEnabled());
     }
     return true;
   }

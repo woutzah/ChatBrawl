@@ -25,8 +25,27 @@ fishrace:
     #parameters you can use: {player}
     commands:
       1:
-        command: 'time set day'
-        chance: 10
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
+        chance: 30
       2:
-        command: 'time set night'
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
         chance: 20
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  fishrace-name: 'Fish Race'
+  fishrace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oFish Race &e&l]&8&m------------&e&l<\n'
+    - '&fCatch the following fish as fast as possible!\n'
+    - '      &f&l>> &b<amount> &7x &b<fish> &f&l<<\n'
+    - '&e&l>&8&m------------------------------------&e&l<'
+  fishrace-ended: '&fthe &eFish Race &fended without a winner!'
+  fishrace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oFish Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m------------------------------------&e&l<\n'
+  fishrace-winner-personal: '&7you won the &eFish Race&7!'

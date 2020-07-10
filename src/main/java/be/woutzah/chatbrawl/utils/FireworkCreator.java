@@ -8,12 +8,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 public class FireworkCreator {
 
-  // private ChatBrawl plugin;
-
-  // public FireworkCreator(ChatBrawl plugin) {
-  //    this.plugin = plugin;
-  // }
-
   public static void spawnFirework(Player player) {
     Firework firework = player.getWorld().spawn(player.getLocation(), Firework.class);
     FireworkMeta data = firework.getFireworkMeta();

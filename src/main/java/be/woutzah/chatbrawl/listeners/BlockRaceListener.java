@@ -1,7 +1,13 @@
 package be.woutzah.chatbrawl.listeners;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.types.BlockRace;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.rewards.RewardRandomizer;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,52 +19,65 @@ import java.util.UUID;
 
 public class BlockRaceListener implements Listener {
 
-  private ChatBrawl plugin;
+    private RaceCreator raceCreator;
+    private BlockRace blockRace;
+    private Printer printer;
+    private RewardRandomizer rewardRandomizer;
+    private ChatBrawl plugin;
 
-  public BlockRaceListener(ChatBrawl plugin) {
-    this.plugin = plugin;
-  }
+    public BlockRaceListener(ChatBrawl plugin) {
+        this.raceCreator = plugin.getRaceCreator();
+        this.blockRace = plugin.getBlockRace();
+        this.printer = plugin.getPrinter();
+        this.rewardRandomizer = blockRace.getRewardRandomizer();
+        this.plugin = plugin;
+    }
 
-  @EventHandler
-  public void checkBlocksMined(BlockBreakEvent event) {
-    if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.block)) {
-      Block minedBlock = event.getBlock();
-      UUID uuid = event.getPlayer().getUniqueId();
-      Player player = event.getPlayer();
-      if (minedBlock.getType().equals(plugin.getBlockRace().getCurrentItemStack().getType())) {
-        if (plugin.getBlockRace().getPlayerScores().containsKey(uuid)) {
-          int currentAmount = plugin.getBlockRace().getPlayerScores().get(uuid);
-          currentAmount++;
-          plugin.getBlockRace().getPlayerScores().put(uuid, currentAmount);
-          if (plugin.getBlockRace().getPlayerScores().get(uuid)
-              == plugin.getBlockRace().getCurrentItemStack().getAmount()) {
-            plugin
-                .getServer()
-                .broadcastMessage(
-                    plugin.getPrinter().getAnnounceBlockWinner(player));
-            if (!plugin.getPrinter().getPersonalBlockWinner().isEmpty()) {
-              player.sendMessage(plugin.getPrinter().getPersonalBlockWinner());
+    @EventHandler
+    public void checkBlocksMined(BlockBreakEvent event) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.block)) {
+            if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
+                return;
             }
-            plugin.getBlockRace().shootFireWorkIfEnabled(player);
-            plugin
-                .getBlockRace()
-                .getRewardRandomizer()
-                .executeRandomCommand(plugin.getBlockRace().getCommandRewardsMap(), player);
-            plugin.getRaceCreator().getBlockRaceTask().cancel();
-            plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-            plugin.getBlockRace().removeOnlinePlayers();
-          }
+            if (!plugin.getAllowCreative()) {
+                if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+                    return;
+                }
+            }
+            Block minedBlock = event.getBlock();
+            if (minedBlock.getType().equals(blockRace.getCurrentItemStack().getType())) {
+                UUID uuid = event.getPlayer().getUniqueId();
+                if (blockRace.getPlayerScores().containsKey(uuid)) {
+                    int currentAmount = blockRace.getPlayerScores().get(uuid);
+                    currentAmount++;
+                    blockRace.getPlayerScores().put(uuid, currentAmount);
+                    if (blockRace.getPlayerScores().get(uuid)
+                            == blockRace.getCurrentItemStack().getAmount()) {
+                        Player player = event.getPlayer();
+                        Bukkit.broadcast(printer.getAnnounceBlockWinner(player), "cb.default");
+                        if (!printer.getPersonalBlockWinner().isEmpty()) {
+                            player.sendMessage(printer.getPersonalBlockWinner());
+                        }
+                        if (plugin.isSoundEnabled()){
+                            Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getEndSound(),1.0F, 8.0F) );
+                        }
+                        blockRace.shootFireWorkIfEnabled(player);
+                        rewardRandomizer.executeRandomCommand(blockRace.getCommandRewardsMap(), player);
+                        raceCreator.getBlockRaceTask().cancel();
+                        raceCreator.setCurrentRunningRace(RaceType.none);
+                        blockRace.removeOnlinePlayers();
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  @EventHandler
-  public void addPlayerBlockRace(PlayerJoinEvent event) {
-    if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.block)) {
-      if (!plugin.getBlockRace().getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
-        plugin.getBlockRace().getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
-      }
+    @EventHandler
+    public void addPlayerBlockRace(PlayerJoinEvent event) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.block)) {
+            if (!blockRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
+                blockRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
+            }
+        }
     }
-  }
 }

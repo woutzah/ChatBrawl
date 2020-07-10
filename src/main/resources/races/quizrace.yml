@@ -31,8 +31,27 @@ quizrace:
     #parameters you can use: {player}
     commands:
       1:
-        command: 'say standardcommand'
-        chance: 20
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
+        chance: 30
       2:
-        command: 'eco give {player} 10'
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
         chance: 20
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  quizrace-name: 'Quiz Race'
+  quizrace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oQuiz Race &e&l]&8&m------------&e&l<\n'
+    - '&fAnswer the following question as fast as possible!\n'
+    - '      &b<question>\n'
+    - '&e&l>&8&m------------------------------------&e&l<'
+  quizrace-ended: '&fthe &eQuiz Race &fended without a winner!'
+  quizrace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oQuiz Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m------------------------------------&e&l<\n'
+  quizrace-winner-personal: '&7you won the &eQuiz Race&7!'

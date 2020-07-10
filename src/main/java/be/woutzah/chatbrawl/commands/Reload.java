@@ -2,6 +2,7 @@ package be.woutzah.chatbrawl.commands;
 
 import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.exceptions.RaceException;
+import be.woutzah.chatbrawl.listeners.ChatRaceListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +18,11 @@ public class Reload implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        plugin.getRaceCreator().getRaceCreationTask().cancel();
+        try {
+            plugin.getRaceCreator().getRaceCreationTask().cancel();
+        }catch (Exception ignored){
+
+        }
         switch (plugin.getRaceCreator().getCurrentRunningRace()){
             case chat:
                 plugin.getRaceCreator().getChatRaceTask().cancel();
@@ -36,19 +41,24 @@ public class Reload implements CommandExecutor {
                 break;
             case quiz:
                 plugin.getRaceCreator().getQuizRaceTask().cancel();
+                break;
             case food:
                 plugin.getRaceCreator().getFoodRaceTask().cancel();
+                break;
+            case scramble:
+                plugin.getRaceCreator().getScrambleRaceTask().cancel();
+                break;
             case none:
                 break;
         }
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
         plugin.setupFiles();
+        HandlerList.unregisterAll(plugin);
         plugin.init();
         RaceException.resetIsBadConfig();
         plugin.configChecker();
         sender.sendMessage(plugin.getPrinter().getReloadMessage());
-        plugin.getRaceCreator().createRaces();
         return true;
     }
 }

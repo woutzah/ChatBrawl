@@ -1,0 +1,60 @@
+#general settings for the scramblerace (unscramble the word shown in chat as fast as possible)
+scramblerace:
+  #this setting enables/disable this type of race
+  enabled: false
+  #this setting changes the difficulty of the scramble race.
+  #     difficulty 1 = only randomly places characters
+  #     difficulty 2 = also randomly capitalizes characters
+  #     difficulty 3 = also adds certain digits as characters
+  #                    e.g. 5 = A, 0 = O, 3 = E, ...
+  #valid options: 1, 2, 3
+  difficulty: 1
+  #this is a list of words the plugin will randomly choose from and scramble when starting the event
+  words:
+    - strawberry
+    - car
+    - hello
+    - mechanic
+    - potion
+    - redstone
+    - obsidian
+    - pickaxe
+  #the duration of the chatrace in seconds (cannot be longer than event-delay in general settings!)
+  duration: 900
+  #the chance chatrace is held in chat
+  chance: 20
+  #shoot a firework from the player that wins the race.
+  enable-firework: true
+
+  rewards:
+    #in here you can add/remove commands that will be executed when someone wins!
+    #the chance the command get's executed in the console is behind the semicolon
+    #you can add/remove entries in the list by inserting the next number
+    #E.G. the command 'eco give {player} 10' has a chance of 10
+    #parameters you can use: {player} = placeholder for player name in commands
+    commands:
+      1:
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
+        chance: 30
+      2:
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
+        chance: 20
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  scramblerace-name: 'Scramble Race'
+  scramblerace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oScramble Race &e&l]&8&m------------&e&l<\n'
+    - '&fUnscramble the following word as fast as possible!\n'
+    - '      &b<word>\n'
+    - '&e&l>&8&m---------------------------------------&e&l<'
+  scramblerace-ended: '&fthe &eScramble Race &fended without a winner!'
+  scramblerace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oScramble Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m---------------------------------------&e&l<\n'
+  scramblerace-winner-personal: '&7you won the &eScramble Race&7!'

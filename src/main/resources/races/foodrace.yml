@@ -24,8 +24,27 @@ foodrace:
     #parameters you can use: {player}
     commands:
       1:
-        command: 'say standardcommand'
-        chance: 20
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
+        chance: 30
       2:
-        command: 'eco give {player} 10'
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
         chance: 20
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  foodrace-name: 'Food Race'
+  foodrace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oFood Race &e&l]&8&m------------&e&l<\n'
+    - '&fConsume the following food as fast as possible!\n'
+    - '      &f&l>> &b<amount> &7x &b<food> &f&l<<\n'
+    - '&e&l>&8&m------------------------------------&e&l<'
+  foodrace-ended: '&fthe &eFood Race &fended without a winner!'
+  foodrace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oFood Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m------------------------------------&e&l<\n'
+  foodrace-winner-personal: '&7you won the &eFood Race&7!'

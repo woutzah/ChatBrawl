@@ -24,8 +24,27 @@ craftrace:
     #parameters you can use: {player}
     commands:
       1:
-        command: 'say standardcommand'
-        chance: 20
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
+        chance: 30
       2:
-        command: 'eco give {player} 10'
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
         chance: 20
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  craftrace-name: 'Craft Race'
+  craftrace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oCraft Race &e&l]&8&m------------&e&l<\n'
+    - '&fCraft the following items as fast as possible!\n'
+    - '      &f&l>> &b<amount> &7x &b<item> &f&l<<\n'
+    - '&e&l>&8&m------------------------------------&e&l<'
+  craftrace-ended: '&fthe &eCraft Race &fended without a winner!'
+  craftrace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oCraft Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m------------------------------------&e&l<\n'
+  craftrace-winner-personal: '&7you won the &eCraft Race&7!'

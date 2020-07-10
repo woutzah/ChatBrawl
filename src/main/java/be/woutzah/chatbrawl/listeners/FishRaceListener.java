@@ -1,7 +1,13 @@
 package be.woutzah.chatbrawl.listeners;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.types.FishRace;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.rewards.RewardRandomizer;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,41 +20,54 @@ import java.util.UUID;
 
 public class FishRaceListener implements Listener {
 
+  private RaceCreator raceCreator;
+  private FishRace fishRace;
+  private Printer printer;
+  private RewardRandomizer rewardRandomizer;
   private ChatBrawl plugin;
 
   public FishRaceListener(ChatBrawl plugin) {
+    this.raceCreator = plugin.getRaceCreator();
+    this.fishRace = plugin.getFishRace();
+    this.printer = plugin.getPrinter();
+    this.rewardRandomizer = fishRace.getRewardRandomizer();
     this.plugin = plugin;
   }
 
   @EventHandler
   public void checkFishedObjects(PlayerFishEvent event) {
-    if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.fish)) {
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.fish)) {
+      if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
+        return;
+      }
+      if (!plugin.getAllowCreative()) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+          return;
+        }
+      }
       if (event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH)) {
         Item fish = (Item) event.getCaught();
         ItemStack fishStack = fish.getItemStack();
-        Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-        if (fishStack.getType().equals(plugin.getFishRace().getCurrentItemStack().getType())) {
-          int currentAmount = plugin.getFishRace().getPlayerScores().get(uuid);
+        if (fishStack.getType().equals(fishRace.getCurrentItemStack().getType())) {
+          UUID uuid = event.getPlayer().getUniqueId();
+          int currentAmount = fishRace.getPlayerScores().get(uuid);
           currentAmount++;
-          plugin.getFishRace().getPlayerScores().put(uuid, currentAmount);
-          if (plugin.getFishRace().getPlayerScores().get(uuid)
-              == plugin.getFishRace().getCurrentItemStack().getAmount()) {
-            plugin
-                .getServer()
-                .broadcastMessage(
-                    plugin.getPrinter().getAnnounceFishWinner(player));
-            if (!plugin.getPrinter().getPersonalFishWinner().isEmpty()) {
-              player.sendMessage(plugin.getPrinter().getPersonalFishWinner());
+          fishRace.getPlayerScores().put(uuid, currentAmount);
+          if (fishRace.getPlayerScores().get(uuid)
+              == fishRace.getCurrentItemStack().getAmount()) {
+            Player player = event.getPlayer();
+            Bukkit.broadcast(printer.getAnnounceFishWinner(player),"cb.default");
+            if (!printer.getPersonalFishWinner().isEmpty()) {
+              player.sendMessage(printer.getPersonalFishWinner());
             }
-            plugin.getFishRace().shootFireWorkIfEnabled(player);
-            plugin
-                .getFishRace()
-                .getRewardRandomizer()
-                .executeRandomCommand(plugin.getFishRace().getCommandRewardsMap(), player);
-            plugin.getRaceCreator().getFishRaceTask().cancel();
-            plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-            plugin.getFishRace().removeOnlinePlayers();
+            if (plugin.isSoundEnabled()){
+              Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getEndSound(),1.0F, 8.0F) );
+            }
+            fishRace.shootFireWorkIfEnabled(player);
+            rewardRandomizer.executeRandomCommand(fishRace.getCommandRewardsMap(), player);
+            raceCreator.getFishRaceTask().cancel();
+            raceCreator.setCurrentRunningRace(RaceType.none);
+            fishRace.removeOnlinePlayers();
           }
         }
       }
@@ -57,9 +76,9 @@ public class FishRaceListener implements Listener {
 
   @EventHandler
   public void addPlayerFishRace(PlayerJoinEvent event) {
-    if (plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.fish)) {
-      if (!plugin.getFishRace().getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
-        plugin.getFishRace().getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.fish)) {
+      if (!fishRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
+        fishRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
       }
     }
   }

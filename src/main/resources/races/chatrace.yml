@@ -27,8 +27,27 @@ chatrace:
     #parameters you can use: {player} = placeholder for player name in commands
     commands:
       1:
-        command: 'eco give {player} 10'
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
         chance: 30
       2:
-        command: 'time set day'
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
         chance: 20
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  chatrace-name: 'Chat Race'
+  chatrace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oChat Race &e&l]&8&m------------&e&l<\n'
+    - '&fType the following word as fast as possible!\n'
+    - '      &b<word>\n'
+    - '&e&l>&8&m------------------------------------&e&l<'
+  chatrace-ended: '&fthe &eChat Race &fended without a winner!'
+  chatrace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oChat Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m------------------------------------&e&l<\n'
+  chatrace-winner-personal: '&7you won the &eChat Race&7!'

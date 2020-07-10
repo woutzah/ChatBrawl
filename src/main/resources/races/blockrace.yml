@@ -26,8 +26,28 @@ blockrace:
     #parameters you can use: {player}
     commands:
       1:
-        command: 'say standardcommand'
-        chance: 20
+        commands:
+          - 'eco give {player} 10'
+          - 'time set day'
+        chance: 30
       2:
-        command: 'eco give {player} 10'
+        commands:
+          - 'eco give {player} 5'
+          - 'time set day'
         chance: 20
+
+
+#you can replace <player> with <rawname> to show the username of a player without prefixes
+language:
+  blockrace-name: 'Block Race'
+  blockrace-start:
+    - '&e&l>&8&m------------&e&l[ &6&oBlock Race &e&l]&8&m------------&e&l<\n'
+    - '&fMine the following blocks as fast as possible!\n'
+    - '      &f&l>> &b<amount> &7x &b<block> &f&l<<\n'
+    - '&e&l>&8&m------------------------------------&e&l<'
+  blockrace-ended: '&fthe &eBlock Race &fended without a winner!'
+  blockrace-winner:
+    - '&e&l>&8&m---------&e&l[ &b&oBlock Race Winner &e&l]&8&m---------&e&l<\n'
+    - '&fCongrats! &b<player> &fwas the fastest!\n'
+    - '&e&l>&8&m------------------------------------&e&l<\n'
+  blockrace-winner-personal: '&7you won the &eBlock Race&7!'

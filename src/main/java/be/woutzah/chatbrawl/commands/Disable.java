@@ -1,6 +1,8 @@
 package be.woutzah.chatbrawl.commands;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,54 +11,60 @@ import org.bukkit.command.CommandSender;
 
 public class Disable implements CommandExecutor {
 
-  private ChatBrawl plugin;
+  private RaceCreator raceCreator;
+  private Printer printer;
 
   public Disable(ChatBrawl plugin) {
-    this.plugin = plugin;
+    this.printer = plugin.getPrinter();
+    this.raceCreator = plugin.getRaceCreator();
   }
 
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    if (plugin.getRaceCreator().getRacesEnabled()) {
-      plugin.getRaceCreator().setRacesEnabled(false);
-      plugin.getRaceCreator().getRaceCreationTask().cancel();
-      switch (plugin.getRaceCreator().getCurrentRunningRace()) {
+    if (raceCreator.getRacesEnabled()) {
+      raceCreator.setRacesEnabled(false);
+      try {
+        raceCreator.getRaceCreationTask().cancel();
+      }catch (Exception ignored){
+
+      }
+      switch (raceCreator.getCurrentRunningRace()) {
         case chat:
-          plugin.getRaceCreator().getChatRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
+          raceCreator.getChatRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
         case block:
-          plugin.getRaceCreator().getBlockRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
+          raceCreator.getBlockRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
         case fish:
-          plugin.getRaceCreator().getFishRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
+          raceCreator.getFishRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
         case hunt:
-          plugin.getRaceCreator().getHuntRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
+          raceCreator.getHuntRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
         case craft:
-          plugin.getRaceCreator().getCraftRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
+          raceCreator.getCraftRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
         case quiz:
-          plugin.getRaceCreator().getQuizRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
+          raceCreator.getQuizRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
         case food:
-          plugin.getRaceCreator().getFoodRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
+          raceCreator.getFoodRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
-        default:
+        case scramble:
+          raceCreator.getScrambleRaceTask().cancel();
+          raceCreator.setCurrentRunningRace(RaceType.none);
           break;
       }
-      sender.sendMessage(
-          plugin.getPrinter().getDisabled());
+      sender.sendMessage(printer.getDisabled());
     } else {
-      sender.sendMessage(
-          plugin.getPrinter().getAlreadyDisabled());
+      sender.sendMessage(printer.getAlreadyDisabled());
     }
     return true;
   }

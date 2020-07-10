@@ -19,13 +19,11 @@ public class GeneralListener implements Listener {
     @EventHandler
     public void notifyOnLogin(PlayerLoginEvent event) {
         if (notifyOnLogin) {
-            Bukkit.getServer()
-                    .getScheduler()
-                    .runTaskLater(
-                            plugin,
-                            () -> event.getPlayer().sendMessage(plugin.getPrinter().getCurrentRunningRaceInfo()),
-                            100);
-
+            if (!plugin.getPrinter().getCurrentRunningRaceInfo().isEmpty()) {
+                Bukkit.getServer().getScheduler().runTaskLater(plugin, () ->
+                                event.getPlayer().sendMessage(plugin.getPrinter().getCurrentRunningRaceInfo()),
+                        100);
+            }
         }
     }
 }

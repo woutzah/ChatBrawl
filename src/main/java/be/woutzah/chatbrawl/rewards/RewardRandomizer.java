@@ -24,27 +24,26 @@ public class RewardRandomizer {
         this.random = new Random();
     }
 
-    public void executeRandomCommand(HashMap<String, Integer> rewardsMap, Player player) {
+    public void executeRandomCommand(HashMap<List<String>, Integer> rewardsMap, Player player) {
         calculateSumAndFillChanceList(rewardsMap);
         int index = random.nextInt(sum);
         for (Chance chance : chanceList) {
             if (chance.getLowerLimit() <= index && chance.getUpperLimit() > index) {
-                Bukkit.getServer()
-                        .getScheduler()
-                        .runTaskLater(
+                chance.getCommands().forEach(c -> Bukkit.getServer()
+                        .getScheduler().runTaskLater(
                                 plugin,
                                 () -> Bukkit.dispatchCommand(
                                         Bukkit.getServer().getConsoleSender(),
-                                        chance.getCommandString().replace("{player}", player.getName())),
-                                0);
+                                        c.replace("{player}", player.getName())),
+                                0));
             }
         }
     }
 
-    public void calculateSumAndFillChanceList(HashMap<String, Integer> rewardsMap) {
-        for (String command : rewardsMap.keySet()) {
-            Chance chance = new Chance(sum + rewardsMap.get(command), sum, command);
-            sum += rewardsMap.get(command);
+    public void calculateSumAndFillChanceList(HashMap<List<String>, Integer> rewardsMap) {
+        for (List<String> commands : rewardsMap.keySet()) {
+            Chance chance = new Chance(sum + rewardsMap.get(commands), sum, commands);
+            sum += rewardsMap.get(commands);
             chanceList.add(chance);
         }
     }

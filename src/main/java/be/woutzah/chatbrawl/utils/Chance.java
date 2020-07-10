@@ -2,17 +2,19 @@ package be.woutzah.chatbrawl.utils;
 
 import be.woutzah.chatbrawl.races.RaceType;
 
+import java.util.List;
+
 public class Chance {
 
   private int upperLimit;
   private int lowerLimit;
-  private String commandString;
+  private List<String> commands;
   private RaceType raceType;
 
-  public Chance(int upperlimit, int lowerLimit, String commandString) {
+  public Chance(int upperlimit, int lowerLimit, List<String> commands) {
     this.upperLimit = upperlimit;
     this.lowerLimit = lowerLimit;
-    this.commandString = commandString;
+    this.commands = commands;
   }
 
   public Chance(int upperLimit, int lowerLimit, RaceType raceType) {
@@ -33,7 +35,7 @@ public class Chance {
     return raceType;
   }
 
-  public String getCommandString() {
-    return commandString;
+  public List<String> getCommands() {
+    return commands;
   }
 }

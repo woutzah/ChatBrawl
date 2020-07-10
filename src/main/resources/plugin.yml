@@ -1,7 +1,7 @@
 name: ChatBrawl
-version: 1.5
+version: 1.7.0
 main: be.woutzah.chatbrawl.ChatBrawl
-api-version: 1.14
+api-version: 1.13
 authors: [Woutzah]
 description: A fun chat competition plugin.
 softdepend: [PlaceholderAPI, LangUtils]

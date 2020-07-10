@@ -4,7 +4,7 @@
 # |                                 ChatBrawl by Woutzah                            | #
 # |                                                                                 | #
 # |             Please follow the instructions noted above every setting.           | #
-# |      For support, please join the Discord server: https://discord.gg/xPFPYbV    | #
+# |      For support, please join the Discord server: https://discord.gg/TvTUWvG    | #
 # |                                                                                 | #
 # +---------------------------------------------------------------------------------+ #
 #######################################################################################
@@ -28,13 +28,39 @@ events-enabled: true
 notify-event-login: true
 
 #minimum amount of players to be online before an event will start.
-minimum-players: 1
+minimum-players: 0
 
 #this is the delay between events in seconds (currently 20 mins). Even if a winner is determined after e.g. 10 seconds
 #the plugin will still wait the full 20 mins before starting a new event. Every race
 #has a setting "duration" where you can set specific durations per race before it ends.
 #NOTE: this setting (general delay) has to be a higher delay than all the other specific race delays!
 event-delay: 1200
+
+#a list of commands that do not count when used for answering chat related races,
+#when players use these commands, chatbrawl will ignore what's said within the commands.
+#you can add as much entries as you want.
+ignored-commands:
+  - '/pm'
+  - '/msg'
+  - '/r'
+
+disabled-worlds:
+  - 'customworld'
+  - 'customworld2'
+
+#enables sound at beginning and end of a race.
+enable-sound: true
+#sound that get's played at the beginning of a race
+sound-begin-races: 'BLOCK_ANVIL_PLACE'
+#sound that get's played at the end of a race
+sound-end-races: 'BLOCK_NOTE_BLOCK_PLING'
+
+#allow players to participate in races when in creative mode.
+allow-creative: true
+
+#if this is set to true, the messages that announce a race start
+#will be centered in the chat. This allows for a new style of formatting.
+center-racestart: false
 
 
 

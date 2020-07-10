@@ -2,9 +2,9 @@ package be.woutzah.chatbrawl.messages;
 
 import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.races.types.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -15,11 +15,28 @@ public class Printer {
     private final String discordLink;
     private ChatBrawl plugin;
     private FileConfiguration config;
+    private LanguageManager languageManager;
+    private ChatRace chatRace;
+    private BlockRace blockRace;
+    private FishRace fishRace;
+    private HuntRace huntRace;
+    private CraftRace craftRace;
+    private QuizRace quizRace;
+    private FoodRace foodRace;
+    private ScrambleRace scrambleRace;
 
     public Printer(ChatBrawl plugin) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
-        discordLink = "https://discord.gg/xPFPYbV";
+        discordLink = "https://discord.gg/TvTUWvG";
+        this.languageManager = plugin.getLanguageFileReader();
+        this.chatRace = plugin.getChatrace();
+        this.blockRace = plugin.getBlockRace();
+        this.fishRace = plugin.getFishRace();
+        this.huntRace = plugin.getHuntRace();
+        this.craftRace = plugin.getCraftRace();
+        this.quizRace = plugin.getQuizRace();
+        this.foodRace = plugin.getFoodRace();
     }
 
     //General messages
@@ -28,15 +45,15 @@ public class Printer {
     }
 
     public String getHelpMenu() {
-        return plugin.getLanguageFileReader().getHelpMenu();
+        return languageManager.getHelpMenu();
     }
 
     public String getStartedCreating() {
-        return getPrefix() + plugin.getLanguageFileReader().getStartedCreating();
+        return getPrefix() + languageManager.getStartedCreating();
     }
 
     public String getReloadMessage() {
-        return parseColorCodes(getPrefix() + "&aChatBrawl &eV" + plugin.getDescription().getVersion() +" &ahas been reloaded!" );
+        return parseColorCodes(getPrefix() + "&aChatBrawl &eV" + plugin.getDescription().getVersion() + " &ahas been reloaded!");
     }
 
     public String getDiscordMessage() {
@@ -59,7 +76,7 @@ public class Printer {
         Bukkit.getConsoleSender()
                 .sendMessage(parseColorCodes("&e&l>           &bChatbrawl V"
                         + plugin.getDescription().getVersion()
-                        + "           &e&l<"));
+                        + "         &e&l<"));
         Bukkit.getConsoleSender()
                 .sendMessage(parseColorCodes("&e&l>             &9&oBy woutzah             &e&l<"));
         Bukkit.getConsoleSender()
@@ -74,58 +91,60 @@ public class Printer {
 
     //commands messages
     public String getNoPermission() {
-        return getPrefix() + plugin.getLanguageFileReader().getNoPermission();
+        return getPrefix() + languageManager.getNoPermission();
     }
 
     public String getSubcommandNotExist() {
-        return getPrefix() + plugin.getLanguageFileReader().getSubcommandNotExist();
+        return getPrefix() + languageManager.getSubcommandNotExist();
     }
 
     public String getStopRaceUsage() {
-        return getPrefix() + plugin.getLanguageFileReader().getStopRaceUsage();
+        return getPrefix() + languageManager.getStopRaceUsage();
     }
 
     public String getStoppedRace(RaceType raceType) {
-        return getPrefix() + plugin.getLanguageFileReader().getStoppedRace(raceType);
+        return getPrefix() + languageManager.getStoppedRace(raceType);
     }
 
     public String getNoRaceRunning() {
-        return getPrefix() + plugin.getLanguageFileReader().getNoRaceRunning();
+        return languageManager.getNoRaceRunning().isEmpty() ? "" : getPrefix() + languageManager.getNoRaceRunning();
     }
 
     public String getDisabled() {
-        return getPrefix() + plugin.getLanguageFileReader().getDisabled();
+        return getPrefix() + languageManager.getDisabled();
     }
 
     public String getAlreadyDisabled() {
-        return getPrefix() + plugin.getLanguageFileReader().getAlreadyDisabled();
+        return getPrefix() + languageManager.getAlreadyDisabled();
     }
 
     public String getEnabled() {
-        return getPrefix() + plugin.getLanguageFileReader().getEnabled();
+        return getPrefix() + languageManager.getEnabled();
     }
 
     public String getAlreadyEnabled() {
-        return getPrefix() + plugin.getLanguageFileReader().getAlreadyEnabled();
+        return getPrefix() + languageManager.getAlreadyEnabled();
     }
 
 
     public String getCurrentRunningRaceInfo() {
         switch (plugin.getRaceCreator().getCurrentRunningRace()) {
             case chat:
-                return getAnnounceChatStart(plugin.getChatrace().getWordToGuess());
+                return getAnnounceChatStart(chatRace.getWordToGuess());
             case block:
-                return getAnnounceBlockStart(plugin.getBlockRace().getCurrentItemStack());
+                return getAnnounceBlockStart(blockRace.getCurrentItemStack());
             case fish:
-                return getAnnounceFishStart(plugin.getFishRace().getCurrentItemStack());
+                return getAnnounceFishStart(fishRace.getCurrentItemStack());
             case hunt:
-                return getAnnounceHuntStart(plugin.getHuntRace().getCurrentEntityType(), plugin.getHuntRace().getCurrentAmount());
+                return getAnnounceHuntStart(huntRace.getCurrentEntityType(), huntRace.getCurrentAmount());
             case craft:
-                return getAnnounceCraftStart(plugin.getCraftRace().getCurrentItemStack());
+                return getAnnounceCraftStart(craftRace.getCurrentItemStack());
             case quiz:
-                return getAnnounceQuizStart(plugin.getQuizRace().getCurrentQuestion());
+                return getAnnounceQuizStart(quizRace.getCurrentQuestion());
             case food:
-                return getAnnounceFoodStart(plugin.getFoodRace().getCurrentItemStack());
+                return getAnnounceFoodStart(foodRace.getCurrentItemStack());
+            case scramble:
+                return getAnnounceScrambleStart(scrambleRace.getWordToUnscramble());
             case none:
                 return getNoRaceRunning();
         }
@@ -134,123 +153,140 @@ public class Printer {
 
     //chatrace messages
     public String getAnnounceChatStart(String word) {
-        return plugin.getLanguageFileReader().getAnnounceChatStart(word);
+        return languageManager.getAnnounceChatStart(word);
     }
 
     public String getAnnounceChatEnd() {
-        return getPrefix() + plugin.getLanguageFileReader().getAnnounceChatEnd();
+        return getPrefix() + languageManager.getAnnounceChatEnd();
     }
 
     public String getAnnounceChatWinner(Player player) {
-        return plugin.getLanguageFileReader().getAnnounceChatWinner(player);
+        return languageManager.getAnnounceChatWinner(player);
     }
 
     public String getPersonalChatWinner() {
-        return plugin.getLanguageFileReader().getPersonalChatWinner().isEmpty() ? "" :getPrefix() + plugin.getLanguageFileReader().getPersonalChatWinner();
+        return languageManager.getPersonalChatWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalChatWinner();
     }
 
     //blockrace messages
     public String getAnnounceBlockStart(ItemStack itemStack) {
-        return plugin.getLanguageFileReader().getAnnounceBlockStart(itemStack);
+        return languageManager.getAnnounceBlockStart(itemStack);
     }
 
     public String getAnnounceBlockEnd() {
-        return getPrefix() + plugin.getLanguageFileReader().getAnnounceBlockEnd();
+        return getPrefix() + languageManager.getAnnounceBlockEnd();
     }
 
     public String getAnnounceBlockWinner(Player player) {
-        return plugin.getLanguageFileReader().getAnnounceBlockWinner(player);
+        return languageManager.getAnnounceBlockWinner(player);
     }
 
     public String getPersonalBlockWinner() {
-        return plugin.getLanguageFileReader().getPersonalBlockWinner().isEmpty() ? "" :getPrefix() + plugin.getLanguageFileReader().getPersonalBlockWinner();
+        return languageManager.getPersonalBlockWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalBlockWinner();
     }
 
     //fishrace messages
     public String getAnnounceFishStart(ItemStack itemStack) {
-        return plugin.getLanguageFileReader().getAnnounceFishStart(itemStack);
+        return languageManager.getAnnounceFishStart(itemStack);
     }
 
     public String getAnnounceFishEnd() {
-        return getPrefix() + plugin.getLanguageFileReader().getAnnounceFishEnd();
+        return getPrefix() + languageManager.getAnnounceFishEnd();
     }
 
     public String getAnnounceFishWinner(Player player) {
-        return plugin.getLanguageFileReader().getAnnounceFishWinner(player);
+        return languageManager.getAnnounceFishWinner(player);
     }
 
     public String getPersonalFishWinner() {
-        return plugin.getLanguageFileReader().getPersonalFishWinner().isEmpty() ? "" :getPrefix() + plugin.getLanguageFileReader().getPersonalFishWinner();
+        return languageManager.getPersonalFishWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalFishWinner();
     }
 
     //huntrace messages
     public String getAnnounceHuntStart(EntityType entityType, int amount) {
-        return plugin.getLanguageFileReader().getAnnounceHuntStart(entityType, amount);
+        return languageManager.getAnnounceHuntStart(entityType, amount);
     }
 
     public String getAnnounceHuntEnd() {
-        return getPrefix() + plugin.getLanguageFileReader().getAnnounceHuntEnd();
+        return getPrefix() + languageManager.getAnnounceHuntEnd();
     }
 
     public String getAnnounceHuntWinner(Player player) {
-        return plugin.getLanguageFileReader().getAnnounceHuntWinner(player);
+        return languageManager.getAnnounceHuntWinner(player);
     }
 
     public String getPersonalHuntWinner() {
-        return plugin.getLanguageFileReader().getPersonalHuntWinner().isEmpty() ? "" :getPrefix() + plugin.getLanguageFileReader().getPersonalHuntWinner();
+        return languageManager.getPersonalHuntWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalHuntWinner();
     }
 
     //craftrace messages
     public String getAnnounceCraftStart(ItemStack itemStack) {
-        return plugin.getLanguageFileReader().getAnnounceCraftStart(itemStack);
+        return languageManager.getAnnounceCraftStart(itemStack);
     }
 
     public String getAnnounceCraftEnd() {
-        return getPrefix() + plugin.getLanguageFileReader().getAnnounceCraftEnd();
+        return getPrefix() + languageManager.getAnnounceCraftEnd();
     }
 
     public String getAnnounceCraftWinner(Player player) {
-        return plugin.getLanguageFileReader().getAnnounceCraftWinner(player);
+        return languageManager.getAnnounceCraftWinner(player);
     }
 
     public String getPersonalCraftWinner() {
-        return plugin.getLanguageFileReader().getPersonalCraftWinner().isEmpty() ? "" :getPrefix() + plugin.getLanguageFileReader().getPersonalCraftWinner();
+        return languageManager.getPersonalCraftWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalCraftWinner();
     }
-    
+
     //quizrace messages
     public String getAnnounceQuizStart(String word) {
-        return plugin.getLanguageFileReader().getAnnounceQuizStart(word);
+        return languageManager.getAnnounceQuizStart(word);
     }
 
     public String getAnnounceQuizEnd() {
-        return getPrefix() + plugin.getLanguageFileReader().getAnnounceQuizEnd();
+        return getPrefix() + languageManager.getAnnounceQuizEnd();
     }
 
     public String getAnnounceQuizWinner(Player player) {
-        return plugin.getLanguageFileReader().getAnnounceQuizWinner(player);
+        return languageManager.getAnnounceQuizWinner(player);
     }
 
     public String getPersonalQuizWinner() {
-        return plugin.getLanguageFileReader().getPersonalQuizWinner().isEmpty() ? "" :getPrefix() + plugin.getLanguageFileReader().getPersonalQuizWinner();
+        return languageManager.getPersonalQuizWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalQuizWinner();
     }
 
     //foodrace messages
     public String getAnnounceFoodStart(ItemStack itemStack) {
-        return plugin.getLanguageFileReader().getAnnounceFoodStart(itemStack);
+        return languageManager.getAnnounceFoodStart(itemStack);
     }
 
     public String getAnnounceFoodEnd() {
-        return getPrefix() + plugin.getLanguageFileReader().getAnnounceFoodEnd();
+        return getPrefix() + languageManager.getAnnounceFoodEnd();
     }
 
     public String getAnnounceFoodWinner(Player player) {
-        return plugin.getLanguageFileReader().getAnnounceFoodWinner(player);
+        return languageManager.getAnnounceFoodWinner(player);
     }
 
     public String getPersonalFoodWinner() {
-        return plugin.getLanguageFileReader().getPersonalFoodWinner().isEmpty() ? "" :getPrefix() + plugin.getLanguageFileReader().getPersonalFoodWinner();
+        return languageManager.getPersonalFoodWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalFoodWinner();
     }
-    
+
+    //scramblerace messages
+    public String getAnnounceScrambleStart(String word) {
+        return languageManager.getAnnounceScrambleStart(word);
+    }
+
+    public String getAnnounceScrambleEnd() {
+        return getPrefix() + languageManager.getAnnounceScrambleEnd();
+    }
+
+    public String getAnnounceScrambleWinner(Player player) {
+        return languageManager.getAnnounceScrambleWinner(player);
+    }
+
+    public String getPersonalScrambleWinner() {
+        return languageManager.getPersonalScrambleWinner().isEmpty() ? "" : getPrefix() + languageManager.getPersonalScrambleWinner();
+    }
+
     //helper methods
     public String capitalize(String str) {
         if (str == null || str.isEmpty()) {

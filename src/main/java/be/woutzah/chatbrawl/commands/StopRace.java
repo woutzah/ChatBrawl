@@ -1,85 +1,75 @@
 package be.woutzah.chatbrawl.commands;
 
 import be.woutzah.chatbrawl.ChatBrawl;
+import be.woutzah.chatbrawl.messages.Printer;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+
 public class StopRace implements CommandExecutor {
 
-  private ChatBrawl plugin;
+    private Printer printer;
+    private RaceCreator raceCreator;
 
-  public StopRace(ChatBrawl plugin) {
-    this.plugin = plugin;
-  }
-
-  @Override
-  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    if (!plugin.getRaceCreator().getCurrentRunningRace().equals(RaceType.none)) {
-      switch (plugin.getRaceCreator().getCurrentRunningRace()) {
-        case chat:
-          plugin.getRaceCreator().getChatRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-          plugin
-              .getServer()
-              .broadcastMessage(
-                  plugin.getPrinter().getStoppedRace(RaceType.chat));
-          return true;
-        case block:
-          plugin.getRaceCreator().getBlockRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-          plugin
-              .getServer()
-              .broadcastMessage(
-                      plugin.getPrinter().getStoppedRace(RaceType.block));
-          return true;
-        case fish:
-          plugin.getRaceCreator().getFishRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-          plugin
-              .getServer()
-              .broadcastMessage(
-                      plugin.getPrinter().getStoppedRace(RaceType.fish));
-          return true;
-        case hunt:
-          plugin.getRaceCreator().getHuntRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-          plugin
-              .getServer()
-              .broadcastMessage(
-                      plugin.getPrinter().getStoppedRace(RaceType.hunt));
-          return true;
-        case craft:
-          plugin.getRaceCreator().getCraftRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-          plugin
-                  .getServer()
-                  .broadcastMessage(
-                          plugin.getPrinter().getStoppedRace(RaceType.craft));
-          return true;
-        case quiz:
-          plugin.getRaceCreator().getQuizRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-          plugin
-                  .getServer()
-                  .broadcastMessage(
-                          plugin.getPrinter().getStoppedRace(RaceType.quiz));
-          return true;
-        case food:
-          plugin.getRaceCreator().getFoodRaceTask().cancel();
-          plugin.getRaceCreator().setCurrentRunningRace(RaceType.none);
-          plugin
-                  .getServer()
-                  .broadcastMessage(
-                          plugin.getPrinter().getStoppedRace(RaceType.food));
-          return true;
-      }
-    } else {
-      sender.sendMessage(
-          plugin.getPrinter().getNoRaceRunning());
+    public StopRace(ChatBrawl plugin) {
+        this.printer = plugin.getPrinter();
+        this.raceCreator = plugin.getRaceCreator();
     }
-    return true;
-  }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!raceCreator.getCurrentRunningRace().equals(RaceType.none)) {
+            switch (raceCreator.getCurrentRunningRace()) {
+                case chat:
+                    raceCreator.getChatRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.chat), "cb.default");
+                    return true;
+                case block:
+                    raceCreator.getBlockRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.block), "cb.default");
+                    return true;
+                case fish:
+                    raceCreator.getFishRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.fish), "cb.default");
+                    return true;
+                case hunt:
+                    raceCreator.getHuntRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.hunt), "cb.default");
+                    return true;
+                case craft:
+                    raceCreator.getCraftRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.craft), "cb.default");
+                    return true;
+                case quiz:
+                    raceCreator.getQuizRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.quiz), "cb.default");
+                    return true;
+                case food:
+                    raceCreator.getFoodRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.food), "cb.default");
+                    return true;
+                case scramble:
+                    raceCreator.getScrambleRaceTask().cancel();
+                    raceCreator.setCurrentRunningRace(RaceType.none);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.scramble), "cb.default");
+                    return true;
+            }
+        } else {
+            if (!printer.getNoRaceRunning().isEmpty()) {
+                sender.sendMessage(printer.getNoRaceRunning());
+            }
+        }
+        return true;
+    }
 }

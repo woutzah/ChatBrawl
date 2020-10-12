@@ -34,7 +34,7 @@ public class FoodRaceListener implements Listener {
 
     @EventHandler
     public void onFoodConsume(PlayerItemConsumeEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.food)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.FOOD)) {
             if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
                 return;
             }
@@ -52,7 +52,9 @@ public class FoodRaceListener implements Listener {
                     if (foodRace.getPlayerScores().get(uuid)
                             == foodRace.getCurrentItemStack().getAmount()) {
                         Player player = event.getPlayer();
-                        Bukkit.broadcast(printer.getAnnounceFoodWinner(player), "cb.default");
+                        if(raceCreator.isEndBroadcastsEnabled()) {
+                            Bukkit.broadcast(printer.getAnnounceFoodWinner(player), "cb.default");
+                        }
                         if (!printer.getPersonalFoodWinner().isEmpty()) {
                             player.sendMessage(printer.getPersonalFoodWinner());
                         }
@@ -62,7 +64,12 @@ public class FoodRaceListener implements Listener {
                         foodRace.shootFireWorkIfEnabled(player);
                         rewardRandomizer.executeRandomCommand(foodRace.getCommandRewardsMap(), player);
                         raceCreator.getFoodRaceTask().cancel();
-                        raceCreator.setCurrentRunningRace(RaceType.none);
+                        try {
+                            raceCreator.getActionbarTask().cancel();
+                        }catch (Exception ignored){
+
+                        }
+                        raceCreator.setCurrentRunningRace(RaceType.NONE);
                         foodRace.removeOnlinePlayers();
                     }
                 }
@@ -72,7 +79,7 @@ public class FoodRaceListener implements Listener {
 
     @EventHandler
     public void addPlayerFoodRace(PlayerJoinEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.food)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.FOOD)) {
             if (!foodRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
                 foodRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
             }

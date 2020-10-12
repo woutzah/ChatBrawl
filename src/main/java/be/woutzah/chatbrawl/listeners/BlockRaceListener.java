@@ -35,7 +35,7 @@ public class BlockRaceListener implements Listener {
 
     @EventHandler
     public void checkBlocksMined(BlockBreakEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.block)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.BLOCK)) {
             if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
                 return;
             }
@@ -54,7 +54,9 @@ public class BlockRaceListener implements Listener {
                     if (blockRace.getPlayerScores().get(uuid)
                             == blockRace.getCurrentItemStack().getAmount()) {
                         Player player = event.getPlayer();
-                        Bukkit.broadcast(printer.getAnnounceBlockWinner(player), "cb.default");
+                        if(raceCreator.isEndBroadcastsEnabled()) {
+                            Bukkit.broadcast(printer.getAnnounceBlockWinner(player), "cb.default");
+                        }
                         if (!printer.getPersonalBlockWinner().isEmpty()) {
                             player.sendMessage(printer.getPersonalBlockWinner());
                         }
@@ -64,7 +66,12 @@ public class BlockRaceListener implements Listener {
                         blockRace.shootFireWorkIfEnabled(player);
                         rewardRandomizer.executeRandomCommand(blockRace.getCommandRewardsMap(), player);
                         raceCreator.getBlockRaceTask().cancel();
-                        raceCreator.setCurrentRunningRace(RaceType.none);
+                        try {
+                            raceCreator.getActionbarTask().cancel();
+                        }catch (Exception ignored){
+
+                        }
+                        raceCreator.setCurrentRunningRace(RaceType.NONE);
                         blockRace.removeOnlinePlayers();
                     }
                 }
@@ -74,7 +81,7 @@ public class BlockRaceListener implements Listener {
 
     @EventHandler
     public void addPlayerBlockRace(PlayerJoinEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.block)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.BLOCK)) {
             if (!blockRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
                 blockRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
             }

@@ -9,12 +9,18 @@ public class Chance {
   private int upperLimit;
   private int lowerLimit;
   private List<String> commands;
+  private String broadcastString;
+  private String titleString;
+  private String subtitleString;
   private RaceType raceType;
 
-  public Chance(int upperlimit, int lowerLimit, List<String> commands) {
+  public Chance(int upperlimit, int lowerLimit, List<String> commands, String broadcastString, String titleString,String subtitleString) {
     this.upperLimit = upperlimit;
     this.lowerLimit = lowerLimit;
     this.commands = commands;
+    this.broadcastString = broadcastString;
+    this.titleString = titleString;
+    this.subtitleString = subtitleString;
   }
 
   public Chance(int upperLimit, int lowerLimit, RaceType raceType) {
@@ -37,5 +43,17 @@ public class Chance {
 
   public List<String> getCommands() {
     return commands;
+  }
+
+  public String getBroadcastString() {
+    return broadcastString;
+  }
+
+  public String getTitleString() {
+    return titleString;
+  }
+
+  public String getSubtitleString() {
+    return subtitleString;
   }
 }

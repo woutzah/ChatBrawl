@@ -35,7 +35,7 @@ public class HuntRaceListener implements Listener {
 
   @EventHandler
   public void checkMobsKilled(EntityDeathEvent event) {
-    if (raceCreator.getCurrentRunningRace().equals(RaceType.hunt)) {
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.HUNT)) {
       if (event.getEntity().getKiller() == null){
         return;
       }
@@ -57,7 +57,9 @@ public class HuntRaceListener implements Listener {
           huntRace.getPlayerScores().put(uuid, currentAmount);
           if (huntRace.getPlayerScores().get(uuid)
               == huntRace.getCurrentAmount()) {
-            Bukkit.broadcast(printer.getAnnounceHuntWinner(player), "cb.default");
+            if(raceCreator.isEndBroadcastsEnabled()) {
+              Bukkit.broadcast(printer.getAnnounceHuntWinner(player), "cb.default");
+            }
             if (!printer.getPersonalHuntWinner().isEmpty()) {
               player.sendMessage(printer.getPersonalHuntWinner());
             }
@@ -67,7 +69,12 @@ public class HuntRaceListener implements Listener {
             huntRace.shootFireWorkIfEnabled(player);
             rewardRandomizer.executeRandomCommand(huntRace.getCommandRewardsMap(), player);
             raceCreator.getHuntRaceTask().cancel();
-            raceCreator.setCurrentRunningRace(RaceType.none);
+            try {
+              raceCreator.getActionbarTask().cancel();
+            }catch (Exception ignored){
+
+            }
+            raceCreator.setCurrentRunningRace(RaceType.NONE);
             huntRace.removeOnlinePlayers();
           }
         }
@@ -77,7 +84,7 @@ public class HuntRaceListener implements Listener {
 
   @EventHandler
   public void addPlayerFishRace(PlayerJoinEvent event) {
-    if (raceCreator.getCurrentRunningRace().equals(RaceType.hunt)) {
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.HUNT)) {
       if (!huntRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
         huntRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
       }

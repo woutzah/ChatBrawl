@@ -37,6 +37,7 @@ public class Printer {
         this.craftRace = plugin.getCraftRace();
         this.quizRace = plugin.getQuizRace();
         this.foodRace = plugin.getFoodRace();
+        this.scrambleRace = plugin.getScrambleRace();
     }
 
     //General messages
@@ -106,6 +107,22 @@ public class Printer {
         return getPrefix() + languageManager.getStoppedRace(raceType);
     }
 
+    public String getStartRaceUsage(){
+        return getPrefix() + languageManager.getStartRaceUsage();
+    }
+
+    public String getStartedRace(RaceType raceType) {
+        return getPrefix() + languageManager.getStartedRace(raceType);
+    }
+
+    public String getRaceTypeNotExist(){
+        return getPrefix() + languageManager.getRacetypeNotExist();
+    }
+
+    public String getRaceStillRunning(){
+        return getPrefix() + languageManager.getRaceStillRunning();
+    }
+
     public String getNoRaceRunning() {
         return languageManager.getNoRaceRunning().isEmpty() ? "" : getPrefix() + languageManager.getNoRaceRunning();
     }
@@ -129,23 +146,23 @@ public class Printer {
 
     public String getCurrentRunningRaceInfo() {
         switch (plugin.getRaceCreator().getCurrentRunningRace()) {
-            case chat:
+            case CHAT:
                 return getAnnounceChatStart(chatRace.getWordToGuess());
-            case block:
+            case BLOCK:
                 return getAnnounceBlockStart(blockRace.getCurrentItemStack());
-            case fish:
+            case FISH:
                 return getAnnounceFishStart(fishRace.getCurrentItemStack());
-            case hunt:
+            case HUNT:
                 return getAnnounceHuntStart(huntRace.getCurrentEntityType(), huntRace.getCurrentAmount());
-            case craft:
+            case CRAFT:
                 return getAnnounceCraftStart(craftRace.getCurrentItemStack());
-            case quiz:
+            case QUIZ:
                 return getAnnounceQuizStart(quizRace.getCurrentQuestion());
-            case food:
+            case FOOD:
                 return getAnnounceFoodStart(foodRace.getCurrentItemStack());
-            case scramble:
+            case SCRAMBLE:
                 return getAnnounceScrambleStart(scrambleRace.getWordToUnscramble());
-            case none:
+            case NONE:
                 return getNoRaceRunning();
         }
         return null;
@@ -154,6 +171,9 @@ public class Printer {
     //chatrace messages
     public String getAnnounceChatStart(String word) {
         return languageManager.getAnnounceChatStart(word);
+    }
+    public String getActionBarChatStart(String word){
+        return languageManager.getActionBarChatStart(word);
     }
 
     public String getAnnounceChatEnd() {
@@ -172,6 +192,9 @@ public class Printer {
     public String getAnnounceBlockStart(ItemStack itemStack) {
         return languageManager.getAnnounceBlockStart(itemStack);
     }
+    public String getActionBarBlockStart(ItemStack itemStack){
+        return languageManager.getActionBarBlockStart(itemStack);
+    }
 
     public String getAnnounceBlockEnd() {
         return getPrefix() + languageManager.getAnnounceBlockEnd();
@@ -188,6 +211,9 @@ public class Printer {
     //fishrace messages
     public String getAnnounceFishStart(ItemStack itemStack) {
         return languageManager.getAnnounceFishStart(itemStack);
+    }
+    public String getActionBarFishStart(ItemStack itemStack){
+        return languageManager.getActionBarFishStart(itemStack);
     }
 
     public String getAnnounceFishEnd() {
@@ -206,6 +232,9 @@ public class Printer {
     public String getAnnounceHuntStart(EntityType entityType, int amount) {
         return languageManager.getAnnounceHuntStart(entityType, amount);
     }
+    public String getActionBarHuntStart(EntityType entityType, int amount) {
+        return languageManager.getActionBarHuntStart(entityType, amount);
+    }
 
     public String getAnnounceHuntEnd() {
         return getPrefix() + languageManager.getAnnounceHuntEnd();
@@ -222,6 +251,9 @@ public class Printer {
     //craftrace messages
     public String getAnnounceCraftStart(ItemStack itemStack) {
         return languageManager.getAnnounceCraftStart(itemStack);
+    }
+    public String getActionBarCraftStart(ItemStack itemStack) {
+        return languageManager.getActionBarCraftStart(itemStack);
     }
 
     public String getAnnounceCraftEnd() {
@@ -240,6 +272,9 @@ public class Printer {
     public String getAnnounceQuizStart(String word) {
         return languageManager.getAnnounceQuizStart(word);
     }
+    public String getActionBarQuizStart(String question) {
+        return languageManager.getActionBarQuizStart(question);
+    }
 
     public String getAnnounceQuizEnd() {
         return getPrefix() + languageManager.getAnnounceQuizEnd();
@@ -256,6 +291,9 @@ public class Printer {
     //foodrace messages
     public String getAnnounceFoodStart(ItemStack itemStack) {
         return languageManager.getAnnounceFoodStart(itemStack);
+    }
+    public String getActionBarFoodStart(ItemStack itemStack) {
+        return languageManager.getActionBarFoodStart(itemStack);
     }
 
     public String getAnnounceFoodEnd() {
@@ -274,13 +312,16 @@ public class Printer {
     public String getAnnounceScrambleStart(String word) {
         return languageManager.getAnnounceScrambleStart(word);
     }
-
-    public String getAnnounceScrambleEnd() {
-        return getPrefix() + languageManager.getAnnounceScrambleEnd();
+    public String getActionBarScrambleStart(String word) {
+        return languageManager.getActionBarScrambleStart(word);
     }
 
-    public String getAnnounceScrambleWinner(Player player) {
-        return languageManager.getAnnounceScrambleWinner(player);
+    public String getAnnounceScrambleEnd(String answer) {
+        return getPrefix() + languageManager.getAnnounceScrambleEnd(answer);
+    }
+
+    public String getAnnounceScrambleWinner(Player player, String answer) {
+        return languageManager.getAnnounceScrambleWinner(player, answer);
     }
 
     public String getPersonalScrambleWinner() {
@@ -297,6 +338,10 @@ public class Printer {
 
     private String parseColorCodes(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    public String stripColors(String message){
+        return ChatColor.stripColor(message);
     }
 
 }

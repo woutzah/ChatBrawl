@@ -36,7 +36,7 @@ public class FishRaceListener implements Listener {
 
   @EventHandler
   public void checkFishedObjects(PlayerFishEvent event) {
-    if (raceCreator.getCurrentRunningRace().equals(RaceType.fish)) {
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.FISH)) {
       if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
         return;
       }
@@ -56,7 +56,9 @@ public class FishRaceListener implements Listener {
           if (fishRace.getPlayerScores().get(uuid)
               == fishRace.getCurrentItemStack().getAmount()) {
             Player player = event.getPlayer();
-            Bukkit.broadcast(printer.getAnnounceFishWinner(player),"cb.default");
+            if(raceCreator.isEndBroadcastsEnabled()) {
+              Bukkit.broadcast(printer.getAnnounceFishWinner(player), "cb.default");
+            }
             if (!printer.getPersonalFishWinner().isEmpty()) {
               player.sendMessage(printer.getPersonalFishWinner());
             }
@@ -66,7 +68,12 @@ public class FishRaceListener implements Listener {
             fishRace.shootFireWorkIfEnabled(player);
             rewardRandomizer.executeRandomCommand(fishRace.getCommandRewardsMap(), player);
             raceCreator.getFishRaceTask().cancel();
-            raceCreator.setCurrentRunningRace(RaceType.none);
+            try {
+              raceCreator.getActionbarTask().cancel();
+            }catch (Exception ignored){
+
+            }
+            raceCreator.setCurrentRunningRace(RaceType.NONE);
             fishRace.removeOnlinePlayers();
           }
         }
@@ -76,7 +83,7 @@ public class FishRaceListener implements Listener {
 
   @EventHandler
   public void addPlayerFishRace(PlayerJoinEvent event) {
-    if (raceCreator.getCurrentRunningRace().equals(RaceType.fish)) {
+    if (raceCreator.getCurrentRunningRace().equals(RaceType.FISH)) {
       if (!fishRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
         fishRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
       }

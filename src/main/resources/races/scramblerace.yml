@@ -38,21 +38,30 @@ scramblerace:
           - 'eco give {player} 10'
           - 'time set day'
         chance: 30
+        #broadcast that is run when this reward is won. Leave empty to disable this
+        broadcast: '{player} has won $5!'
+        #personal title send to the winner! Leave empty to disable this
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
       2:
         commands:
           - 'eco give {player} 5'
           - 'time set day'
         chance: 20
+        broadcast: '{player} has won $5!'
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
 
 #you can replace <player> with <rawname> to show the username of a player without prefixes
 language:
   scramblerace-name: 'Scramble Race'
+  scramblerace-actionbar-start: '&6&oScramble Race &f&l>> &7Unscramble &b<word> &7as fast as possible!'
   scramblerace-start:
     - '&e&l>&8&m------------&e&l[ &6&oScramble Race &e&l]&8&m------------&e&l<\n'
     - '&fUnscramble the following word as fast as possible!\n'
     - '      &b<word>\n'
     - '&e&l>&8&m---------------------------------------&e&l<'
-  scramblerace-ended: '&fthe &eScramble Race &fended without a winner!'
+  scramblerace-ended: '&fthe &eScramble Race &fended without a winner! The word was <answer>'
   scramblerace-winner:
     - '&e&l>&8&m---------&e&l[ &b&oScramble Race Winner &e&l]&8&m---------&e&l<\n'
     - '&fCongrats! &b<player> &fwas the fastest!\n'

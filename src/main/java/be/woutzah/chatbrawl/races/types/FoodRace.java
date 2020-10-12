@@ -23,6 +23,7 @@ public class FoodRace extends Race {
     private String foodraceEnd;
     private List<String> foodraceWinner;
     private String foodraceWinnerPersonal;
+    private String foodraceActionBar;
 
     public FoodRace(ChatBrawl plugin, FileConfiguration config) {
         super(
@@ -46,6 +47,7 @@ public class FoodRace extends Race {
         this.foodraceEnd = foodRaceConfig.getString("language.foodrace-ended");
         this.foodraceWinner = foodRaceConfig.getStringList("language.foodrace-winner");
         this.foodraceWinnerPersonal = foodRaceConfig.getString("language.foodrace-winner-personal");
+        this.foodraceActionBar = foodRaceConfig.getString("language.foodrace-actionbar-start");
     }
 
     private void getFoodFromConfig() {
@@ -112,5 +114,9 @@ public class FoodRace extends Race {
 
     public String getFoodraceWinnerPersonal() {
         return foodraceWinnerPersonal;
+    }
+
+    public String getFoodraceActionBar() {
+        return foodraceActionBar;
     }
 }

@@ -23,6 +23,7 @@ public class CraftRace extends Race {
     private String craftraceEnd;
     private List<String> craftraceWinner;
     private String craftraceWinnerPersonal;
+    private String craftraceActionBar;
 
     public CraftRace(ChatBrawl plugin, FileConfiguration config) {
         super(
@@ -46,6 +47,7 @@ public class CraftRace extends Race {
         this.craftraceEnd = craftRaceConfig.getString("language.craftrace-ended");
         this.craftraceWinner = craftRaceConfig.getStringList("language.craftrace-winner");
         this.craftraceWinnerPersonal = craftRaceConfig.getString("language.craftrace-winner-personal");
+        this.craftraceActionBar = craftRaceConfig.getString("language.craftrace-actionbar-start");
     }
 
     private void getCraftsFromConfig() {
@@ -109,5 +111,9 @@ public class CraftRace extends Race {
 
     public String getCraftraceWinnerPersonal() {
         return craftraceWinnerPersonal;
+    }
+
+    public String getCraftraceActionBar() {
+        return craftraceActionBar;
     }
 }

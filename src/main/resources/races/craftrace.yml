@@ -28,15 +28,24 @@ craftrace:
           - 'eco give {player} 10'
           - 'time set day'
         chance: 30
+        #broadcast that is run when this reward is won. Leave empty to disable this
+        broadcast: '{player} has won $5!'
+        #personal title send to the winner! Leave empty to disable this
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
       2:
         commands:
           - 'eco give {player} 5'
           - 'time set day'
         chance: 20
+        broadcast: '{player} has won $5!'
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
 
 #you can replace <player> with <rawname> to show the username of a player without prefixes
 language:
   craftrace-name: 'Craft Race'
+  craftrace-actionbar-start: '&6&oCraft Race &f&l>> &7Craft &b<amount> &7x &b<item> &7as fast as possible!'
   craftrace-start:
     - '&e&l>&8&m------------&e&l[ &6&oCraft Race &e&l]&8&m------------&e&l<\n'
     - '&fCraft the following items as fast as possible!\n'

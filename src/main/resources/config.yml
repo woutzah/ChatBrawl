@@ -21,7 +21,8 @@
 #the prefix that is used in front of the plugin messages.
 plugin-prefix: "&e&l[&6&oChatBrawl&e&l] &r"
 
-#do you want the plugin to create events (enabling/disabling the plugin)
+#do you want the plugin to create events every x seconds
+#if disabled you can still use the /cb start <race> command to start races
 events-enabled: true
 
 #do you want to show the current running race and it's details to a player on login
@@ -29,6 +30,17 @@ notify-event-login: true
 
 #minimum amount of players to be online before an event will start.
 minimum-players: 0
+
+#this option shows an action bar during a race that shows the current mission.
+enable-race-actionbar: false
+
+#this feature enables/disables broadcasting the start of a race in chat
+#usefull to disable if you only want to use the actionbar
+enable-start-race-broadcasts: true
+
+#this feature enables/disables broadcasting the end of a race in chat
+#usefull to disable if you only want to use the actionbar
+enable-end-race-broadcasts: true
 
 #this is the delay between events in seconds (currently 20 mins). Even if a winner is determined after e.g. 10 seconds
 #the plugin will still wait the full 20 mins before starting a new event. Every race

@@ -45,7 +45,7 @@ public class Placeholders extends PlaceholderExpansion {
         }
 
         if (identifier.equals("currentrace")) {
-            if (plugin.getRaceCreator().getCurrentRunningRace() == RaceType.none) {
+            if (plugin.getRaceCreator().getCurrentRunningRace() == RaceType.NONE) {
                 return "No Race";
             }
             return plugin

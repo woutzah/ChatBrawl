@@ -4,6 +4,8 @@ import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.exceptions.RaceException;
 import be.woutzah.chatbrawl.messages.Printer;
 import be.woutzah.chatbrawl.races.types.*;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -14,6 +16,8 @@ public class RaceCreator {
     private long eventDelay;
     private int minimumAmountOfPlayers;
     private Boolean racesEnabled;
+    private boolean startBroadcastsEnabled;
+    private boolean endBroadcastsEnabled;
     private ChatRace chatRace;
     private BlockRace blockRace;
     private FishRace fishRace;
@@ -33,11 +37,14 @@ public class RaceCreator {
     private BukkitTask scrambleRaceTask;
     private RaceType currentRunningRace;
     private Printer printer;
+    private BukkitTask actionbarTask;
 
     public RaceCreator(ChatBrawl plugin) {
         this.plugin = plugin;
         this.eventDelay = plugin.getConfig().getLong("event-delay") * 20;
         this.racesEnabled = plugin.getConfig().getBoolean("events-enabled");
+        this.startBroadcastsEnabled = plugin.getConfig().getBoolean("enable-start-race-broadcasts");
+        this.endBroadcastsEnabled = plugin.getConfig().getBoolean("enable-end-race-broadcasts");
         this.minimumAmountOfPlayers = plugin.getConfig().getInt("minimum-players");
         this.chatRace = plugin.getChatrace();
         this.blockRace = plugin.getBlockRace();
@@ -47,7 +54,7 @@ public class RaceCreator {
         this.quizRace = plugin.getQuizRace();
         this.foodRace = plugin.getFoodRace();
         this.scrambleRace = plugin.getScrambleRace();
-        this.currentRunningRace = RaceType.none;
+        this.currentRunningRace = RaceType.NONE;
         this.printer = plugin.getPrinter();
         if (plugin.isConfigCorrect) createRaces();
     }
@@ -62,67 +69,56 @@ public class RaceCreator {
                 } else {
                     if ((plugin.getServer().getOnlinePlayers().size() >= minimumAmountOfPlayers)) {
                         boolean isEnabled = false;
-                        RaceType raceType;
                         while (!isEnabled) {
+                            RaceType raceType;
                             raceType = plugin.getRaceRandomizer().getRandomRace();
                             //raceType = RaceType.chat;
-                            if (plugin.isSoundEnabled()){
-                                Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getBeginSound(),1.0F, 8.0F) );
-                            }
                             switch (raceType) {
-                                case chat:
+                                case CHAT:
                                     if (chatRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.chat);
                                         chatRaceStart();
                                     }
                                     break;
-                                case block:
+                                case BLOCK:
                                     if (blockRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.block);
                                         blockRaceStart();
                                     }
                                     break;
-                                case fish:
+                                case FISH:
                                     if (fishRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.fish);
                                         fishRaceStart();
                                     }
                                     break;
-                                case hunt:
+                                case HUNT:
                                     if (huntRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.hunt);
                                         huntRaceStart();
                                     }
                                     break;
-                                case craft:
+                                case CRAFT:
                                     if (craftRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.craft);
                                         craftRaceStart();
                                     }
                                     break;
-                                case quiz:
+                                case QUIZ:
                                     if (quizRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.quiz);
                                         quizRaceStart();
                                     }
                                     break;
-                                case food:
+                                case FOOD:
                                     if (foodRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.food);
                                         foodRaceStart();
                                     }
                                     break;
-                                case scramble:
+                                case SCRAMBLE:
                                     if (scrambleRace.isEnabled()) {
                                         isEnabled = true;
-                                        setCurrentRunningRace(RaceType.scramble);
                                         scrambleRaceStart();
                                     }
                                     break;
@@ -134,133 +130,199 @@ public class RaceCreator {
         }.runTaskTimerAsynchronously(plugin, 200, eventDelay);
     }
 
+    public void showActionBar(String message) {
+        if (plugin.isEnabledActionbar()) {
+            actionbarTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+                        Bukkit.getOnlinePlayers().forEach(p -> p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message)));
+                }
+            }.runTaskTimer(plugin, 0, 20);
+        }
+    }
+
+    public void stopActionBar(){
+        if (plugin.isEnabledActionbar()) {
+            actionbarTask.cancel();
+        }
+    }
+
+    public void announceStart(String message) {
+        if (startBroadcastsEnabled) {
+            Bukkit.broadcast(message, "cb.default");
+        }
+    }
+
     public void chatRaceStart() {
+        setCurrentRunningRace(RaceType.CHAT);
         chatRace.generateRandomWord();
-        Bukkit.broadcast(printer.getAnnounceChatStart(chatRace.getWordToGuess()), "cb.default");
+        announceStart(printer.getAnnounceChatStart(chatRace.getWordToGuess()));
+        showActionBar(printer.getActionBarChatStart(chatRace.getWordToGuess()));
+        playBeginSound();
         chatRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         Bukkit.broadcast(printer.getAnnounceChatEnd(), "cb.default");
-                        setCurrentRunningRace(RaceType.none);
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, chatRace.getDuration());
     }
 
     public void blockRaceStart() {
+        setCurrentRunningRace(RaceType.BLOCK);
         blockRace.generateNewMaterialPair();
         blockRace.fillOnlinePlayers();
-        Bukkit.broadcast(printer.getAnnounceBlockStart(blockRace.getCurrentItemStack()), "cb.default");
+        announceStart(printer.getAnnounceBlockStart(blockRace.getCurrentItemStack()));
+        showActionBar(printer.getActionBarBlockStart(blockRace.getCurrentItemStack()));
+        playBeginSound();
         blockRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         Bukkit.broadcast(printer.getAnnounceBlockEnd(), "cb.default");
                         blockRace.removeOnlinePlayers();
-                        setCurrentRunningRace(RaceType.none);
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, blockRace.getDuration());
     }
 
-    private void fishRaceStart() {
+    public void fishRaceStart() {
+        setCurrentRunningRace(RaceType.FISH);
         fishRace.generateNewMaterialPair();
         fishRace.fillOnlinePlayers();
-        Bukkit.broadcast(printer.getAnnounceFishStart(fishRace.getCurrentItemStack()), "cb.default");
+        announceStart(printer.getAnnounceFishStart(fishRace.getCurrentItemStack()));
+        showActionBar(printer.getActionBarFishStart(fishRace.getCurrentItemStack()));
+        playBeginSound();
         fishRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         Bukkit.broadcast(printer.getAnnounceFishEnd(), "cb.default");
                         fishRace.removeOnlinePlayers();
-                        setCurrentRunningRace(RaceType.none);
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, fishRace.getDuration());
     }
 
-    private void huntRaceStart() {
+    public void huntRaceStart() {
+        setCurrentRunningRace(RaceType.HUNT);
         huntRace.generateNewMobPair();
         huntRace.fillOnlinePlayers();
-        Bukkit.broadcast(printer.getAnnounceHuntStart(huntRace.getCurrentEntityType(),
-                huntRace.getCurrentAmount()), "cb.default");
+        announceStart(printer.getAnnounceHuntStart(huntRace.getCurrentEntityType(), huntRace.getCurrentAmount()));
+        showActionBar(printer.getActionBarHuntStart(huntRace.getCurrentEntityType(),
+                huntRace.getCurrentAmount()));
+        playBeginSound();
         huntRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         Bukkit.broadcast(printer.getAnnounceHuntEnd(), "cb.default");
                         huntRace.removeOnlinePlayers();
-                        setCurrentRunningRace(RaceType.none);
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, huntRace.getDuration());
     }
 
     public void craftRaceStart() {
+        setCurrentRunningRace(RaceType.CRAFT);
         craftRace.generateNewMaterialPair();
         craftRace.fillOnlinePlayers();
-        Bukkit.broadcast(printer.getAnnounceCraftStart(craftRace.getCurrentItemStack()), "cb.default");
+        announceStart(printer.getAnnounceCraftStart(craftRace.getCurrentItemStack()));
+        showActionBar(printer.getActionBarCraftStart(craftRace.getCurrentItemStack()));
+        playBeginSound();
         craftRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         Bukkit.broadcast(printer.getAnnounceCraftEnd(), "cb.default");
                         craftRace.removeOnlinePlayers();
-                        setCurrentRunningRace(RaceType.none);
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, craftRace.getDuration());
     }
 
     public void quizRaceStart() {
+        setCurrentRunningRace(RaceType.QUIZ);
         quizRace.generateRandomQuestionWithAnswer();
-        Bukkit.broadcast(printer.getAnnounceQuizStart(quizRace.getCurrentQuestion()), "cb.default");
+        announceStart(printer.getAnnounceQuizStart(quizRace.getCurrentQuestion()));
+        showActionBar(printer.getActionBarQuizStart(quizRace.getCurrentQuestion()));
+        playBeginSound();
         quizRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         Bukkit.broadcast(printer.getAnnounceQuizEnd(), "cb.default");
-                        setCurrentRunningRace(RaceType.none);
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, quizRace.getDuration());
     }
 
     public void foodRaceStart() {
+        setCurrentRunningRace(RaceType.FOOD);
         foodRace.generateNewFoodPair();
         foodRace.fillOnlinePlayers();
-        Bukkit.broadcast(printer.getAnnounceFoodStart(foodRace.getCurrentItemStack()), "cb.default");
+        announceStart(printer.getAnnounceFoodStart(foodRace.getCurrentItemStack()));
+        showActionBar(printer.getActionBarFoodStart(foodRace.getCurrentItemStack()));
+        playBeginSound();
         foodRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Bukkit.broadcast(printer.getAnnounceFoodEnd(),"cb.default");
+                        Bukkit.broadcast(printer.getAnnounceFoodEnd(), "cb.default");
                         foodRace.removeOnlinePlayers();
-                        setCurrentRunningRace(RaceType.none);
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, foodRace.getDuration());
     }
 
     public void scrambleRaceStart() {
+        setCurrentRunningRace(RaceType.SCRAMBLE);
         scrambleRace.generateRandomScrambledWord();
-        Bukkit.broadcast(printer.getAnnounceScrambleStart(scrambleRace.getWordToUnscramble()), "cb.default");
+        announceStart(printer.getAnnounceScrambleStart(scrambleRace.getWordToUnscramble()));
+        showActionBar(printer.getActionBarScrambleStart(scrambleRace.getWordToUnscramble()));
+        playBeginSound();
         scrambleRaceTask =
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Bukkit.broadcast(printer.getAnnounceScrambleEnd(), "cb.default");
-                        setCurrentRunningRace(RaceType.none);
+                        Bukkit.broadcast(printer.getAnnounceScrambleEnd(scrambleRace.getOriginalWord()), "cb.default");
+                        setCurrentRunningRace(RaceType.NONE);
                         playEndSound();
+                        stopActionBar();
                     }
                 }.runTaskLater(plugin, scrambleRace.getDuration());
     }
 
-    public void playEndSound(){
-        if (plugin.isSoundEnabled()){
-            Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getEndSound(),1.0F, 8.0F) );
+    private void playEndSound() {
+        if (plugin.isSoundEnabled()) {
+            Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), plugin.getEndSound(), 1.0F, 8.0F));
         }
+    }
+
+    private void playBeginSound(){
+        if (plugin.isSoundEnabled()) {
+            Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), plugin.getBeginSound(), 1.0F, 8.0F));
+        }
+    }
+
+
+    public BukkitTask getActionbarTask() {
+        return actionbarTask;
     }
 
     public BukkitTask getRaceCreationTask() {
@@ -313,5 +375,9 @@ public class RaceCreator {
 
     public void setRacesEnabled(Boolean racesEnabled) {
         this.racesEnabled = racesEnabled;
+    }
+
+    public boolean isEndBroadcastsEnabled() {
+        return endBroadcastsEnabled;
     }
 }

@@ -4,7 +4,6 @@ import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.messages.Printer;
 import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,41 +24,42 @@ public class Disable implements CommandExecutor {
       raceCreator.setRacesEnabled(false);
       try {
         raceCreator.getRaceCreationTask().cancel();
+        raceCreator.getActionbarTask().cancel();
       }catch (Exception ignored){
 
       }
       switch (raceCreator.getCurrentRunningRace()) {
-        case chat:
+        case CHAT:
           raceCreator.getChatRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
-        case block:
+        case BLOCK:
           raceCreator.getBlockRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
-        case fish:
+        case FISH:
           raceCreator.getFishRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
-        case hunt:
+        case HUNT:
           raceCreator.getHuntRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
-        case craft:
+        case CRAFT:
           raceCreator.getCraftRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
-        case quiz:
+        case QUIZ:
           raceCreator.getQuizRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
-        case food:
+        case FOOD:
           raceCreator.getFoodRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
-        case scramble:
+        case SCRAMBLE:
           raceCreator.getScrambleRaceTask().cancel();
-          raceCreator.setCurrentRunningRace(RaceType.none);
+          raceCreator.setCurrentRunningRace(RaceType.NONE);
           break;
       }
       sender.sendMessage(printer.getDisabled());

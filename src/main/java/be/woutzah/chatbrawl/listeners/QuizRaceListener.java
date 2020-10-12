@@ -31,7 +31,7 @@ public class QuizRaceListener implements Listener {
 
     @EventHandler
     public void checkAnswerInChat(AsyncPlayerChatEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.quiz)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.QUIZ)) {
             if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
                 return;
             }
@@ -46,7 +46,9 @@ public class QuizRaceListener implements Listener {
             }
             if (quizRace.getCurrentAnswers().stream().anyMatch(message::equalsIgnoreCase)){
                 Player player = event.getPlayer();
-                Bukkit.broadcast(printer.getAnnounceQuizWinner(player),"cb.default");
+                if(raceCreator.isEndBroadcastsEnabled()) {
+                    Bukkit.broadcast(printer.getAnnounceQuizWinner(player), "cb.default");
+                }
                 if (!printer.getPersonalQuizWinner().isEmpty()) {
                     player.sendMessage(printer.getPersonalQuizWinner());
                 }
@@ -56,7 +58,12 @@ public class QuizRaceListener implements Listener {
                 quizRace.shootFireWorkIfEnabledAsync(player);
                 rewardRandomizer.executeRandomCommand(quizRace.getCommandRewardsMap(), player);
                 raceCreator.getQuizRaceTask().cancel();
-                raceCreator.setCurrentRunningRace(RaceType.none);
+                try {
+                    raceCreator.getActionbarTask().cancel();
+                }catch (Exception ignored){
+
+                }
+                raceCreator.setCurrentRunningRace(RaceType.NONE);
             }
         }
     }

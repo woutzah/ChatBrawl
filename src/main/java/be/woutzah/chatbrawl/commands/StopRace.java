@@ -22,47 +22,60 @@ public class StopRace implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!raceCreator.getCurrentRunningRace().equals(RaceType.none)) {
+        if (!raceCreator.getCurrentRunningRace().equals(RaceType.NONE)) {
+            try {
+                raceCreator.getActionbarTask().cancel();
+            } catch (Exception ex) {
+
+            }
             switch (raceCreator.getCurrentRunningRace()) {
-                case chat:
+                case CHAT:
                     raceCreator.getChatRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.chat), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.CHAT), "cb.default");
                     return true;
-                case block:
+                case BLOCK:
                     raceCreator.getBlockRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.block), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.BLOCK), "cb.default");
                     return true;
-                case fish:
+                case FISH:
                     raceCreator.getFishRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.fish), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.FISH), "cb.default");
                     return true;
-                case hunt:
+                case HUNT:
                     raceCreator.getHuntRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.hunt), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.HUNT), "cb.default");
                     return true;
-                case craft:
+                case CRAFT:
                     raceCreator.getCraftRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.craft), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.CRAFT), "cb.default");
                     return true;
-                case quiz:
+                case QUIZ:
                     raceCreator.getQuizRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.quiz), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.QUIZ), "cb.default");
                     return true;
-                case food:
+                case FOOD:
                     raceCreator.getFoodRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.food), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.FOOD), "cb.default");
                     return true;
-                case scramble:
+                case SCRAMBLE:
                     raceCreator.getScrambleRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.none);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.scramble), "cb.default");
+                    raceCreator.setCurrentRunningRace(RaceType.NONE);
+                    raceCreator.setRacesEnabled(false);
+                    Bukkit.broadcast(printer.getStoppedRace(RaceType.SCRAMBLE), "cb.default");
                     return true;
             }
         } else {

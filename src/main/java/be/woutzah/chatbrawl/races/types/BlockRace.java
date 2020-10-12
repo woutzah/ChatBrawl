@@ -24,6 +24,7 @@ public class BlockRace extends Race {
     private String blockraceEnd;
     private List<String> blockraceWinner;
     private String blockraceWinnerPersonal;
+    private String blockraceActionBar;
 
     public BlockRace(ChatBrawl plugin, FileConfiguration config) {
         super(
@@ -47,6 +48,7 @@ public class BlockRace extends Race {
         this.blockraceEnd = blockRaceConfig.getString("language.blockrace-ended");
         this.blockraceWinner = blockRaceConfig.getStringList("language.blockrace-winner");
         this.blockraceWinnerPersonal = blockRaceConfig.getString("language.blockrace-winner-personal");
+        this.blockraceActionBar = blockRaceConfig.getString("language.blockrace-actionbar-start");
     }
 
     private void getBlocksFromConfig() {
@@ -110,5 +112,9 @@ public class BlockRace extends Race {
 
     public String getBlockraceWinnerPersonal() {
         return blockraceWinnerPersonal;
+    }
+
+    public String getBlockraceActionBar() {
+        return blockraceActionBar;
     }
 }

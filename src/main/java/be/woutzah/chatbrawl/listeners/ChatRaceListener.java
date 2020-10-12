@@ -31,7 +31,7 @@ public class ChatRaceListener implements Listener {
 
     @EventHandler
     public void checkWordInChat(AsyncPlayerChatEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.chat)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.CHAT)) {
             if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())) {
                 return;
             }
@@ -45,9 +45,11 @@ public class ChatRaceListener implements Listener {
                     .anyMatch(ic -> message.toLowerCase().startsWith(ic.toLowerCase()))) {
                 return;
             }
-            if (message.equals(chatRace.getWordToGuess())) {
+            if (printer.stripColors(message).equals(chatRace.getWordToGuess())) {
                 Player player = event.getPlayer();
-                Bukkit.broadcast(printer.getAnnounceChatWinner(player), "cb.default");
+                if(raceCreator.isEndBroadcastsEnabled()) {
+                    Bukkit.broadcast(printer.getAnnounceChatWinner(player), "cb.default");
+                }
                 if (!printer.getPersonalChatWinner().isEmpty()) {
                     player.sendMessage(printer.getPersonalChatWinner());
                 }
@@ -57,7 +59,12 @@ public class ChatRaceListener implements Listener {
                 chatRace.shootFireWorkIfEnabledAsync(player);
                 rewardRandomizer.executeRandomCommand(chatRace.getCommandRewardsMap(), player);
                 raceCreator.getChatRaceTask().cancel();
-                raceCreator.setCurrentRunningRace(RaceType.none);
+                try {
+                    raceCreator.getActionbarTask().cancel();
+                }catch (Exception ignored){
+
+                }
+                raceCreator.setCurrentRunningRace(RaceType.NONE);
             }
         }
     }

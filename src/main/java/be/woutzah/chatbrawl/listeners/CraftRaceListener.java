@@ -38,7 +38,7 @@ public class CraftRaceListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void checkCraftedItems(CraftItemEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.craft)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.CRAFT)) {
             if (plugin.getDisabledWorldsList().contains(event.getWhoClicked().getLocation().getWorld().getName())){
                 return;
             }
@@ -70,7 +70,9 @@ public class CraftRaceListener implements Listener {
                             if (craftRace.getPlayerScores().get(uuid)
                                     >= craftRace.getCurrentItemStack().getAmount()) {
                                 Player player = (Player) event.getWhoClicked();
-                                Bukkit.broadcast(printer.getAnnounceCraftWinner(player), "cb.default");
+                                if(raceCreator.isEndBroadcastsEnabled()) {
+                                    Bukkit.broadcast(printer.getAnnounceCraftWinner(player), "cb.default");
+                                }
                                 if (!printer.getPersonalCraftWinner().isEmpty()) {
                                     player.sendMessage(printer.getPersonalCraftWinner());
                                 }
@@ -80,7 +82,12 @@ public class CraftRaceListener implements Listener {
                                 craftRace.shootFireWorkIfEnabled(player);
                                 rewardRandomizer.executeRandomCommand(craftRace.getCommandRewardsMap(), player);
                                 raceCreator.getCraftRaceTask().cancel();
-                                raceCreator.setCurrentRunningRace(RaceType.none);
+                                try {
+                                    raceCreator.getActionbarTask().cancel();
+                                }catch (Exception ignored){
+
+                                }
+                                raceCreator.setCurrentRunningRace(RaceType.NONE);
                                 craftRace.removeOnlinePlayers();
                             }
                         }
@@ -92,7 +99,7 @@ public class CraftRaceListener implements Listener {
 
     @EventHandler
     public void addPlayerCraftRace(PlayerJoinEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.craft)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.CRAFT)) {
             if (!craftRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
                 craftRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
             }

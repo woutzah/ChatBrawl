@@ -22,6 +22,7 @@ public class ScrambleRace extends Race {
     private String scrambleraceEnd;
     private List<String> scrambleraceWinner;
     private String scrambleraceWinnerPersonal;
+    private String scrambleraceActionBar;
 
     public ScrambleRace(ChatBrawl plugin, FileConfiguration config) {
         super(
@@ -47,6 +48,7 @@ public class ScrambleRace extends Race {
         this.scrambleraceEnd = scrambleRaceConfig.getString("language.scramblerace-ended");
         this.scrambleraceWinner = scrambleRaceConfig.getStringList("language.scramblerace-winner");
         this.scrambleraceWinnerPersonal = scrambleRaceConfig.getString("language.scramblerace-winner-personal");
+        this.scrambleraceActionBar = scrambleRaceConfig.getString("language.scramblerace-actionbar-start");
     }
 
     public void generateRandomScrambledWord() {
@@ -119,5 +121,9 @@ public class ScrambleRace extends Race {
 
     public String getScrambleraceWinnerPersonal() {
         return scrambleraceWinnerPersonal;
+    }
+
+    public String getScrambleraceActionBar() {
+        return scrambleraceActionBar;
     }
 }

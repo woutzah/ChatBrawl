@@ -24,6 +24,7 @@ public class QuizRace extends Race {
     private String quizraceEnd;
     private List<String> quizraceWinner;
     private String quizraceWinnerPersonal;
+    private String quizraceActionBar;
 
     public QuizRace(ChatBrawl plugin, FileConfiguration config) {
         super(
@@ -46,6 +47,7 @@ public class QuizRace extends Race {
         this.quizraceEnd = quizRaceConfig.getString("language.quizrace-ended");
         this.quizraceWinner = quizRaceConfig.getStringList("language.quizrace-winner");
         this.quizraceWinnerPersonal = quizRaceConfig.getString("language.quizrace-winner-personal");
+        this.quizraceActionBar = quizRaceConfig.getString("language.quizrace-actionbar-start");
     }
 
     private void getQuestionsFromConfig() {
@@ -105,5 +107,9 @@ public class QuizRace extends Race {
 
     public String getQuizraceWinnerPersonal() {
         return quizraceWinnerPersonal;
+    }
+
+    public String getQuizraceActionBar() {
+        return quizraceActionBar;
     }
 }

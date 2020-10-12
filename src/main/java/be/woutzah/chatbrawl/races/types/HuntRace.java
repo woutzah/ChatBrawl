@@ -23,6 +23,7 @@ public class HuntRace extends Race {
   private String huntraceEnd;
   private List<String> huntraceWinner;
   private String huntraceWinnerPersonal;
+  private String huntraceActionBar;
 
   public HuntRace(ChatBrawl plugin, FileConfiguration config) {
     super(
@@ -46,6 +47,7 @@ public class HuntRace extends Race {
     this.huntraceEnd = huntRaceConfig.getString("language.huntrace-ended");
     this.huntraceWinner = huntRaceConfig.getStringList("language.huntrace-winner");
     this.huntraceWinnerPersonal = huntRaceConfig.getString("language.huntrace-winner-personal");
+    this.huntraceActionBar = huntRaceConfig.getString("language.huntrace-actionbar-start");
   }
   
   
@@ -119,5 +121,9 @@ public class HuntRace extends Race {
 
   public String getHuntraceWinnerPersonal() {
     return huntraceWinnerPersonal;
+  }
+
+  public String getHuntraceActionBar() {
+    return huntraceActionBar;
   }
 }

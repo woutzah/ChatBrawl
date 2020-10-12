@@ -29,15 +29,24 @@ fishrace:
           - 'eco give {player} 10'
           - 'time set day'
         chance: 30
+        #broadcast that is run when this reward is won. Leave empty to disable this
+        broadcast: '{player} has won $5!'
+        #personal title send to the winner! Leave empty to disable this
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
       2:
         commands:
           - 'eco give {player} 5'
           - 'time set day'
         chance: 20
+        broadcast: '{player} has won $5!'
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
 
 #you can replace <player> with <rawname> to show the username of a player without prefixes
 language:
   fishrace-name: 'Fish Race'
+  fishrace-actionbar-start: '&6&oFish Race &f&l>> &7Fish &b<amount> &7x &b<fish> &7as fast as possible!'
   fishrace-start:
     - '&e&l>&8&m------------&e&l[ &6&oFish Race &e&l]&8&m------------&e&l<\n'
     - '&fCatch the following fish as fast as possible!\n'

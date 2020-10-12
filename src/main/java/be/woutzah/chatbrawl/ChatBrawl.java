@@ -7,7 +7,7 @@ import be.woutzah.chatbrawl.listeners.*;
 import be.woutzah.chatbrawl.messages.LanguageManager;
 import be.woutzah.chatbrawl.messages.Printer;
 import be.woutzah.chatbrawl.placeholders.Placeholders;
-import be.woutzah.chatbrawl.races.*;
+import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.types.*;
 import be.woutzah.chatbrawl.utils.RaceRandomizer;
 import org.bukkit.Bukkit;
@@ -23,6 +23,7 @@ import java.util.Objects;
 public class ChatBrawl extends JavaPlugin {
 
     public static boolean langUtilsIsEnabled = false;
+    public boolean isConfigCorrect;
     private ChatRace chatrace;
     private BlockRace blockRace;
     private FishRace fishRace;
@@ -45,12 +46,13 @@ public class ChatBrawl extends JavaPlugin {
     private FileConfiguration scrambleraceConfig;
     private LanguageManager languageManager;
     private RaceRandomizer raceRandomizer;
-    public boolean isConfigCorrect;
     private List<String> disabledWorldsList;
     private boolean allowCreative;
     private boolean soundEnabled;
     private Sound beginSound;
     private Sound endSound;
+
+    private boolean enableActionbar;
 
     @Override
     public void onEnable() {
@@ -60,6 +62,7 @@ public class ChatBrawl extends JavaPlugin {
         disabledWorldsList.addAll(this.getConfig().getStringList("disabled-worlds"));
         this.allowCreative = this.getConfig().getBoolean("allow-creative");
         this.soundEnabled = this.getConfig().getBoolean("enable-sound");
+        this.enableActionbar = this.getConfig().getBoolean("enable-race-actionbar");
         try {
             beginSound = Sound.valueOf(this.getConfig().getString("sound-begin-races"));
             endSound = Sound.valueOf(this.getConfig().getString("sound-end-races"));
@@ -120,7 +123,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getChatraceConfig().isSet("chatrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for chatrace rewards are missing in the config!");
-            }else if(!this.getChatraceConfig().isSet("language")){
+            } else if (!this.getChatraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the chatrace is missing in the config!");
             }
@@ -147,7 +150,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getBlockraceConfig().isSet("blockrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for blockrace rewards are missing in the config!");
-            }else if(!this.getBlockraceConfig().isSet("language")){
+            } else if (!this.getBlockraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the blockrace is missing in the config!");
             }
@@ -174,7 +177,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getFishraceConfig().isSet("fishrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for fishrace rewards are missing in the config!");
-            }else if(!this.getFishraceConfig().isSet("language")){
+            } else if (!this.getFishraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the fishrace is missing in the config!");
             }
@@ -201,7 +204,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getHuntraceConfig().isSet("huntrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for huntrace rewards are missing in the config!");
-            }else if(!this.getHuntraceConfig().isSet("language")){
+            } else if (!this.getHuntraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the huntrace is missing in the config!");
             }
@@ -228,7 +231,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getCraftraceConfig().isSet("craftrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for craftrace rewards are missing in the config!");
-            }else if(!this.getCraftraceConfig().isSet("language")){
+            } else if (!this.getCraftraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the craftrace is missing in the config!");
             }
@@ -255,7 +258,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getQuizraceConfig().isSet("quizrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for quizrace rewards are missing in the config!");
-            }else if(!this.getQuizraceConfig().isSet("language")){
+            } else if (!this.getQuizraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the quizrace is missing in the config!");
             }
@@ -282,7 +285,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getFoodraceConfig().isSet("foodrace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for foodrace rewards are missing in the config!");
-            }else if(!this.getFoodraceConfig().isSet("language")){
+            } else if (!this.getFoodraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the foodrace is missing in the config!");
             }
@@ -309,7 +312,7 @@ public class ChatBrawl extends JavaPlugin {
             } else if (!this.getScrambleraceConfig().isSet("scramblerace.rewards.commands")) {
                 throw new RaceException(
                         "The commands section for scramblerace rewards are missing in the config!");
-            }else if(!this.getScrambleraceConfig().isSet("language")){
+            } else if (!this.getScrambleraceConfig().isSet("language")) {
                 throw new RaceException(
                         "The language section for the scramblerace is missing in the config!");
             }
@@ -337,13 +340,13 @@ public class ChatBrawl extends JavaPlugin {
         setupCommands();
     }
 
-    private void setupCommands(){
+    private void setupCommands() {
         ChatBrawlCommand chatBrawlCommand = new ChatBrawlCommand(this);
         Objects.requireNonNull(this.getCommand("cb")).setExecutor(chatBrawlCommand);
         Objects.requireNonNull(this.getCommand("cb")).setTabCompleter(chatBrawlCommand);
     }
 
-    private void setupListeners(){
+    private void setupListeners() {
         this.getServer().getPluginManager().registerEvents(new GeneralListener(this), this);
         this.getServer().getPluginManager().registerEvents(new ChatRaceListener(this), this);
         this.getServer().getPluginManager().registerEvents(new BlockRaceListener(this), this);
@@ -388,6 +391,10 @@ public class ChatBrawl extends JavaPlugin {
 
     public Sound getEndSound() {
         return endSound;
+    }
+
+    public boolean isEnabledActionbar() {
+        return enableActionbar;
     }
 
     public ChatRace getChatrace() {

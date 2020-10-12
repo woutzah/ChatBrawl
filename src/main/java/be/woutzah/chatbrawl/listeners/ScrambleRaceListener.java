@@ -4,7 +4,6 @@ import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.messages.Printer;
 import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
-import be.woutzah.chatbrawl.races.types.ChatRace;
 import be.woutzah.chatbrawl.races.types.ScrambleRace;
 import be.woutzah.chatbrawl.rewards.RewardRandomizer;
 import org.bukkit.Bukkit;
@@ -32,7 +31,7 @@ public class ScrambleRaceListener implements Listener {
 
     @EventHandler
     public void checkScrambledWordInChat(AsyncPlayerChatEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.scramble)) {
+        if (raceCreator.getCurrentRunningRace().equals(RaceType.SCRAMBLE)) {
             if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
                 return;
             }
@@ -46,9 +45,11 @@ public class ScrambleRaceListener implements Listener {
                     .anyMatch(ic -> message.toLowerCase().startsWith(ic.toLowerCase()))){
                 return;
             }
-            if (message.equals(scrambleRace.getOriginalWord())) {
+            if (printer.stripColors(message).equals(scrambleRace.getOriginalWord())) {
                 Player player = event.getPlayer();
-                Bukkit.broadcast(printer.getAnnounceScrambleWinner(player), "cb.default");
+                if(raceCreator.isEndBroadcastsEnabled()) {
+                    Bukkit.broadcast(printer.getAnnounceScrambleWinner(player,scrambleRace.getOriginalWord()), "cb.default");
+                }
                 if (!printer.getPersonalScrambleWinner().isEmpty()) {
                     player.sendMessage(printer.getPersonalScrambleWinner());
                 }
@@ -58,7 +59,12 @@ public class ScrambleRaceListener implements Listener {
                 scrambleRace.shootFireWorkIfEnabledAsync(player);
                 rewardRandomizer.executeRandomCommand(scrambleRace.getCommandRewardsMap(), player);
                 raceCreator.getScrambleRaceTask().cancel();
-                raceCreator.setCurrentRunningRace(RaceType.none);
+                try {
+                    raceCreator.getActionbarTask().cancel();
+                }catch (Exception ignored){
+
+                }
+                raceCreator.setCurrentRunningRace(RaceType.NONE);
             }
         }
     }

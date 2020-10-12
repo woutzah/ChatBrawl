@@ -17,6 +17,7 @@ public class ChatRace extends Race {
   private String chatraceEnd;
   private List<String> chatraceWinner;
   private String chatraceWinnerPersonal;
+  private String chatraceActionBar;
 
   public ChatRace(ChatBrawl plugin, FileConfiguration config) {
     super(
@@ -38,6 +39,7 @@ public class ChatRace extends Race {
     this.chatraceEnd = chatRaceConfig.getString("language.chatrace-ended");
     this.chatraceWinner = chatRaceConfig.getStringList("language.chatrace-winner");
     this.chatraceWinnerPersonal = chatRaceConfig.getString("language.chatrace-winner-personal");
+    this.chatraceActionBar = chatRaceConfig.getString("language.chatrace-actionbar-start");
   }
 
   public void generateRandomWord() {
@@ -67,5 +69,9 @@ public class ChatRace extends Race {
 
   public String getChatraceWinnerPersonal() {
     return chatraceWinnerPersonal;
+  }
+
+  public String getChatraceActionBar() {
+    return chatraceActionBar;
   }
 }

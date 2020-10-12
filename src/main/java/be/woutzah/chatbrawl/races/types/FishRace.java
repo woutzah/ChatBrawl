@@ -24,6 +24,7 @@ public class FishRace extends Race {
   private String fishraceEnd;
   private List<String> fishraceWinner;
   private String fishraceWinnerPersonal;
+  private String fishraceActionBar;
 
   public FishRace(ChatBrawl plugin, FileConfiguration config) {
     super(
@@ -49,6 +50,7 @@ public class FishRace extends Race {
     this.fishraceEnd = fishRaceConfig.getString("language.fishrace-ended");
     this.fishraceWinner = fishRaceConfig.getStringList("language.fishrace-winner");
     this.fishraceWinnerPersonal = fishRaceConfig.getString("language.fishrace-winner-personal");
+    this.fishraceActionBar = fishRaceConfig.getString("language.fishrace-actionbar-start");
   }
 
   private void getFishFromConfig() {
@@ -122,5 +124,9 @@ public class FishRace extends Race {
 
   public String getFishraceWinnerPersonal() {
     return fishraceWinnerPersonal;
+  }
+
+  public String getFishraceActionBar() {
+    return fishraceActionBar;
   }
 }

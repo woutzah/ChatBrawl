@@ -19,27 +19,37 @@ chatrace:
   #shoot a firework from the player that wins the race.
   enable-firework: true
 
-  rewards:
+
     #in here you can add/remove commands that will be executed when someone wins!
     #the chance the command get's executed in the console is behind the semicolon
     #you can add/remove entries in the list by inserting the next number
     #E.G. the command 'eco give {player} 10' has a chance of 10
     #parameters you can use: {player} = placeholder for player name in commands
+  rewards:
     commands:
       1:
         commands:
           - 'eco give {player} 10'
           - 'time set day'
         chance: 30
+        #broadcast that is run when this reward is won. Leave empty to disable this
+        broadcast: '{player} has won $5!'
+        #personal title send to the winner! Leave empty to disable this
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
       2:
         commands:
           - 'eco give {player} 5'
           - 'time set day'
         chance: 20
+        broadcast: '{player} has won $5!'
+        title: 'You won 5 dollar!'
+        subtitle: 'Enjoy!'
 
 #you can replace <player> with <rawname> to show the username of a player without prefixes
 language:
   chatrace-name: 'Chat Race'
+  chatrace-actionbar-start: '&6&oChat Race &f&l>> &7Type &b<word> &7as fast as possible!'
   chatrace-start:
     - '&e&l>&8&m------------&e&l[ &6&oChat Race &e&l]&8&m------------&e&l<\n'
     - '&fType the following word as fast as possible!\n'

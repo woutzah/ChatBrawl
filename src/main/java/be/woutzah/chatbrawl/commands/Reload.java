@@ -2,7 +2,6 @@ package be.woutzah.chatbrawl.commands;
 
 import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.exceptions.RaceException;
-import be.woutzah.chatbrawl.listeners.ChatRaceListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,35 +19,36 @@ public class Reload implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         try {
             plugin.getRaceCreator().getRaceCreationTask().cancel();
+            plugin.getRaceCreator().getActionbarTask().cancel();
         }catch (Exception ignored){
 
         }
         switch (plugin.getRaceCreator().getCurrentRunningRace()){
-            case chat:
+            case CHAT:
                 plugin.getRaceCreator().getChatRaceTask().cancel();
                 break;
-            case block:
+            case BLOCK:
                 plugin.getRaceCreator().getBlockRaceTask().cancel();
                 break;
-            case fish:
+            case FISH:
                 plugin.getRaceCreator().getFishRaceTask().cancel();
                 break;
-            case hunt:
+            case HUNT:
                 plugin.getRaceCreator().getHuntRaceTask().cancel();
                 break;
-            case craft:
+            case CRAFT:
                 plugin.getRaceCreator().getCraftRaceTask().cancel();
                 break;
-            case quiz:
+            case QUIZ:
                 plugin.getRaceCreator().getQuizRaceTask().cancel();
                 break;
-            case food:
+            case FOOD:
                 plugin.getRaceCreator().getFoodRaceTask().cancel();
                 break;
-            case scramble:
+            case SCRAMBLE:
                 plugin.getRaceCreator().getScrambleRaceTask().cancel();
                 break;
-            case none:
+            case NONE:
                 break;
         }
         plugin.saveDefaultConfig();

@@ -56,6 +56,7 @@ public class FoodRace extends Race {
                     foodRaceConfig.getConfigurationSection("foodrace.food");
             for (String materialString :
                     Objects.requireNonNull(configSection).getKeys(false)) {
+                materialString = materialString.toUpperCase();
                 Material material = Material.getMaterial(materialString);
                 if (material == null) {
                     throw new RaceException("Invalid material type in food race: " + materialString);

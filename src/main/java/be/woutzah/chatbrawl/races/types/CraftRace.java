@@ -56,6 +56,7 @@ public class CraftRace extends Race {
                     craftRaceConfig.getConfigurationSection("craftrace.items");
             for (String materialString :
                     Objects.requireNonNull(configSection).getKeys(false)) {
+                materialString = materialString.toUpperCase();
                 Material material = Material.getMaterial(materialString);
                 if (material == null) {
                     throw new RaceException("Invalid material type in craft race: " + materialString);

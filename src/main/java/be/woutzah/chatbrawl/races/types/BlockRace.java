@@ -57,6 +57,7 @@ public class BlockRace extends Race {
                     blockRaceConfig.getConfigurationSection("blockrace.blocks");
             for (String materialString :
                     Objects.requireNonNull(configSection).getKeys(false)) {
+                materialString = materialString.toUpperCase();
                 Material material = Material.getMaterial(materialString);
                 int amount = configSection.getInt(materialString);
                 if (material == null) {

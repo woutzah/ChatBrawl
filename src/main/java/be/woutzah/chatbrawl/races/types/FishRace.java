@@ -59,6 +59,7 @@ public class FishRace extends Race {
           fishRaceConfig.getConfigurationSection("fishrace.fish");
       for (String materialString :
           Objects.requireNonNull(configSection).getKeys(false)) {
+        materialString = materialString.toUpperCase();
         Material material = Material.getMaterial(materialString);
         if (material == null) {
           throw new RaceException("Invalid material type in fish race: " + materialString);

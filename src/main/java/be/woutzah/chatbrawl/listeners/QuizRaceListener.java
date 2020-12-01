@@ -44,7 +44,7 @@ public class QuizRaceListener implements Listener {
             if (quizRace.getIgnoredCommandsList().stream().anyMatch(ic -> message.toLowerCase().startsWith(ic.toLowerCase()))){
                 return;
             }
-            if (quizRace.getCurrentAnswers().stream().anyMatch(message::equalsIgnoreCase)){
+            if (quizRace.getCurrentAnswers().stream().anyMatch(a -> a.equalsIgnoreCase(printer.stripColors(message)))){
                 Player player = event.getPlayer();
                 if(raceCreator.isEndBroadcastsEnabled()) {
                     Bukkit.broadcast(printer.getAnnounceQuizWinner(player), "cb.default");

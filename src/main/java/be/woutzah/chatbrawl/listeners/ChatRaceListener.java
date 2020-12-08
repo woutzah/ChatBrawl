@@ -15,7 +15,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatRaceListener implements Listener {
 
-    private final RaceCreator raceCreator;
+    private RaceCreator raceCreator;
     private final ChatRace chatRace;
     private final Printer printer;
     private final RewardRandomizer rewardRandomizer;

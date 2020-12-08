@@ -19,15 +19,15 @@ import java.util.List;
 public class ChatBrawlCommand implements CommandExecutor, TabCompleter {
 
     private final ChatBrawl plugin;
-    private Printer printer;
-    private Disable disable;
-    private Enable enable;
-    private StopRace stopRace;
-    private StartRace startRace;
-    private Help help;
-    private Discord discord;
-    private Current current;
-    private Reload reload;
+    private final Printer printer;
+    private final Disable disable;
+    private final Enable enable;
+    private final StopRace stopRace;
+    private final StartRace startRace;
+    private final Help help;
+    private final Discord discord;
+    private final Current current;
+    private final Reload reload;
 
     public ChatBrawlCommand(ChatBrawl plugin) {
         this.plugin = plugin;
@@ -52,7 +52,7 @@ public class ChatBrawlCommand implements CommandExecutor, TabCompleter {
                     + " created by Woutzah.");
             return true;
         }
-        if (RaceException.isBadConfig() && !args[0].toLowerCase().equals("reload")) {
+        if (RaceException.isBadConfig() && !args[0].equalsIgnoreCase("reload")) {
             sender.sendMessage(printer.getPrefix()
                     + ChatColor.RED
                     + "Error in the config. Check startup log for details!");

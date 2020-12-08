@@ -10,15 +10,17 @@ import be.woutzah.chatbrawl.placeholders.Placeholders;
 import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.types.*;
 import be.woutzah.chatbrawl.utils.RaceRandomizer;
+import com.google.common.base.Enums;
+import com.sun.tools.javac.util.Pair;
+import jdk.javadoc.internal.doclets.toolkit.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class ChatBrawl extends JavaPlugin {
@@ -65,21 +67,21 @@ public class ChatBrawl extends JavaPlugin {
         this.soundEnabled = this.getConfig().getBoolean("enable-sound");
         this.enableActionbar = this.getConfig().getBoolean("enable-race-actionbar");
 
-        try {
-            beginSound = Sound.valueOf(this.getConfig().getString("sound-begin-races"));
-            endSound = Sound.valueOf(this.getConfig().getString("sound-end-races"));
-        } catch (Exception ex) {
+        beginSound = Enums.getIfPresent(Sound.class, this.getConfig().getString("sound-begin-races")).orNull();
+        endSound = Enums.getIfPresent(Sound.class, this.getConfig().getString("sound-end-races")).orNull();
+
+        if (beginSound == null || endSound == null) {
             RaceException.handleConfigException(this, new RaceException("wrong sound in general config!"));
         }
 
         init();
         printer.printConsoleMessage();
 
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new Placeholders(this).register();
         }
 
-        if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
+        if (Bukkit.getPluginManager().isPluginEnabled("LangUtils")) {
             langUtilsIsEnabled = true;
         }
     }
@@ -88,6 +90,40 @@ public class ChatBrawl extends JavaPlugin {
     public void onDisable() {
         HandlerList.unregisterAll(this);
         getLogger().info("Chatbrawl has been disabled!");
+    }
+
+    private void setupCommands() {
+        ChatBrawlCommand chatBrawlCommand = new ChatBrawlCommand(this);
+        Objects.requireNonNull(this.getCommand("cb")).setExecutor(chatBrawlCommand);
+        Objects.requireNonNull(this.getCommand("cb")).setTabCompleter(chatBrawlCommand);
+    }
+
+    private void setupListeners() {
+        Stream.of(
+                new GeneralListener(this),
+                new ChatRaceListener(this),
+                new BlockRaceListener(this),
+                new FishRaceListener(this),
+                new HuntRaceListener(this),
+                new CraftRaceListener(this),
+                new QuizRaceListener(this),
+                new FoodRaceListener(this),
+                new ScrambleRaceListener(this)
+        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
+    }
+
+    public void setupFiles() {
+        saveDefaultConfig();
+        this.fileManager = new FileManager(this);
+        languageConfig = fileManager.loadFile("language/language.yml", true);
+        chatraceConfig = fileManager.loadFile("races/chatrace.yml", true);
+        blockraceConfig = fileManager.loadFile("races/blockrace.yml", true);
+        fishraceConfig = fileManager.loadFile("races/fishrace.yml", true);
+        huntraceConfig = fileManager.loadFile("races/huntrace.yml", true);
+        craftraceConfig = fileManager.loadFile("races/craftrace.yml", true);
+        quizraceConfig = fileManager.loadFile("races/quizrace.yml", true);
+        foodraceConfig = fileManager.loadFile("races/foodrace.yml", true);
+        scrambleraceConfig = fileManager.loadFile("races/scramblerace.yml", true);
     }
 
     public boolean configChecker() {
@@ -344,42 +380,12 @@ public class ChatBrawl extends JavaPlugin {
         setupCommands();
     }
 
-    private void setupCommands() {
-        ChatBrawlCommand chatBrawlCommand = new ChatBrawlCommand(this);
-        Objects.requireNonNull(this.getCommand("cb")).setExecutor(chatBrawlCommand);
-        Objects.requireNonNull(this.getCommand("cb")).setTabCompleter(chatBrawlCommand);
-    }
-
-    private void setupListeners() {
-        Stream.of(
-                new GeneralListener(this),
-                new ChatRaceListener(this),
-                new BlockRaceListener(this),
-                new FishRaceListener(this),
-                new HuntRaceListener(this),
-                new CraftRaceListener(this),
-                new QuizRaceListener(this),
-                new FoodRaceListener(this),
-                new ScrambleRaceListener(this)
-        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
-    }
-
-    public void setupFiles() {
-        saveDefaultConfig();
-        this.fileManager = new FileManager(this);
-        languageConfig = fileManager.loadFile("language/language.yml", true);
-        chatraceConfig = fileManager.loadFile("races/chatrace.yml", true);
-        blockraceConfig = fileManager.loadFile("races/blockrace.yml", true);
-        fishraceConfig = fileManager.loadFile("races/fishrace.yml", true);
-        huntraceConfig = fileManager.loadFile("races/huntrace.yml", true);
-        craftraceConfig = fileManager.loadFile("races/craftrace.yml", true);
-        quizraceConfig = fileManager.loadFile("races/quizrace.yml", true);
-        foodraceConfig = fileManager.loadFile("races/foodrace.yml", true);
-        scrambleraceConfig = fileManager.loadFile("races/scramblerace.yml", true);
-    }
-
     public List<String> getDisabledWorldsList() {
         return disabledWorldsList;
+    }
+
+    public boolean isDisabledInWorld(final World world) {
+        return disabledWorldsList.contains(world.getName());
     }
 
     public boolean getAllowCreative() {

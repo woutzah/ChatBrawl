@@ -4,6 +4,7 @@ import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.messages.Printer;
 import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.utils.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,66 +23,65 @@ public class StopRace implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!raceCreator.getCurrentRunningRace().equals(RaceType.NONE)) {
-            try {
-                raceCreator.getActionbarTask().cancel();
-            } catch (Exception ignored) { }
-
-            switch (raceCreator.getCurrentRunningRace()) {
-                case CHAT:
-                    raceCreator.getChatRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.CHAT), "cb.default");
-                    return true;
-                case BLOCK:
-                    raceCreator.getBlockRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.BLOCK), "cb.default");
-                    return true;
-                case FISH:
-                    raceCreator.getFishRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.FISH), "cb.default");
-                    return true;
-                case HUNT:
-                    raceCreator.getHuntRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.HUNT), "cb.default");
-                    return true;
-                case CRAFT:
-                    raceCreator.getCraftRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.CRAFT), "cb.default");
-                    return true;
-                case QUIZ:
-                    raceCreator.getQuizRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.QUIZ), "cb.default");
-                    return true;
-                case FOOD:
-                    raceCreator.getFoodRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.FOOD), "cb.default");
-                    return true;
-                case SCRAMBLE:
-                    raceCreator.getScrambleRaceTask().cancel();
-                    raceCreator.setCurrentRunningRace(RaceType.NONE);
-                    raceCreator.setRacesEnabled(false);
-                    Bukkit.broadcast(printer.getStoppedRace(RaceType.SCRAMBLE), "cb.default");
-                    return true;
-            }
-        } else {
+        if (raceCreator.getCurrentRunningRace() == RaceType.NONE) {
             if (!printer.getNoRaceRunning().isEmpty()) {
                 sender.sendMessage(printer.getNoRaceRunning());
             }
+
+            return true;
         }
+
+        try {
+            raceCreator.getActionbarTask().cancel();
+        } catch (Exception ignored) { }
+
+        final RaceType currentRunningRace = raceCreator.getCurrentRunningRace();
+
+        switch (currentRunningRace) {
+            case BLOCK: {
+                raceCreator.getBlockRaceTask().cancel();
+                break;
+            }
+
+            case CHAT: {
+                raceCreator.getChatRaceTask().cancel();
+                break;
+            }
+
+            case CRAFT: {
+                raceCreator.getCraftRaceTask().cancel();
+                break;
+            }
+
+            case FISH: {
+                raceCreator.getFishRaceTask().cancel();
+                break;
+            }
+
+            case FOOD: {
+                raceCreator.getFoodRaceTask().cancel();
+                break;
+            }
+
+            case HUNT: {
+                raceCreator.getHuntRaceTask().cancel();
+                break;
+            }
+
+            case QUIZ: {
+                raceCreator.getQuizRaceTask().cancel();
+                break;
+            }
+
+            case SCRAMBLE: {
+                raceCreator.getScrambleRaceTask().cancel();
+                break;
+            }
+        }
+
+        raceCreator.setCurrentRunningRace(RaceType.NONE);
+        raceCreator.getChatRaceTask().cancel();
+        Bukkit.broadcast(printer.getStoppedRace(currentRunningRace), Permission.DEFAULT);
         return true;
     }
 }

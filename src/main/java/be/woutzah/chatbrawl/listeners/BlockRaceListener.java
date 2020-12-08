@@ -6,6 +6,7 @@ import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
 import be.woutzah.chatbrawl.races.types.BlockRace;
 import be.woutzah.chatbrawl.rewards.RewardRandomizer;
+import be.woutzah.chatbrawl.utils.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
@@ -34,57 +35,62 @@ public class BlockRaceListener implements Listener {
     }
 
     @EventHandler
-    public void checkBlocksMined(BlockBreakEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.BLOCK)) {
-            if (plugin.getDisabledWorldsList().contains(event.getPlayer().getLocation().getWorld().getName())){
-                return;
-            }
-            if (!plugin.getAllowCreative()) {
-                if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-                    return;
-                }
-            }
-            Block minedBlock = event.getBlock();
-            if (minedBlock.getType().equals(blockRace.getCurrentItemStack().getType())) {
-                UUID uuid = event.getPlayer().getUniqueId();
-                if (blockRace.getPlayerScores().containsKey(uuid)) {
-                    int currentAmount = blockRace.getPlayerScores().get(uuid);
-                    currentAmount++;
-                    blockRace.getPlayerScores().put(uuid, currentAmount);
-                    if (blockRace.getPlayerScores().get(uuid)
-                            == blockRace.getCurrentItemStack().getAmount()) {
-                        Player player = event.getPlayer();
-                        if(raceCreator.isEndBroadcastsEnabled()) {
-                            Bukkit.broadcast(printer.getAnnounceBlockWinner(player), "cb.default");
-                        }
-                        if (!printer.getPersonalBlockWinner().isEmpty()) {
-                            player.sendMessage(printer.getPersonalBlockWinner());
-                        }
-                        if (plugin.isSoundEnabled()){
-                            Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(),plugin.getEndSound(),1.0F, 8.0F) );
-                        }
-                        blockRace.shootFireWorkIfEnabled(player);
-                        rewardRandomizer.executeRandomCommand(blockRace.getCommandRewardsMap(), player);
-                        raceCreator.getBlockRaceTask().cancel();
-                        try {
-                            raceCreator.getActionbarTask().cancel();
-                        }catch (Exception ignored){
-
-                        }
-                        raceCreator.setCurrentRunningRace(RaceType.NONE);
-                        blockRace.removeOnlinePlayers();
-                    }
-                }
-            }
+    public void checkBlocksMined(final BlockBreakEvent event) {
+        if (raceCreator.getCurrentRunningRace() != RaceType.BLOCK) {
+            return;
         }
+
+        final Player player = event.getPlayer();
+
+        if (plugin.isDisabledInWorld(event.getPlayer().getLocation().getWorld())) {
+            return;
+        }
+
+        if (!plugin.getAllowCreative() && player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
+
+        if (event.getBlock().getType() != blockRace.getCurrentItemStack().getType()) {
+            return;
+        }
+
+        final Integer score = blockRace.getPlayerScores().get(player.getUniqueId());
+
+        if (score == null) {
+            return;
+        }
+
+        if (score + 1 >= blockRace.getCurrentItemStack().getAmount()) {
+            if (raceCreator.isEndBroadcastsEnabled()) {
+                Bukkit.broadcast(printer.getAnnounceBlockWinner(player), Permission.DEFAULT);
+            }
+
+            if (!printer.getPersonalBlockWinner().isEmpty()) {
+                player.sendMessage(printer.getPersonalBlockWinner());
+            }
+
+            blockRace.shootFireWorkIfEnabled(player);
+            rewardRandomizer.executeRandomCommand(blockRace.getCommandRewardsMap(), player);
+            raceCreator.getBlockRaceTask().cancel();
+
+            try {
+                raceCreator.getActionbarTask().cancel();
+            } catch (Exception ignored) { }
+
+            raceCreator.setCurrentRunningRace(RaceType.NONE);
+            blockRace.removeOnlinePlayers();
+            return;
+        }
+
+        blockRace.getPlayerScores().put(player.getUniqueId(), score + 1);
     }
 
     @EventHandler
     public void addPlayerBlockRace(PlayerJoinEvent event) {
-        if (raceCreator.getCurrentRunningRace().equals(RaceType.BLOCK)) {
-            if (!blockRace.getPlayerScores().containsKey(event.getPlayer().getUniqueId())) {
-                blockRace.getPlayerScores().put(event.getPlayer().getUniqueId(), 0);
-            }
+        if (raceCreator.getCurrentRunningRace() != RaceType.BLOCK) {
+            return;
         }
+
+        blockRace.getPlayerScores().putIfAbsent(event.getPlayer().getUniqueId(), 0);
     }
 }

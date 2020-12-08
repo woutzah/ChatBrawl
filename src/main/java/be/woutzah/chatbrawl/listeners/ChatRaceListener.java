@@ -15,11 +15,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatRaceListener implements Listener {
 
-    private RaceCreator raceCreator;
-    private ChatRace chatRace;
-    private Printer printer;
-    private RewardRandomizer rewardRandomizer;
-    private ChatBrawl plugin;
+    private final RaceCreator raceCreator;
+    private final ChatRace chatRace;
+    private final Printer printer;
+    private final RewardRandomizer rewardRandomizer;
+    private final ChatBrawl plugin;
 
     public ChatRaceListener(ChatBrawl plugin) {
         this.raceCreator = plugin.getRaceCreator();

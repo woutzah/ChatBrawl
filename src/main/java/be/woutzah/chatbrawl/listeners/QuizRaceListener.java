@@ -2,9 +2,9 @@ package be.woutzah.chatbrawl.listeners;
 
 import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.messages.Printer;
-import be.woutzah.chatbrawl.races.types.QuizRace;
 import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.races.types.QuizRace;
 import be.woutzah.chatbrawl.rewards.RewardRandomizer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -15,11 +15,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class QuizRaceListener implements Listener {
 
-    private RaceCreator raceCreator;
-    private QuizRace quizRace;
-    private Printer printer;
-    private RewardRandomizer rewardRandomizer;
-    private ChatBrawl plugin;
+    private final RaceCreator raceCreator;
+    private final QuizRace quizRace;
+    private final Printer printer;
+    private final RewardRandomizer rewardRandomizer;
+    private final ChatBrawl plugin;
 
     public QuizRaceListener(ChatBrawl plugin) {
         this.raceCreator = plugin.getRaceCreator();

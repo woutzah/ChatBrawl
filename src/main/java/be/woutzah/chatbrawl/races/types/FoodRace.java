@@ -13,7 +13,7 @@ import java.util.*;
 
 public class FoodRace extends Race {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private HashMap<Material, Integer> foodMap;
     private HashMap<UUID, Integer> playerScores;
     private ItemStack currentItemStack;
@@ -32,7 +32,8 @@ public class FoodRace extends Race {
                 config.getInt("foodrace.chance"),
                 config.getBoolean("foodrace.enable-firework"),
                 config.getBoolean("foodrace.enabled"),
-                config.getConfigurationSection("foodrace.rewards.commands"));
+                config.getConfigurationSection("foodrace.rewards.commands")
+        );
         this.plugin = plugin;
         this.foodRaceConfig = config;
         this.foodMap = new HashMap<>();

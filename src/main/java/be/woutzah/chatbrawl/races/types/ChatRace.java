@@ -26,7 +26,8 @@ public class ChatRace extends Race {
         config.getInt("chatrace.chance"),
         config.getBoolean("chatrace.enable-firework"),
         config.getBoolean("chatrace.enabled"),
-        config.getConfigurationSection("chatrace.rewards.commands"));
+        config.getConfigurationSection("chatrace.rewards.commands")
+    );
     this.chatRaceConfig = config;
     this.allWordsList = chatRaceConfig.getStringList("chatrace.words");
     generateRandomWord();

@@ -12,8 +12,8 @@ import org.bukkit.command.CommandSender;
 
 public class StopRace implements CommandExecutor {
 
-    private Printer printer;
-    private RaceCreator raceCreator;
+    private final Printer printer;
+    private final RaceCreator raceCreator;
 
     public StopRace(ChatBrawl plugin) {
         this.printer = plugin.getPrinter();
@@ -25,9 +25,8 @@ public class StopRace implements CommandExecutor {
         if (!raceCreator.getCurrentRunningRace().equals(RaceType.NONE)) {
             try {
                 raceCreator.getActionbarTask().cancel();
-            } catch (Exception ex) {
+            } catch (Exception ignored) { }
 
-            }
             switch (raceCreator.getCurrentRunningRace()) {
                 case CHAT:
                     raceCreator.getChatRaceTask().cancel();

@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class RaceCreator {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private long eventDelay;
     private int minimumAmountOfPlayers;
     private Boolean racesEnabled;

@@ -18,11 +18,11 @@ import java.util.UUID;
 
 public class FoodRaceListener implements Listener {
 
-    private RaceCreator raceCreator;
-    private FoodRace foodRace;
-    private Printer printer;
-    private RewardRandomizer rewardRandomizer;
-    private ChatBrawl plugin;
+    private final RaceCreator raceCreator;
+    private final FoodRace foodRace;
+    private final Printer printer;
+    private final RewardRandomizer rewardRandomizer;
+    private final ChatBrawl plugin;
 
     public FoodRaceListener(ChatBrawl plugin) {
         this.raceCreator = plugin.getRaceCreator();

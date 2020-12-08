@@ -2,9 +2,9 @@ package be.woutzah.chatbrawl.listeners;
 
 import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.messages.Printer;
-import be.woutzah.chatbrawl.races.types.BlockRace;
 import be.woutzah.chatbrawl.races.RaceCreator;
 import be.woutzah.chatbrawl.races.RaceType;
+import be.woutzah.chatbrawl.races.types.BlockRace;
 import be.woutzah.chatbrawl.rewards.RewardRandomizer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -19,11 +19,11 @@ import java.util.UUID;
 
 public class BlockRaceListener implements Listener {
 
-    private RaceCreator raceCreator;
-    private BlockRace blockRace;
-    private Printer printer;
-    private RewardRandomizer rewardRandomizer;
-    private ChatBrawl plugin;
+    private final RaceCreator raceCreator;
+    private final BlockRace blockRace;
+    private final Printer printer;
+    private final RewardRandomizer rewardRandomizer;
+    private final ChatBrawl plugin;
 
     public BlockRaceListener(ChatBrawl plugin) {
         this.raceCreator = plugin.getRaceCreator();

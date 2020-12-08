@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 
 public class Reload implements CommandExecutor {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
 
     public Reload(ChatBrawl plugin) {
         this.plugin = plugin;
@@ -20,10 +20,9 @@ public class Reload implements CommandExecutor {
         try {
             plugin.getRaceCreator().getRaceCreationTask().cancel();
             plugin.getRaceCreator().getActionbarTask().cancel();
-        }catch (Exception ignored){
+        } catch (Exception ignored) { }
 
-        }
-        switch (plugin.getRaceCreator().getCurrentRunningRace()){
+        switch (plugin.getRaceCreator().getCurrentRunningRace()) {
             case CHAT:
                 plugin.getRaceCreator().getChatRaceTask().cancel();
                 break;

@@ -13,7 +13,7 @@ import java.util.*;
 
 public class CraftRace extends Race {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private HashMap<Material, Integer> craftsMap;
     private HashMap<UUID, Integer> playerScores;
     private ItemStack currentItemStack;
@@ -32,7 +32,8 @@ public class CraftRace extends Race {
                 config.getInt("craftrace.chance"),
                 config.getBoolean("craftrace.enable-firework"),
                 config.getBoolean("craftrace.enabled"),
-                config.getConfigurationSection("craftrace.rewards.commands"));
+                config.getConfigurationSection("craftrace.rewards.commands")
+        );
         this.craftRaceConfig = config;
         this.plugin = plugin;
         this.craftsMap = new HashMap<>();
@@ -52,20 +53,17 @@ public class CraftRace extends Race {
 
     private void getCraftsFromConfig() {
         try {
-            ConfigurationSection configSection =
-                    craftRaceConfig.getConfigurationSection("craftrace.items");
-            for (String materialString :
-                    Objects.requireNonNull(configSection).getKeys(false)) {
+            final ConfigurationSection configSection = craftRaceConfig.getConfigurationSection("craftrace.items");
+
+            for (String materialString : Objects.requireNonNull(configSection).getKeys(false)) {
                 materialString = materialString.toUpperCase();
-                Material material = Material.getMaterial(materialString);
+                final Material material = Material.getMaterial(materialString);
+
                 if (material == null) {
                     throw new RaceException("Invalid material type in craft race: " + materialString);
                 }
-                int amount = configSection.getInt(materialString);
-                if (amount == 0) {
-                    amount = 1;
-                }
-                craftsMap.put(material, amount);
+
+                craftsMap.put(material, Math.max(1, configSection.getInt(materialString)));
             }
         } catch (RaceException e) {
             RaceException.handleConfigException(plugin, e);

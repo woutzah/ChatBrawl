@@ -22,11 +22,11 @@ import java.util.UUID;
 
 public class CraftRaceListener implements Listener {
 
-    private RaceCreator raceCreator;
-    private CraftRace craftRace;
-    private Printer printer;
-    private RewardRandomizer rewardRandomizer;
-    private ChatBrawl plugin;
+    private final RaceCreator raceCreator;
+    private final CraftRace craftRace;
+    private final Printer printer;
+    private final RewardRandomizer rewardRandomizer;
+    private final ChatBrawl plugin;
 
     public CraftRaceListener(ChatBrawl plugin) {
         this.raceCreator = plugin.getRaceCreator();

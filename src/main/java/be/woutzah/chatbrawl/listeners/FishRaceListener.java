@@ -20,11 +20,11 @@ import java.util.UUID;
 
 public class FishRaceListener implements Listener {
 
-  private RaceCreator raceCreator;
-  private FishRace fishRace;
-  private Printer printer;
-  private RewardRandomizer rewardRandomizer;
-  private ChatBrawl plugin;
+  private final RaceCreator raceCreator;
+  private final FishRace fishRace;
+  private final Printer printer;
+  private final RewardRandomizer rewardRandomizer;
+  private final ChatBrawl plugin;
 
   public FishRaceListener(ChatBrawl plugin) {
     this.raceCreator = plugin.getRaceCreator();

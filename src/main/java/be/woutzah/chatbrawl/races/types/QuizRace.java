@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class QuizRace extends Race {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private HashMap<String, List<String>> questionsMap;
     private String currentQuestion;
     private List<String> currentAnswers;
@@ -33,7 +33,8 @@ public class QuizRace extends Race {
                 config.getInt("quizrace.chance"),
                 config.getBoolean("quizrace.enable-firework"),
                 config.getBoolean("quizrace.enabled"),
-                config.getConfigurationSection("quizrace.rewards.commands"));
+                config.getConfigurationSection("quizrace.rewards.commands")
+        );
         this.plugin = plugin;
         this.quizRaceConfig = config;
         this.questionsMap = new HashMap<>();
@@ -52,24 +53,25 @@ public class QuizRace extends Race {
 
     private void getQuestionsFromConfig() {
         try {
-            ConfigurationSection configSection =
-                    quizRaceConfig.getConfigurationSection("quizrace.questions");
-            for (String questionAnswerEntry :
-                    Objects.requireNonNull(configSection).getKeys(false)) {
-                String question = configSection.getString( questionAnswerEntry + ".question");
+            final ConfigurationSection configSection = quizRaceConfig.getConfigurationSection("quizrace.questions");
+
+            for (String questionAnswerEntry : Objects.requireNonNull(configSection).getKeys(false)) {
+                final String question = configSection.getString(questionAnswerEntry + ".question");
+
                 if (question == null) {
                     throw new RaceException("Empty question in quizrace for questionsection number " + questionAnswerEntry);
                 }
-                List<String> answers = configSection.getStringList(questionAnswerEntry + ".answer")
-                        .stream()
+
+                final List<String> answers = configSection.getStringList(questionAnswerEntry + ".answer").stream()
                         .map(String::toLowerCase)
                         .collect(Collectors.toList());
+
                 if (answers.isEmpty()) {
                     throw new RaceException("Empty answer in quizrace for questionsection number " + questionAnswerEntry);
                 }
+
                 questionsMap.put(question, answers);
             }
-
         } catch (RaceException e) {
             RaceException.handleConfigException(plugin, e);
         }

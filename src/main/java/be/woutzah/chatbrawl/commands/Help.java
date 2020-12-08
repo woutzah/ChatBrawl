@@ -9,15 +9,15 @@ import org.bukkit.command.CommandSender;
 
 public class Help implements CommandExecutor {
 
-  private Printer printer;
+    private final Printer printer;
 
-  public Help(ChatBrawl plugin) {
-    this.printer = plugin.getPrinter();
-  }
+    public Help(ChatBrawl plugin) {
+        this.printer = plugin.getPrinter();
+    }
 
-  @Override
-  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    sender.sendMessage(printer.getHelpMenu());
-    return true;
-  }
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        sender.sendMessage(printer.getHelpMenu());
+        return true;
+    }
 }

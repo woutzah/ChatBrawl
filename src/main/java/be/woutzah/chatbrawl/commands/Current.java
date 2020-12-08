@@ -8,20 +8,20 @@ import org.bukkit.command.CommandSender;
 
 public class Current implements CommandExecutor {
 
-  private Printer printer;
-  private ChatBrawl plugin;
+    private final Printer printer;
+    private final ChatBrawl plugin;
 
-  public Current(ChatBrawl plugin) {
-    this.printer = plugin.getPrinter();
-    this.plugin = plugin;
-  }
-
-  @Override
-  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    if (!plugin.getPrinter().getCurrentRunningRaceInfo().isEmpty()) {
-      sender.sendMessage(printer.getCurrentRunningRaceInfo());
-      return true;
+    public Current(ChatBrawl plugin) {
+        this.printer = plugin.getPrinter();
+        this.plugin = plugin;
     }
-    return true;
-  }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!plugin.getPrinter().getCurrentRunningRaceInfo().isEmpty()) {
+            sender.sendMessage(printer.getCurrentRunningRaceInfo());
+            return true;
+        }
+        return true;
+    }
 }

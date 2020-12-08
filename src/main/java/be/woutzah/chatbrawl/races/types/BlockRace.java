@@ -7,14 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
 public class BlockRace extends Race {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private HashMap<Material, Integer> blocksMap;
     private HashMap<UUID, Integer> playerScores;
     private ItemStack currentItemStack;
@@ -33,7 +32,8 @@ public class BlockRace extends Race {
                 config.getInt("blockrace.chance"),
                 config.getBoolean("blockrace.enable-firework"),
                 config.getBoolean("blockrace.enabled"),
-                config.getConfigurationSection("blockrace.rewards.commands"));
+                config.getConfigurationSection("blockrace.rewards.commands")
+        );
         this.plugin = plugin;
         this.blockRaceConfig = config;
         this.blocksMap = new HashMap<>();
@@ -53,20 +53,17 @@ public class BlockRace extends Race {
 
     private void getBlocksFromConfig() {
         try {
-            ConfigurationSection configSection =
-                    blockRaceConfig.getConfigurationSection("blockrace.blocks");
-            for (String materialString :
-                    Objects.requireNonNull(configSection).getKeys(false)) {
+            final ConfigurationSection configSection = blockRaceConfig.getConfigurationSection("blockrace.blocks");
+
+            for (String materialString : Objects.requireNonNull(configSection).getKeys(false)) {
                 materialString = materialString.toUpperCase();
-                Material material = Material.getMaterial(materialString);
-                int amount = configSection.getInt(materialString);
+                final Material material = Material.getMaterial(materialString);
+
                 if (material == null) {
                     throw new RaceException("Invalid material type in block race: " + materialString);
                 }
-                if (amount == 0) {
-                    amount = 1;
-                }
-                blocksMap.put(material, amount);
+
+                blocksMap.put(material, Math.max(1, configSection.getInt(materialString)));
             }
         } catch (RaceException e) {
             RaceException.handleConfigException(plugin, e);

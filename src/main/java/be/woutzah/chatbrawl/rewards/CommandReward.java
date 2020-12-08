@@ -37,4 +37,5 @@ public class CommandReward {
     public int getChance() {
         return chance;
     }
+
 }

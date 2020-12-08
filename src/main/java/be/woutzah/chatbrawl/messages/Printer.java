@@ -10,10 +10,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.stream.Stream;
+
 public class Printer {
 
     private final String discordLink;
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private FileConfiguration config;
     private LanguageManager languageManager;
     private ChatRace chatRace;
@@ -58,36 +60,26 @@ public class Printer {
     }
 
     public String getDiscordMessage() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("&e&l>&7&m---------&e&l[ &6&oChatBrawl Discord &e&l]&7&m---------&e&l<\n");
-        sb.append("      &fFor &esupport/issues&f or &esuggestions           \n");
-        sb.append("           &fjoin our official discord!               \n");
-        sb.append("          &d&o&n" + discordLink + "\n");
-        sb.append("&e&l>&7&m------------------------------------&e&l<\n");
-
-        return parseColorCodes(sb.toString());
+        return parseColorCodes(
+                "&e&l>&7&m---------&e&l[ &6&oChatBrawl Discord &e&l]&7&m---------&e&l<\n" +
+                        "      &fFor &esupport/issues&f or &esuggestions           \n" +
+                        "           &fjoin our official discord!               \n" +
+                        "          &d&o&n" + discordLink + "\n" +
+                        "&e&l>&7&m------------------------------------&e&l<\n"
+        );
     }
 
     public void printConsoleMessage() {
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>&7&m------------&e&l[ &6&oChatBrawl &e&l]&7&m-----------&e&l<"));
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>                                    &e&l<"));
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>           &bChatbrawl V"
-                        + plugin.getDescription().getVersion()
-                        + "         &e&l<"));
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>             &9&oBy woutzah             &e&l<"));
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>                                    &e&l<"));
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>            &eEnabling ...            &e&l<"));
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>                                    &e&l<"));
-        Bukkit.getConsoleSender()
-                .sendMessage(parseColorCodes("&e&l>&7&m------------------------------------&e&l<"));
+        Stream.of(
+                "&e&l>&7&m------------&e&l[ &6&oChatBrawl &e&l]&7&m-----------&e&l<",
+                "&e&l>                                    &e&l<",
+                "&e&l>           &bChatbrawl V" + plugin.getDescription().getVersion() + "         &e&l<",
+                "&e&l>             &9&oBy woutzah             &e&l<",
+                "&e&l>                                    &e&l<",
+                "&e&l>            &eEnabling ...            &e&l<",
+                "&e&l>                                    &e&l<",
+                "&e&l>&7&m------------------------------------&e&l<"
+        ).forEach(line -> Bukkit.getConsoleSender().sendMessage(parseColorCodes(line)));
     }
 
     //commands messages

@@ -8,15 +8,15 @@ import org.bukkit.command.CommandSender;
 
 public class Discord implements CommandExecutor {
 
-  private Printer printer;
+    private final Printer printer;
 
-  public Discord(ChatBrawl plugin) {
-    this.printer = plugin.getPrinter();
-  }
+    public Discord(ChatBrawl plugin) {
+        this.printer = plugin.getPrinter();
+    }
 
-  @Override
-  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    sender.sendMessage(printer.getDiscordMessage());
-    return true;
-  }
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        sender.sendMessage(printer.getDiscordMessage());
+        return true;
+    }
 }

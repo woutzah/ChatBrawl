@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ChatBrawlCommand implements CommandExecutor, TabCompleter {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private Printer printer;
     private Disable disable;
     private Enable enable;

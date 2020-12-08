@@ -51,12 +51,7 @@ public abstract class Race {
 
     public void shootFireWorkIfEnabledAsync(Player player) {
         if (useFirework) {
-            Bukkit.getServer()
-                    .getScheduler()
-                    .runTaskLater(
-                            plugin,
-                            () -> FireworkCreator.spawnFirework(player),
-                            0);
+            Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> FireworkCreator.spawnFirework(player), 0);
         }
     }
 
@@ -68,21 +63,23 @@ public abstract class Race {
 
     public void fillCommandRewards() {
         try {
-            for (String commandEntry :
-                    Objects.requireNonNull(commandRewardSection).getKeys(false)) {
-                List<String> commands = commandRewardSection.getStringList(commandEntry + ".commands");
+            for (final String commandEntry : Objects.requireNonNull(commandRewardSection).getKeys(false)) {
+                final List<String> commands = commandRewardSection.getStringList(commandEntry + ".commands");
+
                 if (commands.isEmpty()) {
                     throw new RaceException(commandEntry + ": the commandlist for a reward is missing in the config!");
                 }
-                int chance = commandRewardSection.getInt(commandEntry + ".chance");
+
+                final int chance = commandRewardSection.getInt(commandEntry + ".chance");
+
                 if (chance == 0) {
                     throw new RaceException(commandEntry + "the command chance for rewards is missing in the config!");
                 }
-                String broadcastString = commandRewardSection.getString(commandEntry + ".broadcast");
-                String titleString = commandRewardSection.getString(commandEntry + ".title");
-                String subtitleString = commandRewardSection.getString(commandEntry + ".subtitle");
-                CommandReward newCommandReward = new CommandReward(broadcastString, titleString, subtitleString, commands, chance);
-                commandRewardsMap.add(newCommandReward);
+
+                final String broadcastString = commandRewardSection.getString(commandEntry + ".broadcast");
+                final String titleString = commandRewardSection.getString(commandEntry + ".title");
+                final String subtitleString = commandRewardSection.getString(commandEntry + ".subtitle");
+                commandRewardsMap.add(new CommandReward(broadcastString, titleString, subtitleString, commands, chance));
             }
         } catch (RaceException e) {
             RaceException.handleConfigException(plugin, e);

@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class ChatBrawl extends JavaPlugin {
 
@@ -63,22 +64,25 @@ public class ChatBrawl extends JavaPlugin {
         this.allowCreative = this.getConfig().getBoolean("allow-creative");
         this.soundEnabled = this.getConfig().getBoolean("enable-sound");
         this.enableActionbar = this.getConfig().getBoolean("enable-race-actionbar");
+
         try {
             beginSound = Sound.valueOf(this.getConfig().getString("sound-begin-races"));
             endSound = Sound.valueOf(this.getConfig().getString("sound-end-races"));
         } catch (Exception ex) {
             RaceException.handleConfigException(this, new RaceException("wrong sound in general config!"));
         }
+
         init();
         printer.printConsoleMessage();
+
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new Placeholders(this).register();
         }
+
         if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
             langUtilsIsEnabled = true;
         }
     }
-
 
     @Override
     public void onDisable() {
@@ -347,17 +351,18 @@ public class ChatBrawl extends JavaPlugin {
     }
 
     private void setupListeners() {
-        this.getServer().getPluginManager().registerEvents(new GeneralListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new ChatRaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new BlockRaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new FishRaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new HuntRaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new CraftRaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new QuizRaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new FoodRaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new ScrambleRaceListener(this), this);
+        Stream.of(
+                new GeneralListener(this),
+                new ChatRaceListener(this),
+                new BlockRaceListener(this),
+                new FishRaceListener(this),
+                new HuntRaceListener(this),
+                new CraftRaceListener(this),
+                new QuizRaceListener(this),
+                new FoodRaceListener(this),
+                new ScrambleRaceListener(this)
+        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
-
 
     public void setupFiles() {
         saveDefaultConfig();

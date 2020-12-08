@@ -9,69 +9,71 @@ import java.util.Random;
 
 public class RaceRandomizer {
 
-  private ChatBrawl plugin;
-  private List<Chance> chanceList;
-  private int sum;
-  private Random random;
+    private final ChatBrawl plugin;
+    private final List<Chance> chanceList;
+    private final Random random;
+    private int sum;
 
-  public RaceRandomizer(ChatBrawl plugin) {
-    this.plugin = plugin;
-    this.chanceList = new ArrayList<>();
-    this.sum = 0;
-    this.random = new Random();
-    putChancesInList();
-  }
+    public RaceRandomizer(ChatBrawl plugin) {
+        this.plugin = plugin;
+        this.chanceList = new ArrayList<>();
+        this.sum = 0;
+        this.random = new Random();
+        putChancesInList();
+    }
 
-  public void putChancesInList() {
-    if (plugin.getChatrace().isEnabled()) {
-      Chance chatChance = new Chance(sum + plugin.getChatrace().getChance(), sum, RaceType.CHAT);
-      sum += plugin.getChatrace().getChance();
-      chanceList.add(chatChance);
-    }
-    if (plugin.getBlockRace().isEnabled()) {
-      Chance blockChance = new Chance(sum + plugin.getBlockRace().getChance(), sum, RaceType.BLOCK);
-      sum += plugin.getBlockRace().getChance();
-      chanceList.add(blockChance);
-    }
-    if (plugin.getFishRace().isEnabled()) {
-      Chance fishChance = new Chance(sum + plugin.getFishRace().getChance(), sum, RaceType.FISH);
-      sum += plugin.getFishRace().getChance();
-      chanceList.add(fishChance);
-    }
-    if (plugin.getHuntRace().isEnabled()) {
-      Chance huntChance = new Chance(sum + plugin.getHuntRace().getChance(), sum, RaceType.HUNT);
-      sum += plugin.getHuntRace().getChance();
-      chanceList.add(huntChance);
-    }
-    if (plugin.getCraftRace().isEnabled()) {
-      Chance craftChance = new Chance(sum + plugin.getCraftRace().getChance(), sum, RaceType.CRAFT);
-      sum += plugin.getCraftRace().getChance();
-      chanceList.add(craftChance);
-    }
-    if (plugin.getQuizRace().isEnabled()) {
-      Chance quizChance = new Chance(sum + plugin.getQuizRace().getChance(), sum, RaceType.QUIZ);
-      sum += plugin.getQuizRace().getChance();
-      chanceList.add(quizChance);
-    }
-    if (plugin.getFoodRace().isEnabled()) {
-      Chance foodChance = new Chance(sum + plugin.getFoodRace().getChance(), sum, RaceType.FOOD);
-      sum += plugin.getFoodRace().getChance();
-      chanceList.add(foodChance);
-    }
-    if (plugin.getScrambleRace().isEnabled()) {
-      Chance scrambleChance = new Chance(sum + plugin.getScrambleRace().getChance(), sum, RaceType.SCRAMBLE);
-      sum += plugin.getScrambleRace().getChance();
-      chanceList.add(scrambleChance);
-    }
-  }
+    public void putChancesInList() {
+        if (plugin.getChatrace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getChatrace().getChance(), sum, RaceType.CHAT));
+            sum += plugin.getChatrace().getChance();
+        }
 
-  public RaceType getRandomRace() {
-    int index = this.random.nextInt(this.sum);
-    for (Chance chance : this.chanceList) {
-      if (chance.getLowerLimit() <= index && chance.getUpperLimit() > index) {
-        return chance.getRaceType();
-      }
+        if (plugin.getBlockRace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getBlockRace().getChance(), sum, RaceType.BLOCK));
+            sum += plugin.getBlockRace().getChance();
+        }
+
+        if (plugin.getFishRace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getFishRace().getChance(), sum, RaceType.FISH));
+            sum += plugin.getFishRace().getChance();
+        }
+
+        if (plugin.getHuntRace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getHuntRace().getChance(), sum, RaceType.HUNT));
+            sum += plugin.getHuntRace().getChance();
+        }
+
+        if (plugin.getCraftRace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getCraftRace().getChance(), sum, RaceType.CRAFT));
+            sum += plugin.getCraftRace().getChance();
+        }
+
+        if (plugin.getQuizRace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getQuizRace().getChance(), sum, RaceType.QUIZ));
+            sum += plugin.getQuizRace().getChance();
+        }
+
+        if (plugin.getFoodRace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getFoodRace().getChance(), sum, RaceType.FOOD));
+            sum += plugin.getFoodRace().getChance();
+        }
+
+        if (plugin.getScrambleRace().isEnabled()) {
+            chanceList.add(new Chance(sum + plugin.getScrambleRace().getChance(), sum, RaceType.SCRAMBLE));
+            sum += plugin.getScrambleRace().getChance();
+        }
     }
-    return RaceType.NONE;
-  }
+
+    public RaceType getRandomRace() {
+        final int index = this.random.nextInt(this.sum);
+
+        for (Chance chance : this.chanceList) {
+            if (chance.getLowerLimit() <= index && chance.getUpperLimit() > index) {
+                return chance.getRaceType();
+            }
+        }
+
+        return RaceType.NONE;
+    }
+
 }

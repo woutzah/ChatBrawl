@@ -11,8 +11,8 @@ import org.bukkit.command.CommandSender;
 
 public class StartRace implements CommandExecutor {
 
-    private Printer printer;
-    private RaceCreator raceCreator;
+    private final Printer printer;
+    private final RaceCreator raceCreator;
 
     public StartRace(ChatBrawl plugin) {
         this.printer = plugin.getPrinter();
@@ -21,16 +21,15 @@ public class StartRace implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(raceCreator.getCurrentRunningRace() != RaceType.NONE){
+        if (raceCreator.getCurrentRunningRace() != RaceType.NONE) {
             sender.sendMessage(printer.getRaceStillRunning());
             return true;
         }
         try {
             raceCreator.getRaceCreationTask().cancel();
-        }catch (Exception ignored){
+        } catch (Exception ignored) { }
 
-        }
-        switch(args[0].toUpperCase()){
+        switch (args[0].toUpperCase()) {
             case "CHAT":
                 Bukkit.broadcast(printer.getStartedRace(RaceType.CHAT), "cb.default");
                 raceCreator.chatRaceStart();

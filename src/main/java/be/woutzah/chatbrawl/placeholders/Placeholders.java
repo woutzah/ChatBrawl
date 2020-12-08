@@ -6,7 +6,8 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
 public class Placeholders extends PlaceholderExpansion {
-    private ChatBrawl plugin;
+
+    private final ChatBrawl plugin;
 
     public Placeholders(ChatBrawl plugin) {
         this.plugin = plugin;
@@ -39,7 +40,6 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
-
         if (player == null) {
             return "";
         }
@@ -48,6 +48,7 @@ public class Placeholders extends PlaceholderExpansion {
             if (plugin.getRaceCreator().getCurrentRunningRace() == RaceType.NONE) {
                 return "No Race";
             }
+
             return plugin
                     .getPrinter()
                     .capitalize(plugin.getRaceCreator().getCurrentRunningRace().toString()) + " Race";

@@ -31,7 +31,8 @@ public class ScrambleRace extends Race {
                 config.getInt("scramblerace.chance"),
                 config.getBoolean("scramblerace.enable-firework"),
                 config.getBoolean("scramblerace.enabled"),
-                config.getConfigurationSection("scramblerace.rewards.commands"));
+                config.getConfigurationSection("scramblerace.rewards.commands")
+        );
         this.scrambleRaceConfig = config;
         this.allWordsList = scrambleRaceConfig.getStringList("scramblerace.words");
         this.difficulty = scrambleRaceConfig.getInt("scramblerace.difficulty");
@@ -57,13 +58,15 @@ public class ScrambleRace extends Race {
     }
 
     public String scramble(String word) {
-        List<Character> chars = word.chars()
+        final List<Character> chars = word.chars()
                 .mapToObj(e -> (char) e)
                 .collect(Collectors.toList());
         Collections.shuffle(chars);
-        String shuffledWord = chars.toString()
+
+        final String shuffledWord = chars.toString()
                 .substring(1, 3 * chars.size() - 1)
                 .replaceAll(", ", "");
+
         switch (difficulty) {
             case 1:
                 return shuffledWord;
@@ -71,26 +74,29 @@ public class ScrambleRace extends Race {
                 return randomCase(shuffledWord);
             case 3:
                 return swapInNumbers(randomCase(shuffledWord));
+            default:
+                return null;
         }
-        return null;
     }
 
     private String randomCase(String word) {
-        StringBuilder newWord = new StringBuilder();
+        final StringBuilder newWord = new StringBuilder();
+
         for (int i = 0; i < word.length(); i++) {
-            int number = random.nextInt(2);
-            if (number == 0) {
+            if (!random.nextBoolean()) {
                 newWord.append(word.substring(i, i + 1).toLowerCase());
             } else {
                 newWord.append(word.substring(i, i + 1).toUpperCase());
             }
         }
+
         return newWord.toString();
     }
 
     private String swapInNumbers(String word) {
-        return word.replace("A", "5").replace("a", "5")
-                .replace("E", "3").replace("a", "3")
+        return word
+                .replace("A", "5").replace("a", "5") // Doesn't A looks more like a 4 than 5?
+                .replace("E", "3").replace("e", "3")
                 .replace("O", "0").replace("o", "0")
                 .replace("I", "1").replace("i", "1");
     }

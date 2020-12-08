@@ -15,7 +15,7 @@ import java.util.List;
 
 public class LanguageManager {
 
-    private ChatBrawl plugin;
+    private final ChatBrawl plugin;
     private String lang;
     private ChatRace chatRace;
     private BlockRace blockRace;
@@ -75,10 +75,12 @@ public class LanguageManager {
 
     //General messages
     public String getHelpMenu() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
+
         for (String line : helpMenuList) {
             sb.append(line.replace("\\n", "\n"));
         }
+
         return parseColorCodes(sb.toString());
     }
 

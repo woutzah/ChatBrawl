@@ -8,8 +8,8 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 public class GeneralListener implements Listener {
 
-    private ChatBrawl plugin;
-    private boolean notifyOnLogin;
+    private final ChatBrawl plugin;
+    private final boolean notifyOnLogin;
 
     public GeneralListener(ChatBrawl plugin) {
         this.plugin = plugin;

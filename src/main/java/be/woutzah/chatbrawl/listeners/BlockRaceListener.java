@@ -9,14 +9,11 @@ import be.woutzah.chatbrawl.rewards.RewardRandomizer;
 import be.woutzah.chatbrawl.utils.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.util.UUID;
 
 public class BlockRaceListener implements Listener {
 
@@ -42,7 +39,7 @@ public class BlockRaceListener implements Listener {
 
         final Player player = event.getPlayer();
 
-        if (plugin.isDisabledInWorld(event.getPlayer().getLocation().getWorld())) {
+        if (plugin.isDisabledInWorld(player.getWorld())) {
             return;
         }
 

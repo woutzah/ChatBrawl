@@ -1,10 +1,28 @@
 name: ChatBrawl
-version: 1.7.3
+version: '${project.version}'
 main: be.woutzah.chatbrawl.ChatBrawl
 api-version: 1.13
 authors: [Woutzah]
+
 description: A fun chat competition plugin.
 softdepend: [PlaceholderAPI, LangUtils]
+
+permissions:
+  cb.admin:
+    children:
+      cb.default: true
+      cb.current: true
+      cb.disable: true
+      cb.enable: true
+      cb.reload: true
+      cb.stop: true
+  cb.default: {}
+  cb.current: {}
+  cb.disable: {}
+  cb.enable: {}
+  cb.reload: {}
+  cb.stop: {}
+
 commands:
   cb:
     description: main chatbrawl command

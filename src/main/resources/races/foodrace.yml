@@ -1,59 +1,43 @@
-#general settings for the foodrace (Consume the amount of food as fast as possible)
-foodrace:
-  #this setting enables/disable this type of race
+enabled: true
+chance: 10
+duration: 900
+food:
+  1:
+    food: COD
+    amount: 1
+    rewards:
+      - 1
+      - 2
+enable-firework: true
+enable-actionbar: true
+broadcast:
+  center-messages: false
+  enable-start: true
+  enable-end: true
+sound:
   enabled: true
-  #this is a list of fooditems, with the amount required to eat, the plugin will randomly choose from when starting the event
-  food:
-    #E.G. if selected, players need to eat 3 cake's as fast as possible
-    #list of materials you can use: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
-    COOKED_BEEF: 2
-    BAKED_POTATO: 10
-    APPLE: 5
-  #the duration of the foodrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance foodrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 20
-    #parameters you can use: {player}
-    commands:
-      1:
-        commands:
-          - 'eco give {player} 10'
-          - 'time set day'
-        chance: 30
-        #broadcast that is run when this reward is won. Leave empty to disable this
-        broadcast: '{player} has won $5!'
-        #personal title send to the winner! Leave empty to disable this
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-      2:
-        commands:
-          - 'eco give {player} 5'
-          - 'time set day'
-        chance: 20
-        broadcast: '{player} has won $5!'
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-
-#you can replace <player> with <rawname> to show the username of a player without prefixes
+  begin-race: BLOCK_ANVIL_PLACE
+  end-race: BLOCK_NOTE_BLOCK_PLING
 language:
-  foodrace-name: 'Food Race'
-  foodrace-actionbar-start: '&6&oFood Race &f&l>> &7Consume &b<amount> &7x &b<food> &7as fast as possible!'
-  foodrace-start:
-    - '&e&l>&8&m------------&e&l[ &6&oFood Race &e&l]&8&m------------&e&l<\n'
-    - '&fConsume the following food as fast as possible!\n'
-    - '      &f&l>> &b<amount> &7x &b<food> &f&l<<\n'
-    - '&e&l>&8&m------------------------------------&e&l<'
-  foodrace-ended: '&fthe &eFood Race &fended without a winner!'
-  foodrace-winner:
-    - '&e&l>&8&m---------&e&l[ &b&oFood Race Winner &e&l]&8&m---------&e&l<\n'
-    - '&fCongrats! &b<player> &fwas the fastest!\n'
-    - '&e&l>&8&m------------------------------------&e&l<\n'
-  foodrace-winner-personal: '&7you won the &eFood Race&7!'
+  actionbar: '&6&oFood Race &7&l>> &fConsume &b<amount> &fx &b<food>'
+  start:
+    - ' \n'
+    - '&7&l>&m========&r&7{ &7(&e!&7) &6Food Race &7(&e!&7) &7}&m=======&r&7&l>\n'
+    - ' \n'
+    - ' &fConsume the following food:\n'
+    - ' \n'
+    - '       &b<amount> &fx &b<food>\n'
+    - ' \n'
+    - '&7&l>&m===========================&r&7&l>\n'
+    - ' '
+  ended:
+    - '&7The &6Food Race &7ended without a winner!'
+  winner:
+    - ' \n'
+    - '&7&l>&m======&r&7{ &7(&e*&7) &6Food Race Winner &7(&e*&7) &7}&m======&r&7&l>\n'
+    - ' \n'
+    - ' &fCongrats! &b<player> &fwas the fastest!\n'
+    - ' \n'
+    - '&7&l>&m==============================&r&7&l>\n'
+    - ' '
+  winner-personal: '&7you won the &eFood Race&7!'

@@ -1,59 +1,43 @@
-#general settings for the huntrace (Hunt and kill the required mobs as fast as possible)
-huntrace:
-  #this settings enables/disable this type of race
+enabled: true
+chance: 10
+duration: 900
+mobs:
+  1:
+    mob: COW
+    amount: 1
+    rewards:
+      - 1
+      - 2
+enable-firework: true
+enable-actionbar: true
+broadcast:
+  center-messages: false
+  enable-start: true
+  enable-end: true
+sound:
   enabled: true
-  #this is a list of mobs, with the amount required to kill, the plugin will randomly choose from when starting the event
-  mobs:
-    #E.G. if selected, players need to kill 3 zombies as fast as possible
-    #usable entity types: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
-    ZOMBIE: 20
-    SKELETON: 10
-    COW: 25
-  #the duration of the huntrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance huntrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'say chance1' has a chance of 10
-    #parameters you can use: {player}
-    commands:
-      1:
-        commands:
-          - 'eco give {player} 10'
-          - 'time set day'
-        chance: 30
-        #broadcast that is run when this reward is won. Leave empty to disable this
-        broadcast: '{player} has won $5!'
-        #personal title send to the winner! Leave empty to disable this
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-      2:
-        commands:
-          - 'eco give {player} 5'
-          - 'time set day'
-        chance: 20
-        broadcast: '{player} has won $5!'
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-
-#you can replace <player> with <rawname> to show the username of a player without prefixes
+  begin-race: BLOCK_ANVIL_PLACE
+  end-race: BLOCK_NOTE_BLOCK_PLING
 language:
-  huntrace-name: 'Hunt Race'
-  huntrace-actionbar-start: '&6&oHunt Race &f&l>> &7Kill &b<amount> &7x &b<mob> &7as fast as possible!'
-  huntrace-start:
-    - '&e&l>&8&m------------&e&l[ &6&oHunt Race &e&l]&8&m------------&e&l<\n'
-    - '&fKill the following mobs as fast as possible!\n'
-    - '      &f&l>> &b<amount> &7x &b<mob> &f&l<<\n'
-    - '&e&l>&8&m------------------------------------&e&l<'
-  huntrace-ended: '&fthe &eHunt Race &fended without a winner!'
-  huntrace-winner:
-    - '&e&l>&8&m---------&e&l[ &b&oHunt Race Winner &e&l]&8&m---------&e&l<\n'
-    - '&fCongrats! &b<player> &fwas the fastest!\n'
-    - '&e&l>&8&m------------------------------------&e&l<\n'
-  huntrace-winner-personal: '&7you won the &eHunt Race&7!'
+  actionbar: '&6&oHunt Race &7&l>> &fKill &b<amount> &fx &b<mob>'
+  start:
+    - ' \n'
+    - '&7&l>&m========&r&7{ &7(&e!&7) &6Hunt Race &7(&e!&7) &7}&m=======&r&7&l>\n'
+    - ' \n'
+    - ' &fKill the following mobs:\n'
+    - ' \n'
+    - '       &b<amount> &fx &b<mob>\n'
+    - ' \n'
+    - '&7&l>&m===========================&r&7&l>\n'
+    - ' '
+  ended:
+    - '&7The &6Hunt Race &7ended without a winner!'
+  winner:
+    - ' \n'
+    - '&7&l>&m======&r&7{ &7(&e*&7) &6Hunt Race Winner &7(&e*&7) &7}&m======&r&7&l>\n'
+    - ' \n'
+    - ' &fCongrats! &b<player> &fwas the fastest!\n'
+    - ' \n'
+    - '&7&l>&m==============================&r&7&l>\n'
+    - ' '
+  winner-personal: '&7you won the &eHunt Race&7!'

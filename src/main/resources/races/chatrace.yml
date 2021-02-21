@@ -1,63 +1,42 @@
-#general settings for the chatrace (type the word shown in chat as fast as possible)
-chatrace:
-  #this setting enables/disable this type of race
+enabled: true
+chance: 10
+duration: 900
+words:
+  1:
+    word: Woolly Development
+    rewards:
+      - 1
+      - 2
+enable-firework: true
+enable-actionbar: true
+broadcast:
+  center-messages: false
+  enable-start: true
+  enable-end: true
+sound:
   enabled: true
-  #this is a list of words the plugin will randomly choose from when starting the event
-  words:
-    - Eustachius
-    - yeet
-    - treehugger
-    - chatbrawl
-    - DfzEfZsxdFg
-    - bearsarelife
-    - creepersexplode
-    - hat
-  #the duration of the chatrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance chatrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-
-
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 10
-    #parameters you can use: {player} = placeholder for player name in commands
-  rewards:
-    commands:
-      1:
-        commands:
-          - 'eco give {player} 10'
-          - 'time set day'
-        chance: 30
-        #broadcast that is run when this reward is won. Leave empty to disable this
-        broadcast: '{player} has won $5!'
-        #personal title send to the winner! Leave empty to disable this
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-      2:
-        commands:
-          - 'eco give {player} 5'
-          - 'time set day'
-        chance: 20
-        broadcast: '{player} has won $5!'
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-
-#you can replace <player> with <rawname> to show the username of a player without prefixes
+  begin-race: BLOCK_ANVIL_PLACE
+  end-race: BLOCK_NOTE_BLOCK_PLING
 language:
-  chatrace-name: 'Chat Race'
-  chatrace-actionbar-start: '&6&oChat Race &f&l>> &7Type &b<word> &7as fast as possible!'
-  chatrace-start:
-    - '&e&l>&8&m------------&e&l[ &6&oChat Race &e&l]&8&m------------&e&l<\n'
-    - '&fType the following word as fast as possible!\n'
-    - '      &b<word>\n'
-    - '&e&l>&8&m------------------------------------&e&l<'
-  chatrace-ended: '&fthe &eChat Race &fended without a winner!'
-  chatrace-winner:
-    - '&e&l>&8&m---------&e&l[ &b&oChat Race Winner &e&l]&8&m---------&e&l<\n'
-    - '&fCongrats! &b<player> &fwas the fastest!\n'
-    - '&e&l>&8&m------------------------------------&e&l<\n'
-  chatrace-winner-personal: '&7you won the &eChat Race&7!'
+  actionbar: '&6&oChat Race &7&l>> &fType &b<word>'
+  start:
+    - ' \n'
+    - '&7&l>&m======&r&7{ &7(&e!&7) &6Chat Race &7(&e!&7) &7}&m======&r&7&l>\n'
+    - ' \n'
+    - ' &fType the following word:\n'
+    - ' \n'
+    - '        &b<word>\n'
+    - ' \n'
+    - '&7&l>&m===========================&r&7&l>\n'
+    - ' '
+  ended:
+    - '&7The &6Chat Race &7ended without a winner!'
+  winner:
+    - ' \n'
+    - '&7&l>&m====&r&7{ &7(&e*&7) &6Chat Race Winner &7(&e*&7) &7}&m====&r&7&l>\n'
+    - ' \n'
+    - ' &fCongrats! &b<player> &fwas the fastest!\n'
+    - ' \n'
+    - '&7&l>&m==============================&r&7&l>\n'
+    - ' '
+  winner-personal: '&7you won the &eChat Race&7!'

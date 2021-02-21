@@ -1,60 +1,43 @@
-#general settings for the fishrace (Fish the amount of specific fish as fast as possible)
-fishrace:
-  #this settings enables/disable this type of race
+enabled: true
+chance: 10
+duration: 900
+fish:
+  1:
+    catch: COD
+    amount: 1
+    rewards:
+      - 1
+      - 2
+enable-firework: true
+enable-actionbar: true
+broadcast:
+  center-messages: false
+  enable-start: true
+  enable-end: true
+sound:
   enabled: true
-  #this is a list of fish, with the amount required to fish, the plugin will randomly choose from when starting the event
-  fish:
-    #E.G. if selected, players need to fish 3 cod fishes the fastest
-    #usable fish: COD, PUFFERFISH, SALMON, TROPICAL_FISH
-    COD: 3
-    PUFFERFISH: 5
-    SALMON: 5
-    TROPICAL_FISH: 2
-  #the duration of the fishrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance fishrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'time set day' has a chance of 10
-    #parameters you can use: {player}
-    commands:
-      1:
-        commands:
-          - 'eco give {player} 10'
-          - 'time set day'
-        chance: 30
-        #broadcast that is run when this reward is won. Leave empty to disable this
-        broadcast: '{player} has won $5!'
-        #personal title send to the winner! Leave empty to disable this
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-      2:
-        commands:
-          - 'eco give {player} 5'
-          - 'time set day'
-        chance: 20
-        broadcast: '{player} has won $5!'
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-
-#you can replace <player> with <rawname> to show the username of a player without prefixes
+  begin-race: BLOCK_ANVIL_PLACE
+  end-race: BLOCK_NOTE_BLOCK_PLING
 language:
-  fishrace-name: 'Fish Race'
-  fishrace-actionbar-start: '&6&oFish Race &f&l>> &7Fish &b<amount> &7x &b<fish> &7as fast as possible!'
-  fishrace-start:
-    - '&e&l>&8&m------------&e&l[ &6&oFish Race &e&l]&8&m------------&e&l<\n'
-    - '&fCatch the following fish as fast as possible!\n'
-    - '      &f&l>> &b<amount> &7x &b<fish> &f&l<<\n'
-    - '&e&l>&8&m------------------------------------&e&l<'
-  fishrace-ended: '&fthe &eFish Race &fended without a winner!'
-  fishrace-winner:
-    - '&e&l>&8&m---------&e&l[ &b&oFish Race Winner &e&l]&8&m---------&e&l<\n'
-    - '&fCongrats! &b<player> &fwas the fastest!\n'
-    - '&e&l>&8&m------------------------------------&e&l<\n'
-  fishrace-winner-personal: '&7you won the &eFish Race&7!'
+  actionbar: '&6&oFish Race &7&l>> &fFish &b<amount> &fx &b<fish>'
+  start:
+    - ' \n'
+    - '&7&l>&m=======&r&7{ &7(&e!&7) &6Fish Race &7(&e!&7) &7}&m======&r&7&l>\n'
+    - ' \n'
+    - ' &fCatch the following fish:\n'
+    - ' \n'
+    - '       &b<amount> &fx &b<fish>\n'
+    - ' \n'
+    - '&7&l>&m===========================&r&7&l>\n'
+    - ' '
+  ended:
+    - '&7The &6Fish Race &7ended without a winner!'
+  winner:
+    - ' \n'
+    - '&7&l>&m=====&r&7{ &7(&e*&7) &6Fish Race Winner &7(&e*&7) &7}&m=====&r&7&l>\n'
+    - ' \n'
+    - ' &fCongrats! &b<player> &fwas the fastest!\n'
+    - ' \n'
+    - '&7&l>&m==============================&r&7&l>\n'
+    - ' '
+  winner-personal: '&7you won the &eFish Race&7!'

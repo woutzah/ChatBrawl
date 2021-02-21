@@ -1,6 +1,6 @@
 ![logo]
 
-[logo]: https://i.imgur.com/7CeSMAf.png
+[logo]: https://i.imgur.com/UnRbHfK.png
 # Compete in fun chat races/events and earn rewards!
 ## Download links and information:
 * [Spigot](https://www.spigotmc.org/resources/chatbrawl-chat-competition-for-rewards.74546/)

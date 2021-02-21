@@ -1,66 +1,47 @@
-#general settings for the quizrace (Answer the question as fast as possible!)
-quizrace:
-  #this setting enables/disable this type of race
+enabled: true
+chance: 10
+duration: 900
+questions:
+  1:
+    question: 'What''s the capital of France?'
+    answer:
+      - 'paris'
+      - 'parijs'
+      - 'Paris'
+    rewards:
+      - 1
+      - 2
+enable-firework: true
+enable-actionbar: true
+broadcast:
+  center-messages: false
+  enable-start: true
+  enable-end: true
+sound:
   enabled: true
-  #this is a list of question entries.Make sure to fill in the question/answer field for each entry.
-  #You can add/remove as much entries as you want. The plugin will randomly choose a section from here when starting the event
-  questions:
-    1:
-      question: 'What''s the capital of France?'
-      answer:
-        - 'paris'
-        - 'parijs'
-        - 'Paris'
-    2:
-      question: 'How much is 20 + 20 X 2 ?'
-      answer:
-        - '60'
-        - 'sixty'
-  #the duration of the quizrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance quizrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-  #rewards
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 20
-    #parameters you can use: {player}
-    commands:
-      1:
-        commands:
-          - 'eco give {player} 10'
-          - 'time set day'
-        chance: 30
-        #broadcast that is run when this reward is won. Leave empty to disable this
-        broadcast: '{player} has won $5!'
-        #personal title send to the winner! Leave empty to disable this
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-      2:
-        commands:
-          - 'eco give {player} 5'
-          - 'time set day'
-        chance: 20
-        broadcast: '{player} has won $5!'
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-
-#you can replace <player> with <rawname> to show the username of a player without prefixes
+  begin-race: BLOCK_ANVIL_PLACE
+  end-race: BLOCK_NOTE_BLOCK_PLING
 language:
-  quizrace-name: 'Quiz Race'
-  quizrace-actionbar-start: '&6&oQuiz Race &f&l>> &7Answer &b<question> &7as fast as possible!'
-  quizrace-start:
-    - '&e&l>&8&m------------&e&l[ &6&oQuiz Race &e&l]&8&m------------&e&l<\n'
-    - '&fAnswer the following question as fast as possible!\n'
-    - '      &b<question>\n'
-    - '&e&l>&8&m------------------------------------&e&l<'
-  quizrace-ended: '&fthe &eQuiz Race &fended without a winner!'
-  quizrace-winner:
-    - '&e&l>&8&m---------&e&l[ &b&oQuiz Race Winner &e&l]&8&m---------&e&l<\n'
-    - '&fCongrats! &b<player> &fwas the fastest!\n'
-    - '&e&l>&8&m------------------------------------&e&l<\n'
-  quizrace-winner-personal: '&7you won the &eQuiz Race&7!'
+  actionbar:
+    - '&6&oQuiz Race &7&l>> &fAnswer &b<question>'
+  start:
+    - ' \n'
+    - '&7&l>&m========&r&7{ &7(&e!&7) &6Quiz Race &7(&e!&7) &7}&m=======&r&7&l>\n'
+    - ' \n'
+    - ' &fAnswer the following question:\n'
+    - ' \n'
+    - '    &b<question>\n'
+    - ' \n'
+    - '&7&l>&m===========================&r&7&l>\n'
+    - ' '
+  ended: '&7The &6Quiz Race &7ended without a winner! The answer was &b<answer>'
+  winner:
+    - ' \n'
+    - '&7&l>&m======&r&7{ &7(&e*&7) &6Quiz Race Winner &7(&e*&7) &7}&m=====&r&7&l>\n'
+    - ' \n'
+    - ' &fCongrats! &b<player> &fwas the fastest!\n'
+    - ' &fThe answer was: &b<answer>\n'
+    - ' \n'
+    - '&7&l>&m==============================&r&7&l>\n'
+    - ' '
+  winner-personal: '&7you won the &eQuiz Race&7!'

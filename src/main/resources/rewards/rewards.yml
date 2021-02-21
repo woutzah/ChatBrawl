@@ -1,0 +1,9 @@
+rewards:
+  1:
+    chance: 20
+    commands:
+      - 'eco give <player> 10'
+      - 'time set day'
+    broadcast: '<player> has won $10!'
+    title: 'You won 10 dollar!'
+    subtitle: 'Enjoy!'

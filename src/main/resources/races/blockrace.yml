@@ -1,62 +1,49 @@
-#general settings for the blockrace (Mine the amount of specific blocks as fast as possible)
-blockrace:
-  #this setting enables/disable this type of race
+enabled: true
+chance: 20
+duration: 20
+blocks:
+  1:
+    block: COBBLESTONE
+    amount: 5
+    rewards:
+      - 1
+      - 2
+  2:
+    block: COBBLESTONE
+    amount: 10
+    rewards:
+      - 1
+      - 2
+enable-firework: true
+enable-actionbar: true
+broadcast:
+  center-messages: false
+  enable-start: true
+  enable-end: true
+sound:
   enabled: true
-  #this is a list of blocks, with the amount required to mine, the plugin will randomly choose from when starting the event
-  blocks:
-    #E.G. if selected, players need to mine 3 diamond blocks the fastest
-    #list of materials you can use: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
-    COBBLESTONE: 30
-    OAK_LOG: 20
-    OBSIDIAN: 5
-    ANDESITE: 20
-    GRANITE: 15
-  #the duration of the blockrace in seconds (cannot be longer than event-delay in general settings!)
-  duration: 900
-  #the chance blockrace is held in chat
-  chance: 20
-  #shoot a firework from the player that wins the race.
-  enable-firework: true
-
-  rewards:
-    #in here you can add/remove commands that will be executed when someone wins!
-    #the chance the command get's executed in the console is behind the semicolon
-    #you can add/remove entries in the list by inserting the next number
-    #E.G. the command 'eco give {player} 10' has a chance of 10
-    #parameters you can use: {player}
-    commands:
-      1:
-        commands:
-          - 'eco give {player} 10'
-          - 'time set day'
-        chance: 30
-        #broadcast that is run when this reward is won. Leave empty to disable this
-        broadcast: '{player} has won $5!'
-        #personal title send to the winner! Leave empty to disable this
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-      2:
-        commands:
-          - 'eco give {player} 5'
-          - 'time set day'
-        chance: 20
-        broadcast: '{player} has won $5!'
-        title: 'You won 5 dollar!'
-        subtitle: 'Enjoy!'
-
-
-#you can replace <player> with <rawname> to show the username of a player without prefixes
+  begin-race: BLOCK_ANVIL_PLACE
+  end-race: BLOCK_NOTE_BLOCK_PLING
 language:
-  blockrace-name: 'Block Race'
-  blockrace-actionbar-start: '&6&oBlock Race &f&l>> &7Mine &b<amount> &7x &b<block> &7as fast as possible!'
-  blockrace-start:
-    - '&e&l>&8&m------------&e&l[ &6&oBlock Race &e&l]&8&m------------&e&l<\n'
-    - '&fMine the following blocks as fast as possible!\n'
-    - '      &f&l>> &b<amount> &7x &b<block> &f&l<<\n'
-    - '&e&l>&8&m------------------------------------&e&l<'
-  blockrace-ended: '&fthe &eBlock Race &fended without a winner!'
-  blockrace-winner:
-    - '&e&l>&8&m---------&e&l[ &b&oBlock Race Winner &e&l]&8&m---------&e&l<\n'
-    - '&fCongrats! &b<player> &fwas the fastest!\n'
-    - '&e&l>&8&m------------------------------------&e&l<\n'
-  blockrace-winner-personal: '&7you won the &eBlock Race&7!'
+  actionbar: '&6&oBlock Race &7&l>> &fMine &b<amount> &fx &b<block>'
+  start:
+    - ' \n'
+    - '&7&l>&m=======&r&7{ &7(&e!&7) &6Block Race &7(&e!&7) &7}&m=======&r&7&l>\n'
+    - ' \n'
+    - ' &fMine the following blocks:\n'
+    - ' \n'
+    - '       &b<amount> &fx &b<block>\n'
+    - ' \n'
+    - '&7&l>&m===========================&r&7&l>\n'
+    - ' '
+  ended:
+    - '&7The &6Block Race &7ended without a winner!'
+  winner:
+    - ' \n'
+    - '&7&l>&m======&r&7{ &7(&e*&7) &6Block Race Winner &7(&e*&7) &7}&m=====&r&7&l>\n'
+    - ' \n'
+    - ' &fCongrats! &b<player> &fwas the fastest!\n'
+    - ' \n'
+    - '&7&l>&m==============================&r&7&l>\n'
+    - ' '
+  winner-personal: '&7you won the &eBlock Race&7!'

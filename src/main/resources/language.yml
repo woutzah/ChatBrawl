@@ -3,7 +3,7 @@ general:
   helpmenu:
     - '&7&l>&m======&r&7{ &7(&e?&7) &6ChatBrawl Help &7(&e?&7) &7}&m======&r&7&l>\n'
     - ' \n'
-    - '  &e&l>> #E67030/cb help &6- &7show the general help menu\n'
+    - '  &e&l>> &f/cb help &6- &7show the general help menu\n'
     - '  &e&l>> &f/cb current &6- &7show the current running race\n'
     - '  &e&l>> &f/cb discord &6- &7link to official discord\n'
     - '  &e&l>> &f/cb disable &6- &7stop the creation of races\n'

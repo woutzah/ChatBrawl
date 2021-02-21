@@ -4,6 +4,7 @@ race-delay: 1200
 notify-on-login: true
 minimum-players: 0
 allow-creative: true
+#dddddd
 ignored-commands:
   - /pm
   - /r

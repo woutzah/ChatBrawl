@@ -22,8 +22,7 @@ sound:
   begin-race: BLOCK_ANVIL_PLACE
   end-race: BLOCK_NOTE_BLOCK_PLING
 language:
-  actionbar:
-    - '&6&oQuiz Race &7&l>> &fAnswer &b<question>'
+  actionbar: '&6&oQuiz Race &7&l>> &fAnswer &b<question>'
   start:
     - ' \n'
     - '&7&l>&m========&r&7{ &7(&e!&7) &6Quiz Race &7(&e!&7) &7}&m=======&r&7&l>\n'
@@ -34,7 +33,8 @@ language:
     - ' \n'
     - '&7&l>&m===========================&r&7&l>\n'
     - ' '
-  ended: '&7The &6Quiz Race &7ended without a winner! The answer was &b<answer>'
+  ended:
+    - '&7The &6Quiz Race &7ended without a winner! The answer was &b<answer>'
   winner:
     - ' \n'
     - '&7&l>&m======&r&7{ &7(&e*&7) &6Quiz Race Winner &7(&e*&7) &7}&m=====&r&7&l>\n'

@@ -1,16 +1,10 @@
 enabled: true
-chance: 20
-duration: 20
+chance: 10
+duration: 900
 blocks:
   1:
     block: COBBLESTONE
     amount: 5
-    rewards:
-      - 1
-      - 2
-  2:
-    block: COBBLESTONE
-    amount: 10
     rewards:
       - 1
       - 2

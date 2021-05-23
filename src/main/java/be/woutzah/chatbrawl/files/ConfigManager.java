@@ -3,7 +3,6 @@ package be.woutzah.chatbrawl.files;
 import be.woutzah.chatbrawl.ChatBrawl;
 import be.woutzah.chatbrawl.util.ErrorHandler;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;

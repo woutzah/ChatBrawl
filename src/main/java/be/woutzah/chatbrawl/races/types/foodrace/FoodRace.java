@@ -155,7 +155,7 @@ public class FoodRace extends ContestantRace {
     public String replacePlaceholders(String message) {
         return message.replace("<food>", ChatBrawl.isLangUtilsIsEnabled() ?
                 LanguageHelper.getItemName(new ItemStack(foodEntry.getMaterial()), settingManager.getString(LanguageSetting.LANG))
-                : foodEntry.getMaterial().toString().toLowerCase())
+                : foodEntry.getMaterial().toString().toLowerCase().replace("_", " "))
                 .replace("<amount>", String.valueOf(foodEntry.getAmount()));
     }
 

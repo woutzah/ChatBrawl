@@ -160,7 +160,7 @@ public class BlockRace extends ContestantRace {
         return message
                 .replace("<block>", ChatBrawl.isLangUtilsIsEnabled() ?
                         LanguageHelper.getItemName(new ItemStack(blockEntry.getMaterial()), settingManager.getString(LanguageSetting.LANG))
-                        : blockEntry.getMaterial().toString().toLowerCase())
+                        : blockEntry.getMaterial().toString().toLowerCase().replace("_", " "))
                 .replace("<amount>", String.valueOf(blockEntry.getAmount()));
     }
 

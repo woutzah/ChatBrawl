@@ -161,7 +161,7 @@ public class FishRace extends ContestantRace {
     public String replacePlaceholders(String message) {
         return message.replace("<fish>", ChatBrawl.isLangUtilsIsEnabled() ?
                 LanguageHelper.getItemName(new ItemStack(fishEntry.getMaterial()), settingManager.getString(LanguageSetting.LANG))
-                : fishEntry.getMaterial().toString().toLowerCase())
+                : fishEntry.getMaterial().toString().toLowerCase().replace("_", " "))
                 .replace("<amount>", String.valueOf(fishEntry.getAmount()));
     }
 

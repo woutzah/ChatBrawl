@@ -172,7 +172,7 @@ public class CraftRace extends ContestantRace {
     public String replacePlaceholders(String message) {
         return message.replace("<item>", ChatBrawl.isLangUtilsIsEnabled() ?
                 LanguageHelper.getItemName(new ItemStack(craftEntry.getMaterial()), settingManager.getString(LanguageSetting.LANG))
-                :craftEntry.getMaterial().toString().toLowerCase())
+                :craftEntry.getMaterial().toString().toLowerCase().replace("_", " "))
                 .replace("<amount>", String.valueOf(craftEntry.getAmount()));
     }
 

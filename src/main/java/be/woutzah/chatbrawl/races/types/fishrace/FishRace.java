@@ -21,6 +21,7 @@ import be.woutzah.chatbrawl.util.Printer;
 import com.meowj.langutils.lang.LanguageHelper;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -161,7 +162,7 @@ public class FishRace extends ContestantRace {
     public String replacePlaceholders(String message) {
         return message.replace("<fish>", ChatBrawl.isLangUtilsIsEnabled() ?
                 LanguageHelper.getItemName(new ItemStack(fishEntry.getMaterial()), settingManager.getString(LanguageSetting.LANG))
-                : fishEntry.getMaterial().toString().toLowerCase().replace("_", " "))
+                : WordUtils.capitalizeFully(fishEntry.getMaterial().toString().replace("_", " ")))
                 .replace("<amount>", String.valueOf(fishEntry.getAmount()));
     }
 

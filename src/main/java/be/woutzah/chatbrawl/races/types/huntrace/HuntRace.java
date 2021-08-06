@@ -21,6 +21,7 @@ import be.woutzah.chatbrawl.util.Printer;
 import com.meowj.langutils.lang.LanguageHelper;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -158,7 +159,7 @@ public class HuntRace extends ContestantRace {
 	public String replacePlaceholders(String message) {
 		return message.replace("<mob>", ChatBrawl.isLangUtilsIsEnabled() ?
 				LanguageHelper.getEntityName(huntEntry.getEntityType(), settingManager.getString(LanguageSetting.LANG))
-				: huntEntry.getEntityType().toString().toLowerCase().replace("_", " "))
+				: WordUtils.capitalizeFully(huntEntry.getEntityType().toString().replace("_", " ")))
 				.replace("<amount>", String.valueOf(huntEntry.getAmount()));
 	}
 

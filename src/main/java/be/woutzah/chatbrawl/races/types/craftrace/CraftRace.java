@@ -21,6 +21,7 @@ import be.woutzah.chatbrawl.util.Printer;
 import com.meowj.langutils.lang.LanguageHelper;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -172,7 +173,7 @@ public class CraftRace extends ContestantRace {
     public String replacePlaceholders(String message) {
         return message.replace("<item>", ChatBrawl.isLangUtilsIsEnabled() ?
                 LanguageHelper.getItemName(new ItemStack(craftEntry.getMaterial()), settingManager.getString(LanguageSetting.LANG))
-                :craftEntry.getMaterial().toString().toLowerCase().replace("_", " "))
+                : WordUtils.capitalizeFully(craftEntry.getMaterial().toString().replace("_", " ")))
                 .replace("<amount>", String.valueOf(craftEntry.getAmount()));
     }
 

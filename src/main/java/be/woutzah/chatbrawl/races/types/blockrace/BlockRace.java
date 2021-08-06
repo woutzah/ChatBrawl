@@ -21,6 +21,7 @@ import be.woutzah.chatbrawl.util.Printer;
 import com.meowj.langutils.lang.LanguageHelper;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -160,7 +161,7 @@ public class BlockRace extends ContestantRace {
         return message
                 .replace("<block>", ChatBrawl.isLangUtilsIsEnabled() ?
                         LanguageHelper.getItemName(new ItemStack(blockEntry.getMaterial()), settingManager.getString(LanguageSetting.LANG))
-                        : blockEntry.getMaterial().toString().toLowerCase().replace("_", " "))
+                        : WordUtils.capitalizeFully(blockEntry.getMaterial().toString().replace("_", " ")))
                 .replace("<amount>", String.valueOf(blockEntry.getAmount()));
     }
 
